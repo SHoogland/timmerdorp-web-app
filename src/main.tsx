@@ -12,10 +12,10 @@ import Home from './pages/Home.tsx';
 import './scss/styles.scss'
 
 Parse.initialize(
-  "YOUR_APP_ID",
-  "YOUR_JAVASCRIPT_KEY"
+  "knDC2JAquVJZ1jSPwARj53IhQCfpOPIDNKcgRMsD",
+  "xnFIbFCrE1vjzWbRVehMO4QzPpNMCIdDgORKNlRI"
 );
-Parse.serverURL = 'http://YOUR_PARSE_SERVER:1337/parse'
+Parse.serverURL = 'https://api.timmerdorp.com/1'
 
 const router = createBrowserRouter([
   {

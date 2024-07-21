@@ -37,19 +37,19 @@
           - name: Push to GitHub Packages with sha tag
             run: docker push "ghcr.io/shoogland/timmerdorp-web-app:$GITHUB_SHA"
     
-          # - name: Install doctl
-          #   uses: digitalocean/action-doctl@v2
-          #   with:
-          #     token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          - name: Install doctl
+            uses: digitalocean/action-doctl@v2
+            with:
+              token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
     
-          # - name: get kubectl creds
-          #   run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 sh-cluster-01
+          - name: get kubectl creds
+            run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 sh-cluster-01
     
-          # - name: get app-timmerdorp deployment
-          #   run: kubectl get deployment -n argocd app-timmerdorp -o yaml > deployment.yaml
+          - name: get app-timmerdorp deployment
+            run: kubectl get deployment -n argocd app-timmerdorp -o yaml > deployment.yaml
     
-          # - name: update image tag
-          #   run: sed 's|ghcr\.io\/shoogland\/timmerdorp-web-app:.*|ghcr\.io\/shoogland\/timmerdorp-web-app:'${GITHUB_SHA}'|' < deployment.yaml > deployment2.yaml
+          - name: update image tag
+            run: sed 's|ghcr\.io\/shoogland\/timmerdorp-web-app:.*|ghcr\.io\/shoogland\/timmerdorp-web-app:'${GITHUB_SHA}'|' < deployment.yaml > deployment2.yaml
     
-          # - name: apply updated image
-          #   run: kubectl apply -f deployment2.yaml
+          - name: apply updated image
+            run: kubectl apply -f deployment2.yaml

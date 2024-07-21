@@ -1,7 +1,9 @@
+import { Link } from 'react-router-dom';
+
 export default function Root() {
     return (
         <>
-            Root
+            <Link to={"home"}>Home</Link>
         </>
     );
 }
