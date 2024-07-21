@@ -1,0 +1,55 @@
+---
+    name: Upload Website
+    
+    on:
+      push:
+        branches:
+          - main
+    
+    jobs:
+      deploy:
+        runs-on: ubuntu-latest
+    
+        steps:
+          - uses: actions/checkout@v3
+  
+          - name: Setup Node.js (.nvmrc)
+            uses: actions/setup-node@v4.0.3
+            with:
+              node-version-file: '.nvmrc'
+  
+          # run the ci equivalent of npm install
+          - name: npm ci
+            run: |
+              npm ci
+              npm run build
+    
+          - name: Log in to ghcr.io with docker
+            run: echo ${{ secrets.PAT }} | docker login ghcr.io -u shoogland --password-stdin
+    
+          - name: Build docker image
+            run: |
+              docker build . --tag "ghcr.io/shoogland/timmerdorp-web-app:$GITHUB_SHA" --tag "ghcr.io/shoogland/timmerdorp-web-app:latest"
+    
+          - name: Push to GitHub Packages with latest tag
+            run: docker push ghcr.io/shoogland/timmerdorp-web-app:latest
+    
+          - name: Push to GitHub Packages with sha tag
+            run: docker push "ghcr.io/shoogland/timmerdorp-web-app:$GITHUB_SHA"
+    
+          # - name: Install doctl
+          #   uses: digitalocean/action-doctl@v2
+          #   with:
+          #     token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    
+          # - name: get kubectl creds
+          #   run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 sh-cluster-01
+    
+          # - name: get app-timmerdorp deployment
+          #   run: kubectl get deployment -n argocd app-timmerdorp -o yaml > deployment.yaml
+    
+          # - name: update image tag
+          #   run: sed 's|ghcr\.io\/shoogland\/timmerdorp-web-app:.*|ghcr\.io\/shoogland\/timmerdorp-web-app:'${GITHUB_SHA}'|' < deployment.yaml > deployment2.yaml
+    
+          # - name: apply updated image
+          #   run: kubectl apply -f deployment2.yaml
