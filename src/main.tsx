@@ -4,18 +4,15 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from 'react-router-dom';
-import Parse from 'parse';
 
 import Root from './pages/Root.tsx';
 import ErrorPage from './pages/ErrorPage.tsx';
 import Home from './pages/Home.tsx';
 import './scss/styles.scss'
+import initParse from './utils/initParse.ts';
+import Login from './pages/Login.tsx';
 
-Parse.initialize(
-  "knDC2JAquVJZ1jSPwARj53IhQCfpOPIDNKcgRMsD",
-  "xnFIbFCrE1vjzWbRVehMO4QzPpNMCIdDgORKNlRI"
-);
-Parse.serverURL = 'https://api.timmerdorp.com/1'
+initParse();
 
 const router = createBrowserRouter([
   {
@@ -24,8 +21,12 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "home",
+    path: 'home',
     element: <Home />,
+  },
+  {
+    path: 'login',
+    element: <Login />,
   },
 ]);
 
