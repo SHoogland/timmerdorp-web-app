@@ -11,6 +11,7 @@ import Home from './pages/Home.tsx';
 import './scss/styles.scss'
 import initParse from './utils/initParse.ts';
 import Login from './pages/Login.tsx';
+import ScanTicket from './pages/ScanTicket.tsx';
 
 initParse();
 
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
   {
     path: 'home',
     element: <Home />,
+  },
+  {
+    path: 'scan-ticket',
+    element: <ScanTicket />,
   },
   {
     path: 'login',

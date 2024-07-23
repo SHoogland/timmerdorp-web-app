@@ -1,11 +1,9 @@
 import { useState } from 'react'
 import Parse from 'parse';
-
-import ding from '../assets/ding.svg'
 import QrCode from '../components/QrCode.tsx';
 
-function Home() {
-  const [count, setQr] = useState("")
+export default function ScanTicket() {
+  const [qrCode, setQrCode] = useState("")
   const [scanning, setScanning] = useState(false)
 
   const startScan = () => {
@@ -20,27 +18,27 @@ function Home() {
     console.error('Error scanning QR code', error);
   }
 
-  const qrCodeFound = async (decodedText: string) => {
-    setQr(decodedText)
+  const qrCodeFound = async (qrCode: string) => {
+    setQrCode(qrCode)
     setScanning(false)
 
-    await Parse.User.logIn('stephan@shoogland.com', 'dingen').catch(
-      error => {
-        console.error('Error while logging in user', error);
-      }
-    ).then(function (user) {
-      console.log('User logged in', user);
+    await Parse.Cloud.run('app-findChildById', { id: qrCode }).then(async (child) => {
+      console.log('Child found:', child);
+    }).catch((error) => {
+      console.error('Error while finding child by id', error);
     })
   }
 
   return (
     <>
       <div className="">
-        <h1>Timmerdorp</h1>
-        <img src={ding} />
-        <div className="card">
+        <h1>Scan</h1>
+        <div className="">
           <button className="" onClick={() => startScan()}>
             Scan
+          </button>
+          <button className="" onClick={() => qrCodeFound('X3fD28GOlN')}>
+            QR found
           </button>
           {scanning &&
             <QrCode
@@ -51,11 +49,9 @@ function Home() {
             />}
         </div>
         <p className="">
-          Text goes here
+          {qrCode}
         </p>
       </div>
     </>
   )
 }
-
-export default Home
