@@ -1,0 +1,66 @@
+
+
+@font-face {
+	font-family: Mikado-Bold;
+	src: url("../assets/fonts/Mikado-Bold.woff");
+}
+
+header {
+	background: #2196f3;
+	height: 80px;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	border-bottom: 2px solid #2196f3;
+	* {
+		display: inline-block;
+	}
+
+	img {
+		position: relative;
+		top: 2.5px;
+		float: right;
+		width: 75px;
+		height: 75px;
+		margin-right: 6px;
+	}
+
+	#back-btn {
+		width: 42px;
+		height: 42px;
+		position: relative;
+		float: left;
+		margin-left: 18px;
+		margin-top: calc(80px / 2 - 42px / 2);
+		color: white;
+		cursor: pointer;
+	}
+
+	h1 {
+		font-family: 'Mikado-Bold'!important;
+		font-weight: normal;
+		letter-spacing: 2px;
+		position: absolute;
+		white-space: nowrap;
+		font-size: 30px;
+		overflow-x: hidden;
+		@media only screen and (max-width: 360px) {
+		  font-size: 24px !important;
+		  line-height: 24px;
+		  padding-top: 28px;
+		}
+		line-height: 30px;
+		padding-top: 25px;
+		top: 0;
+		margin-top: 0;
+		margin-bottom: 0;
+		height: 80px;
+		width: calc(100% - 132px);
+		z-index: 100;
+		text-align: center;
+		left: 66px;
+		color: white;
+		&.yellow, &.white {
+		  color: #333;
+		}
+	}
+}

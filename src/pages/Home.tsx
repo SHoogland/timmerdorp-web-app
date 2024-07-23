@@ -1,61 +1,70 @@
-import { useState } from 'react'
 import Parse from 'parse';
 
-import ding from '../assets/ding.svg'
-import QrCode from '../components/QrCode.tsx';
+import Layout from '../layouts/layout';
+import { useNavigate } from 'react-router-dom';
+import checkIfStillLoggedIn from '../utils/checkIfStillLoggedIn.ts';
+
 
 function Home() {
-  const [count, setQr] = useState("")
-  const [scanning, setScanning] = useState(false)
+	const navigate = useNavigate();
 
-  const startScan = () => {
-    if (scanning) {
-      setScanning(false)
-    } else {
-      setScanning(true)
-    }
-  }
+	checkIfStillLoggedIn().then((result) => {
+		if (!result.result) {
+			navigate('/login');
+		}
+	})
 
-  const qrCodeError = (error: any) => {
-    console.error('Error scanning QR code', error);
-  }
 
-  const qrCodeFound = async (decodedText: string) => {
-    setQr(decodedText)
-    setScanning(false)
+	const logOut = async () => {
+		await Parse.User.logOut().catch(
+			error => {
+				alert('Probleem tijdens uitloggen: ' + error);
+			}
+		).then(function (user) {
+			console.log('User logged out', user);
+		})
 
-    await Parse.User.logIn('stephan@shoogland.com', 'dingen').catch(
-      error => {
-        console.error('Error while logging in user', error);
-      }
-    ).then(function (user) {
-      console.log('User logged in', user);
-    })
-  }
+		navigate('/login');
+	}
 
-  return (
-    <>
-      <div className="">
-        <h1>Timmerdorp</h1>
-        <img src={ding} />
-        <div className="card">
-          <button className="" onClick={() => startScan()}>
-            qr code: {count}
-          </button>
-          {scanning &&
-            <QrCode
-              fps={2}
-              qrbox={{ width: 250, height: 250 }}
-              qrCodeSuccessCallback={qrCodeFound}
-              qrCodeErrorCallback={qrCodeError}
-            />}
-        </div>
-        <p className="">
-          Text goes here
-        </p>
-      </div>
-    </>
-  )
+
+	return (
+		<>
+			<h1>Timmerdorp app</h1>
+			<ul>
+				<li>
+					<a href="/zoek">Zoek kinderen</a>
+				</li>
+				<li>
+					<a href="/aanwezigheid">Aanwezigheid</a>
+				</li>
+				<li>
+					<a href="/scan">Scan ticket</a>
+				</li>
+				<li>
+					<a href="/hutjes">Beheer hutjes</a>
+				</li>
+				<li>
+					<a href="/statistieken">Statistieken</a>
+				</li>
+				<li>
+					<a href="/verjaardagen">Verjaardagen</a>
+				</li>
+				<li>
+					<a href="/kaart">Kaart... (doen we dat nog dit jaar?)</a>
+				</li>
+				<li>
+					<a href="/fotos">Foto's en bijlagen</a>
+				</li>
+				<li>
+					<a href="/instellingen">Instellingen</a>
+				</li>
+				<li>
+					<a href="#" onClick={logOut}>Uitloggen</a>
+				</li>
+			</ul>
+		</>
+	)
 }
 
 export default Home
