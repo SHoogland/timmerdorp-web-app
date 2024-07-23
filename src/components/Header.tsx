@@ -14,7 +14,8 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
 
   return (
     <header>
-	  <FaArrowLeft id="back-btn"  onClick={() => navigate(-1)} />
+	  <FaArrowLeft id="back-btn"  onClick={() => navigate('/home')} />
+	  {/* <FaArrowLeft id="back-btn"  onClick={() => navigate(-1)} /> */}
       <h1>{title}</h1>
       <img src={logo} alt="tdorp logo" />
     </header>

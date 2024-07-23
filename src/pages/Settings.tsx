@@ -16,7 +16,7 @@ function Settings() {
 
   return (
 	<>
-		<Layout title="Settings">
+		<Layout title="Instellingen">
 			
 		</Layout>
 	</>

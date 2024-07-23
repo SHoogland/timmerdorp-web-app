@@ -16,7 +16,7 @@ function Attendance() {
 
   return (
 	<>
-		<Layout title="Attendance">
+		<Layout title="Aanwezigheid">
 			
 		</Layout>
 	</>

@@ -9,7 +9,7 @@ import Root from './pages/Root.tsx';
 import ErrorPage from './pages/ErrorPage.tsx';
 import Home from './pages/Home.tsx';
 import Login from './pages/Login.tsx';
-import SearchKids from './pages/SearchKids.tsx';
+import SearchPage from './pages/SearchPage.tsx';
 import Attendance from './pages/Attendance.tsx';
 import ScanTicket from './pages/ScanTicket.tsx';
 import HutjesManagement from './pages/HutjesManagement.tsx';
@@ -40,7 +40,7 @@ const router = createBrowserRouter([
   },
   {
     path: 'zoek',
-    element: <SearchKids />,
+    element: <SearchPage />,
   },
   {
     path: 'aanwezigheid',

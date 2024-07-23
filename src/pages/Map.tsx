@@ -16,7 +16,7 @@ function Map() {
 
   return (
 	<>
-		<Layout title="Map">
+		<Layout title="Kaart">
 			
 		</Layout>
 	</>

@@ -16,7 +16,7 @@ function Statistics() {
 
   return (
 	<>
-		<Layout title="Statistics">
+		<Layout title="Statistieken">
 			
 		</Layout>
 	</>

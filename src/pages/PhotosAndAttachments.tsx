@@ -16,7 +16,7 @@ function PhotosAndAttachments() {
 
   return (
 	<>
-		<Layout title="PhotosAndAttachments">
+		<Layout title="Foto's en bijlagen">
 			
 		</Layout>
 	</>
