@@ -1,0 +1,40 @@
+---
+    name: CI
+    
+    on: push
+    
+    jobs:
+      build:
+        name: Build and Test
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v4
+    
+          - name: Setup Node.js (.nvmrc)
+            uses: actions/setup-node@v4.0.3
+            with:
+              node-version-file: '.nvmrc'
+  
+          # run the ci equivalent of npm install
+          - name: npm ci
+            run: |
+              npm ci
+              npm run build
+    
+          - name: Log in to ghcr.io with docker
+            run: echo ${{ secrets.PAT }} | docker login ghcr.io -u shoogland --password-stdin
+    
+          - name: Build docker image
+            run: |
+              docker build . --tag "ghcr.io/shoogland/timmerdorp-web-app:$GITHUB_SHA" --tag "ghcr.io/shoogland/timmerdorp-web-app:latest"
+    
+          - name: run docker image
+            run: |
+              docker run -d -p 8080:80 ghcr.io/shoogland/timmerdorp-web-app:$GITHUB_SHA
+    
+          - name: wait for docker image to start
+            run: sleep 10
+    
+          - name: test docker image
+            run: curl localhost:8080
