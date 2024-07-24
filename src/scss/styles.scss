@@ -1,6 +1,29 @@
+$white: #ffffff;
+$lightGrey: #ddd;
+$darkGrey: #cccccc;
+$mediumBlack: #101010;
+$blue: #2196f3;
+$liliac: #c393ff;
+$yellow: #f5e31d;
+$green: #43a047;
+$red: #ee0202;
+
+
+@font-face {
+	font-family: Montserrat;
+	src: url("../assets/fonts/Montserrat.woff");
+}
+
+
 body {
-    background-color: lightblue;
-    font-family: 'Arial', sans-serif;
+    background-color: #fafafa;
+	font-family: Roboto, Arial, Helvetica, sans-serif;
     margin: 0;
     padding: 0;
 }
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: Montserrat;
+	font-weight: bold;
+}
+

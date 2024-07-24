@@ -1,10 +1,15 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import checkIfStillLoggedIn from '../utils/checkIfStillLoggedIn';
 
 export default function Root() {
-    return (
-        <>
-            <Link to={"home"}>Home</Link>
-            <Link to={"scan-ticket"}>Scan Ticket</Link>
-        </>
-    );
+	const navigate = useNavigate();
+	checkIfStillLoggedIn().then((result) => {
+		if (result.result) {
+			navigate('/home');
+		} else {
+			navigate('/login');
+		}
+	})
+
+	return null;
 }

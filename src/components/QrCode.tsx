@@ -8,33 +8,34 @@ interface QrCodeProps {
     qrCodeErrorCallback?: (error: any) => void;
 }
 
-const QrCode = (props:QrCodeProps) => {
+const QrCode = (props: QrCodeProps) => {
     const [loading, setLoading] = useState(true);
 
     let htmlScanner: Html5Qrcode | null = null;
 
     const render = async () => {
         console.log('starting');
-        // Suceess callback is required.
+        // Success callback is required.
         if (!(props.qrCodeSuccessCallback)) {
             throw "qrCodeSuccessCallback is required callback.";
         }
     
-        if(!htmlScanner){
-            htmlScanner = new Html5Qrcode("qrscanner", false)
+        if (!htmlScanner) {
+            htmlScanner = new Html5Qrcode("qrscanner", false);
         }
+
         const config = { fps: props.fps, qrbox: props.qrbox };
         setLoading(true);
         await htmlScanner.start({ facingMode: "environment" }, config, props.qrCodeSuccessCallback, props.qrCodeErrorCallback);
         setLoading(false);
-    }
+    };
 
     const stop = async () => {
         console.log('stopping');
-        if(htmlScanner?.getState() === Html5QrcodeScannerState.SCANNING) {
+        if (htmlScanner?.getState() === Html5QrcodeScannerState.SCANNING) {
             await htmlScanner?.stop();
         }
-    }
+    };
     
     useEffect(() => {
         render();
