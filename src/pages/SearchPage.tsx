@@ -229,8 +229,6 @@ function SearchPage() {
 								</div>
 							))}
 							<br/>
-							todo: dit enigszins stylen, en bijzondere props toevoegen: aanwezigheid, telefoonnummers en e-mailadressen formatten. Verder: bewerken kan nog niet
-							<br/>
 							<br/>
 							<button onClick={() => {hideModal()}}>Sluiten</button>
 							{canEditTickets && !isEditingTickets && <button onClick={() => setIsEditingTickets(true)}>Bewerken</button>}

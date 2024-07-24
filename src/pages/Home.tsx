@@ -64,5 +64,6 @@ function Home() {
 			</ul>
 		</>
 	)
+}
 
 export default Home

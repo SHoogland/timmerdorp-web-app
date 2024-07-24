@@ -10,6 +10,7 @@ todo's, soortvan gesorteerd op prioriteit
 - hele registratieproces implementeren (inclusief wachten op e-mail bevestigd, en wachten op admin)
 
 ### Zoekpagina
+- In het kind-overzicht (wat nog heel lelijk is) ontbreken nog sommige gegevens tov de oude app
 
 ### Instellingen
 - admins kunnen toevoegen/verwijderen
@@ -25,6 +26,7 @@ todo's, soortvan gesorteerd op prioriteit
 ## Mid-priority
 - zoekgeschiedenis (her)implementeren
 - een soortvan acceptabel design maken
+- Stan & Stephan tickets kunnen laten bewerken
 
 
 ## Low-priority (maar overige dingen die uit de oude app kwamen)
