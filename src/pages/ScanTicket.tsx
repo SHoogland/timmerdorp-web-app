@@ -1,6 +1,3 @@
-import Parse from 'parse';
-
-import Layout from '../layouts/layout';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import QrCode from '../components/QrCode.tsx';

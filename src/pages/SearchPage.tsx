@@ -242,7 +242,6 @@ function SearchPage() {
 						</div>
 					}
 
-					todo: zoekgeschiedenis (her)implementeren
 				</center>
 			</Layout>
 		</>

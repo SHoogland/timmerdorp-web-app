@@ -1,11 +1,15 @@
 ---
     name: Upload Website
-    
+
     on:
-      push:
-        branches:
-          - main
+      workflow_run:
+        workflows: ["CI"]
+        branches: [main]
+        types:
+          - completed
     
+    concurrency: production_environment
+      
     jobs:
       deploy:
         runs-on: ubuntu-latest

@@ -1,6 +1,5 @@
 import Parse from 'parse';
 
-import Layout from '../layouts/layout';
 import { useNavigate } from 'react-router-dom';
 import checkIfStillLoggedIn from '../utils/checkIfStillLoggedIn.ts';
 
@@ -65,6 +64,5 @@ function Home() {
 			</ul>
 		</>
 	)
-}
 
 export default Home
