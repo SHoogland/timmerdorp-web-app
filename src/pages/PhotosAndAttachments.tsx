@@ -1,6 +1,3 @@
-import Parse from 'parse';
-
-
 import Layout from '../layouts/layout';
 import { useNavigate } from 'react-router-dom';
 import checkIfStillLoggedIn from '../utils/checkIfStillLoggedIn.ts';
@@ -15,9 +12,8 @@ function PhotosAndAttachments() {
   });
 
   return (
-	<>
-		<Layout title="Foto's en bijlagen">
-			
+	<>		<Layout title="Foto's en bijlagen">
+			<p>placeholder</p>
 		</Layout>
 	</>
   );

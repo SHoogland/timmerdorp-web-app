@@ -1,5 +1,3 @@
-import Parse from 'parse';
-
 
 import Layout from '../layouts/layout';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +15,7 @@ function Settings() {
   return (
 	<>
 		<Layout title="Instellingen">
-			
+			<p>placeholder</p>
 		</Layout>
 	</>
   );

@@ -1,6 +1,3 @@
-import Parse from 'parse';
-
-
 import Layout from '../layouts/layout';
 import { useNavigate } from 'react-router-dom';
 import checkIfStillLoggedIn from '../utils/checkIfStillLoggedIn.ts';
@@ -15,9 +12,8 @@ function Wristband() {
   });
 
   return (
-	<>
-		<Layout title="Polsbandje toewijzen">
-			
+	<>		<Layout title="Polsbandje toewijzen">
+			<p>placeholder</p>
 		</Layout>
 	</>
   );

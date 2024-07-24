@@ -1,5 +1,3 @@
-import Parse from 'parse';
-
 
 import Layout from '../layouts/layout';
 import { useNavigate } from 'react-router-dom';

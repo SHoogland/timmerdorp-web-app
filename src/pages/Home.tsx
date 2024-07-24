@@ -1,5 +1,4 @@
 import Parse from 'parse';
-
 import { useNavigate } from 'react-router-dom';
 import checkIfStillLoggedIn from '../utils/checkIfStillLoggedIn.ts';
 

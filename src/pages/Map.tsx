@@ -1,5 +1,3 @@
-import Parse from 'parse';
-
 
 import Layout from '../layouts/layout';
 import { useNavigate } from 'react-router-dom';
@@ -15,9 +13,8 @@ function Map() {
   });
 
   return (
-	<>
-		<Layout title="Kaart">
-			
+	<>		<Layout title="Kaart">
+			<p>placeholder</p>
 		</Layout>
 	</>
   );

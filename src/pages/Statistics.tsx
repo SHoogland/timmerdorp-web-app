@@ -1,5 +1,3 @@
-import Parse from 'parse';
-
 
 import Layout from '../layouts/layout';
 import { useNavigate } from 'react-router-dom';
@@ -15,9 +13,8 @@ function Statistics() {
   });
 
   return (
-	<>
-		<Layout title="Statistieken">
-			
+	<>		<Layout title="Statistieken">
+			<p>placeholder</p>
 		</Layout>
 	</>
   );

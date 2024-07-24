@@ -4,7 +4,6 @@ import QrCode from '../components/QrCode.tsx';
 import checkIfStillLoggedIn from '../utils/checkIfStillLoggedIn.ts';
 
 function ScanTicket() {
-	const [qrCode, setQr] = useState("");
 	const [scanning, setScanning] = useState(true);
 	const navigate = useNavigate();
 
@@ -19,7 +18,6 @@ function ScanTicket() {
 	};
 
 	const qrCodeFound = async (decodedText: string) => {
-		setQr(decodedText);
 		setScanning(false);
 		navigate('/polsbandje?ticket-id=' + decodedText);
 	};

@@ -1,24 +1,36 @@
-import Parse from 'parse';
 import Layout from '../layouts/layout.tsx';
 import { useNavigate } from 'react-router-dom';
 import checkIfStillLoggedIn from '../utils/checkIfStillLoggedIn.ts';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import apiCall from '../utils/apiCall.ts';
 import '../scss/SearchPage.scss';
+
+interface Ticket {
+	[key: string]: any;
+  }
+  
+
+interface TicketProperty {
+	label: string;
+}
+
+interface TicketPropertiesMap {
+	[key: string]: TicketProperty;
+}
 
 function SearchPage() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [isSearchingById, setIsSearchingById] = useState(false);
 	const [hasSearched, setHasSearched] = useState(false);
-	const [searchResults, setSearchResults] = useState([]);
+	const [searchResults, setSearchResults] = useState<Ticket[]>([]);
 	const [lastSearchedTerm, setLastSearchedTerm] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
 	const [errorHelpText, setErrorHelpText] = useState('');
 	const [modalShown, setModalShown] = useState(false);
-	const [selectedChild, setSelectedChild] = useState({});
+	const [selectedChild, setSelectedChild] = useState<Ticket>({});
 	const [canEditTickets, setCanEditTickets] = useState(false);
-	const [ticketPropertiesMap, setTicketPropertiesMap] = useState({});
+	const [ticketPropertiesMap, setTicketPropertiesMap] = useState<TicketPropertiesMap>({});
 	const [isEditingTickets, setIsEditingTickets] = useState(false);
 
 	const tableCategories = [
@@ -37,7 +49,6 @@ function SearchPage() {
 	];
 
 	const navigate = useNavigate();
-
 
 	useEffect(() => {
 		checkIfStillLoggedIn().then((result) => {
@@ -72,7 +83,7 @@ function SearchPage() {
 			setHasSearched(true);
 			setLastSearchedTerm(searchTerm);
 
-			const rankResult = (item) => {
+			const rankResult = (item: Ticket) => {
 				if (item.wristband === searchTerm) return -1;
 				if (item.firstName.toLowerCase().startsWith(searchTerm.toLowerCase())) return 1;
 				if (item.lastName.toLowerCase().startsWith(searchTerm.toLowerCase())) return 2;
@@ -81,7 +92,7 @@ function SearchPage() {
 				return 5;
 			};
 
-			setSearchResults(result.tickets.sort((a, b) => rankResult(a) - rankResult(b)));
+			setSearchResults(result.tickets.sort((a: Ticket, b: Ticket) => rankResult(a) - rankResult(b)));
 			setCanEditTickets(result.canEditTickets);
 			setTicketPropertiesMap(result.ticketPropertiesMap);
 
@@ -101,9 +112,9 @@ function SearchPage() {
 			search(window.location.href.split('ticket-id=')[1].split('&')[0]);
 		}
 	}, [isSearchingById])
-	
 
-	const changeSearchTerm = (e) => {
+
+	const changeSearchTerm = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const newSearchTerm = e.target.value;
 		setSearchTerm(newSearchTerm);
 		setHasSearched(false);
@@ -111,8 +122,8 @@ function SearchPage() {
 	};
 
 	useEffect(() => {
-		if(isSearchingById) return;
-		if(hasSearched && searchTerm === lastSearchedTerm) return;
+		if (isSearchingById) return;
+		if (hasSearched && searchTerm === lastSearchedTerm) return;
 
 		if (searchTerm.length < 3) {
 			setSearchResults([]);
@@ -126,7 +137,7 @@ function SearchPage() {
 		return () => clearTimeout(timer);
 	}, [searchTerm, search]);
 
-	const showModal = (child) => {
+	const showModal = (child: Ticket) => {
 		window.history.pushState({}, '', '/zoek?q=' + searchTerm + '&ticket-id=' + child.id);
 		setModalShown(true);
 		setSelectedChild(child);
@@ -145,16 +156,21 @@ function SearchPage() {
 		}
 	}, []);
 
+	const saveTicketEdit = async () => {
+		alert('Opslaan is nog niet geïmplementeerd');
+	};
+
+
 	return (
 		<>
 			<Layout title="Zoek kinderen">
 				<center>
-					<input 
-						type="text" 
-						title="Zoekterm" 
-						onChange={changeSearchTerm} 
+					<input
+						type="text"
+						title="Zoekterm"
+						onChange={changeSearchTerm}
 						value={searchTerm}
-						placeholder="Zoekterm" 
+						placeholder="Zoekterm"
 					/>
 					<br />
 					{loading && "Laden..."}
@@ -228,9 +244,9 @@ function SearchPage() {
 									</table>
 								</div>
 							))}
-							<br/>
-							<br/>
-							<button onClick={() => {hideModal()}}>Sluiten</button>
+							<br />
+							<br />
+							<button onClick={() => { hideModal() }}>Sluiten</button>
 							{canEditTickets && !isEditingTickets && <button onClick={() => setIsEditingTickets(true)}>Bewerken</button>}
 							{isEditingTickets && <button onClick={() => saveTicketEdit()}>Opslaan</button>}
 							<button onClick={() => navigate('/polsbandje?ticket-id=' + selectedChild.id)}>Polsbandje wijzigen</button>

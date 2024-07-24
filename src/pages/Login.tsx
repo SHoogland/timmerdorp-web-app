@@ -1,5 +1,4 @@
 import Parse from 'parse';
-
 import Layout from '../layouts/layout';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
