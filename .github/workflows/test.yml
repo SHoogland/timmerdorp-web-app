@@ -35,3 +35,5 @@
     
           - name: test docker image
             run: curl localhost:8080
+
+          - uses: cypress-io/github-action@v6
