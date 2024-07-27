@@ -1,6 +1,5 @@
 import Layout from '../layouts/layout.tsx';
 import { useNavigate } from 'react-router-dom';
-import checkIfStillLoggedIn from '../utils/checkIfStillLoggedIn.ts';
 import { useState, useEffect } from 'react';
 import apiCall from '../utils/apiCall.ts';
 import '../scss/SearchPage.scss';
@@ -49,14 +48,6 @@ function SearchPage() {
 	];
 
 	const navigate = useNavigate();
-
-	useEffect(() => {
-		checkIfStillLoggedIn().then((result) => {
-			if (!result.result) {
-				navigate('/login');
-			}
-		});
-	}, [navigate]);
 
 	const search = async (ticketId?: string) => {
 		setSearchResults([]);

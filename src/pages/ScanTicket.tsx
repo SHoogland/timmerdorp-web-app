@@ -1,17 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import QrCode from '../components/QrCode.tsx';
-import checkIfStillLoggedIn from '../utils/checkIfStillLoggedIn.ts';
 
 function ScanTicket() {
 	const [scanning, setScanning] = useState(true);
 	const navigate = useNavigate();
-
-	checkIfStillLoggedIn().then((result) => {
-		if (!result.result) {
-			navigate('/login');
-		}
-	});
 
 	const qrCodeError = (error: object) => {
 		console.error('Error scanning QR code', error);

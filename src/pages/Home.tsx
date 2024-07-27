@@ -1,17 +1,8 @@
 import Parse from 'parse';
 import { useNavigate } from 'react-router-dom';
-import checkIfStillLoggedIn from '../utils/checkIfStillLoggedIn.ts';
-
 
 function Home() {
 	const navigate = useNavigate();
-
-	checkIfStillLoggedIn().then((result) => {
-		if (!result.result) {
-			navigate('/login');
-		}
-	})
-
 
 	const logOut = async () => {
 		await Parse.User.logOut().catch(
@@ -24,7 +15,6 @@ function Home() {
 
 		navigate('/login');
 	}
-
 
 	return (
 		<>
