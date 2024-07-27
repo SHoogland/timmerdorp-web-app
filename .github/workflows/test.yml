@@ -22,9 +22,6 @@
               npm ci
               npm run build
     
-          - name: Log in to ghcr.io with docker
-            run: echo ${{ secrets.PAT }} | docker login ghcr.io -u shoogland --password-stdin
-    
           - name: Build docker image
             run: |
               docker build . --tag "ghcr.io/shoogland/timmerdorp-web-app:$GITHUB_SHA" --tag "ghcr.io/shoogland/timmerdorp-web-app:latest"
