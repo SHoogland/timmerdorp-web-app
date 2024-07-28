@@ -22,7 +22,7 @@ function Login() {
 	}
 
 	return (
-		<Layout title='Inloggen'>
+		<Layout title='Inloggen' disableBackButton={true}>
 			<input
 				value={email}
 				onChange={(e) => setEmail(e.target.value)}

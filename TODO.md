@@ -2,9 +2,6 @@
 todo's, soortvan gesorteerd op prioriteit
 
 ## High-priority
-### Algemeen
-- Er wordt nu bij elke page-load gecheckt of je ingelogd bent. Dat is overkill (?), maar hoe het beter kan...
-
 ### Login
 - wachtwoord vergeten implementeren
 - hele registratieproces implementeren (inclusief wachten op e-mail bevestigd, en wachten op admin)
@@ -19,12 +16,9 @@ todo's, soortvan gesorteerd op prioriteit
 ### Hutjes beheren
 - Alles
 
-### Aanwezigheid
-- Alles
-
 
 ## Mid-priority
-- zoekgeschiedenis (her)implementeren
+- zoekgeschiedenis (her)implementeren, bij zoekpagina, aanwezigheid en hutjes
 - een soortvan acceptabel design maken
 - Stan & Stephan tickets kunnen laten bewerken
 

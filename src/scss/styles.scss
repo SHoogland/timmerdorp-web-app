@@ -27,3 +27,22 @@ h1, h2, h3, h4, h5, h6 {
 	font-weight: bold;
 }
 
+
+button {
+	// make clean
+	border: none;
+	cursor: pointer;
+	background-color: $blue;
+	color: white;
+	border-radius: 5px;
+	font-weight: bold;
+	font-size: 1.05em;
+	letter-spacing: 1px;
+	
+	&.big {
+		padding: 24px 32px;
+	}
+	&.green {
+		background-color: $green;
+	}
+}
