@@ -4,6 +4,8 @@ services:
     command: ["--bind_ip_all"]
     ports:
       - 27017:27017
+    volumes:
+      - ./dump:/dump
 
   tdorp-parse-server:
     image: ghcr.io/shoogland/timmerdorp-parse
@@ -11,3 +13,5 @@ services:
       - 1337:1337
     environment:
       - DATABASE_URI=mongodb://mongodb:27017/dev
+      - APP_ID=myAppId
+      - JS_KEY=jsKey
