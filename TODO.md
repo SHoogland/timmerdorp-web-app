@@ -2,11 +2,7 @@
 todo's, soortvan gesorteerd op prioriteit
 
 ## High-priority
-### Algemeen
-- Er wordt nu bij elke page-load gecheckt of je ingelogd bent. Dat is overkill (?), maar hoe het beter kan...
-
 ### Login
-- wachtwoord vergeten implementeren
 - hele registratieproces implementeren (inclusief wachten op e-mail bevestigd, en wachten op admin)
 
 ### Zoekpagina
@@ -14,19 +10,16 @@ todo's, soortvan gesorteerd op prioriteit
 
 ### Instellingen
 - admins kunnen toevoegen/verwijderen
-- gebeurtenis-log implementeren voor stan & stephan
+- gebeurtenis-log implementeren voor stan & stephan (ook filteren op type gebeurtenis en gebruiker)
 
-### Hutjes beheren
-- Alles
-
-### Aanwezigheid
-- Alles
 
 
 ## Mid-priority
-- zoekgeschiedenis (her)implementeren
+- zoekgeschiedenis (her)implementeren, bij zoekpagina, aanwezigheid en hutjes
 - een soortvan acceptabel design maken
-- Stan & Stephan tickets kunnen laten bewerken
+- Stan & Stephan tickets laten bewerken
+- eigenlijk even de hele oude app doorlopen en kijken wat er nog mist
+- wachtwoord vergeten implementeren
 
 
 ## Low-priority (maar overige dingen die uit de oude app kwamen)

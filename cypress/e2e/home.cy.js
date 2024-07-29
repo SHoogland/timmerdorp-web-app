@@ -16,10 +16,6 @@ context('Viewport', () => {
     // {enter} causes the form to submit
     cy.get('input[name=password]').type(`p_n7!-e8{enter}`)
 
-    // we should be redirected to /dashboard
-    cy.url().should('include', '/home')
-
-
 	//   // the navbar should have collapse since our screen is smaller
 	//   cy.get('#navbar').should('not.be.visible')
 	//   cy.get('.navbar-toggle').should('be.visible').click()

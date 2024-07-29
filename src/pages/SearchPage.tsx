@@ -6,8 +6,8 @@ import '../scss/SearchPage.scss';
 
 interface Ticket {
 	[key: string]: any;
-  }
-  
+}
+
 
 interface TicketProperty {
 	label: string;
@@ -19,12 +19,11 @@ interface TicketPropertiesMap {
 
 function SearchPage() {
 	const [searchTerm, setSearchTerm] = useState("");
-	const [isSearchingById, setIsSearchingById] = useState(false);
 	const [hasSearched, setHasSearched] = useState(false);
 	const [searchResults, setSearchResults] = useState<Ticket[]>([]);
 	const [lastSearchedTerm, setLastSearchedTerm] = useState('');
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState('');
+	const [errorTitle, setErrorTitle] = useState('');
 	const [errorHelpText, setErrorHelpText] = useState('');
 	const [modalShown, setModalShown] = useState(false);
 	const [selectedChild, setSelectedChild] = useState<Ticket>({});
@@ -51,23 +50,20 @@ function SearchPage() {
 
 	const search = async (ticketId?: string) => {
 		setSearchResults([]);
-		setError('');
+		setErrorTitle('');
 		setErrorHelpText('');
-		if (!isSearchingById && searchTerm.length < 3) {
-			return;
-		}
-		if (isSearchingById && !ticketId) {
+		if (!ticketId && searchTerm.length < 3) {
 			return;
 		}
 		setLoading(true);
 
 		try {
-			const result = await apiCall('search', { searchTerm: isSearchingById ? ticketId : searchTerm });
+			const result = await apiCall('search', { searchTerm: ticketId || searchTerm });
 			setLoading(false);
 
 			if (!result || result.response !== 'success') {
-				setError(result.error || result.response);
-				setErrorHelpText(result.errorMessage || result.response);
+				setErrorTitle(result.errorTitle || result.response);
+				setErrorHelpText(result.errorTitleMessage || result.response);
 				return;
 			}
 
@@ -87,23 +83,15 @@ function SearchPage() {
 			setCanEditTickets(result.canEditTickets);
 			setTicketPropertiesMap(result.ticketPropertiesMap);
 
-			if (isSearchingById) {
+			if (ticketId) {
 				setModalShown(result.tickets[0]);
 				setSearchTerm(result.tickets[0].firstName + ' ' + result.tickets[0].lastName);
-				setIsSearchingById(false);
 			}
 		} catch (e) {
 			setLoading(false);
-			setError(String(e));
+			setErrorTitle(String(e));
 		}
 	}
-
-	useEffect(() => {
-		if (isSearchingById && !hasSearched && !loading) {
-			search(window.location.href.split('ticket-id=')[1].split('&')[0]);
-		}
-	}, [isSearchingById])
-
 
 	const changeSearchTerm = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const newSearchTerm = e.target.value;
@@ -113,7 +101,6 @@ function SearchPage() {
 	};
 
 	useEffect(() => {
-		if (isSearchingById) return;
 		if (hasSearched && searchTerm === lastSearchedTerm) return;
 
 		if (searchTerm.length < 3) {
@@ -126,7 +113,7 @@ function SearchPage() {
 		}, 500);
 
 		return () => clearTimeout(timer);
-	}, [searchTerm, search]);
+	}, [searchTerm]);
 
 	const showModal = (child: Ticket) => {
 		window.history.pushState({}, '', '/zoek?q=' + searchTerm + '&ticket-id=' + child.id);
@@ -141,9 +128,14 @@ function SearchPage() {
 
 	useEffect(() => {
 		if (window.location.href.includes('ticket-id=')) {
-			setIsSearchingById(true);
+			if (!hasSearched && !loading) {
+				search(window.location.href.split('ticket-id=')[1].split('&')[0]);
+			}
 		} else if (window.location.href.includes('q=')) {
 			setSearchTerm(window.location.href.split('q=')[1].split('&')[0]);
+			if(!hasSearched && !loading) {
+				search();
+			}
 		}
 	}, []);
 
@@ -156,98 +148,99 @@ function SearchPage() {
 		<>
 			<Layout title="Zoek kinderen">
 				<center>
+					<h2>Zoek kinderen op naam, polsband of hutje: </h2>
 					<input
 						type="text"
 						title="Zoekterm"
 						onChange={changeSearchTerm}
 						value={searchTerm}
 						placeholder="Zoekterm"
+						className='big'
 					/>
 					<br />
 					{loading && "Laden..."}
-
-					{searchResults.length > 0 && (
-						<div id="results">
-							<h3>Zoekresultaten ({searchResults.length})</h3>
-							<ul className="peopleList">
-								{searchResults.map((child) => (
-									<table
-										key={child.id}
-										onClick={() => showModal(child)}
-										style={{ borderBottom: '1px solid #ccc', width: '100%', textAlign: 'left' }}
-									>
-										<tbody className='ticketListItem'>
-											<tr>
-												<td>
-													<h3>Bandje <span>{child.wristband}</span></h3>
-													<h3>Hutje <span>{child.hutNr}</span></h3>
-												</td>
-												<td>
-													<h2>
-														{child.firstName}
-														<br />
-														{child.lastName}
-													</h2>
-												</td>
-												<td>
-													<button>i</button>
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								))}
-							</ul>
-						</div>
-					)}
-
-					{searchResults.length === 0 && hasSearched && !error && (
-						<div>
-							<b>Geen zoekresultaten! Je kunt zoeken op polsbandje-nummer, hutnummer of op voor- of achternaam.</b>
-						</div>
-					)}
-
-					{error && (
-						<div>
-							<b>{error}</b>
-							<br />
-							{errorHelpText}
-						</div>
-					)}
-
-					<br />
-
-					{modalShown &&
-						<div id="modal">
-							{selectedChild.firstName} {selectedChild.lastName}
-							<br />
-							{tableCategories.map((cat) => (
-								<div key={cat.name}>
-									<h3>{cat.name}</h3>
-									<table>
-										<tbody>
-											{cat.props.map((prop) => (
-												<tr key={prop}>
-													<td>{(ticketPropertiesMap[prop] || {}).label}</td>
-													<td>{selectedChild[prop]}</td>
-												</tr>
-											))}
-										</tbody>
-									</table>
-								</div>
-							))}
-							<br />
-							<br />
-							<button onClick={() => { hideModal() }}>Sluiten</button>
-							{canEditTickets && !isEditingTickets && <button onClick={() => setIsEditingTickets(true)}>Bewerken</button>}
-							{isEditingTickets && <button onClick={() => saveTicketEdit()}>Opslaan</button>}
-							<button onClick={() => navigate('/polsbandje?ticket-id=' + selectedChild.id)}>Polsbandje wijzigen</button>
-							<button onClick={() => navigate('/hutje?ticket-id=' + selectedChild.id)}>Naar hutje</button>
-							<button onClick={() => navigate('/aanwezigheid?ticket-id=' + selectedChild.id)}>Naar aanwezigheid</button>
-							<button onClick={() => navigate('/home')}>Terug naar homepagina</button>
-						</div>
-					}
-
 				</center>
+
+				{searchResults.length > 0 && (
+					<div id="results">
+						<h3>Zoekresultaten ({searchResults.length})</h3>
+						<ul className="peopleList">
+							{searchResults.map((child) => (
+								<table
+									key={child.id}
+									onClick={() => showModal(child)}
+									style={{ borderBottom: '1px solid #ccc', width: '100%', textAlign: 'left' }}
+								>
+									<tbody className='ticketListItem'>
+										<tr>
+											<td>
+												<h3>Bandje <span>{child.wristband}</span></h3>
+												<h3>Hutje <span>{child.hutNr}</span></h3>
+											</td>
+											<td>
+												<h2>
+													{child.firstName}
+													<br />
+													{child.lastName}
+												</h2>
+											</td>
+											<td>
+												<button>i</button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							))}
+						</ul>
+					</div>
+				)}
+
+				{searchResults.length === 0 && hasSearched && !errorTitle && (
+					<div>
+						<b>Geen zoekresultaten! Je kunt zoeken op polsbandje-nummer, hutnummer of op voor- of achternaam.</b>
+					</div>
+				)}
+
+				{errorTitle && (
+					<div>
+						<b>{errorTitle}</b>
+						<br />
+						{errorHelpText}
+					</div>
+				)}
+
+				<br />
+
+				{modalShown &&
+					<div id="modal">
+						{selectedChild.firstName} {selectedChild.lastName}
+						<br />
+						{tableCategories.map((cat) => (
+							<div key={cat.name}>
+								<h3>{cat.name}</h3>
+								<table>
+									<tbody>
+										{cat.props.map((prop) => (
+											<tr key={prop}>
+												<td>{(ticketPropertiesMap[prop] || {}).label}</td>
+												<td>{selectedChild[prop]}</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							</div>
+						))}
+						<br />
+						<br />
+						<button onClick={() => { hideModal() }}>Sluiten</button>
+						{canEditTickets && !isEditingTickets && <button onClick={() => setIsEditingTickets(true)}>Bewerken</button>}
+						{isEditingTickets && <button onClick={() => saveTicketEdit()}>Opslaan</button>}
+						<button onClick={() => navigate('/polsbandje?ticket-id=' + selectedChild.id + '&origin=search')}>Polsbandje wijzigen</button>
+						<button onClick={() => navigate('/hutje?ticket-id=' + selectedChild.id)}>Naar hutje</button>
+						<button onClick={() => navigate('/aanwezigheid?ticket-id=' + selectedChild.id)}>Naar aanwezigheid</button>
+						<button onClick={() => navigate('/')}>Terug naar homepagina</button>
+					</div>
+				}
 			</Layout>
 		</>
 	);

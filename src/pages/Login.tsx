@@ -15,14 +15,14 @@ function Login() {
 			})
 			.then(function (user) {
 				if (user) {
-					navigate('/home');
+					navigate('/');
 					console.log('User logged in', user);
 				}
 			})
 	}
 
 	return (
-		<Layout title='Inloggen'>
+		<Layout title='Inloggen' disableBackButton={true}>
 			<input
 				name="email"
 				value={email}
