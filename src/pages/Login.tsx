@@ -24,6 +24,7 @@ function Login() {
 	return (
 		<Layout title='Inloggen' disableBackButton={true}>
 			<input
+				name="email"
 				value={email}
 				onChange={(e) => setEmail(e.target.value)}
 				onKeyUp={(e) => e.key == 'Enter' ? login() : null}
@@ -31,6 +32,7 @@ function Login() {
 				placeholder="Email"
 			/>
 			<input
+				name="password"
 				value={password}
 				onChange={(e) => setPassword(e.target.value)}
 				onKeyUp={(e) => e.key == 'Enter' ? login() : null}

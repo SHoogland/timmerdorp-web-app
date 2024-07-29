@@ -20,12 +20,24 @@
           - name: npm ci
             run: |
               npm ci
-              npm run build
+              npm run test-build
     
+          - name: Log in to ghcr.io with docker
+            run: echo ${{ secrets.GH_PAT }} | docker login ghcr.io -u shoogland --password-stdin
+
+          - name: Start mongodb
+            run: docker compose up -d mongodb
+
+          - name: restore dump
+            run: docker compose exec mongodb mongorestore --uri "mongodb://localhost:27017/dev" --nsExclude "admin.system.*" /dump
+
+          - name: Start parse server
+            run: docker compose up -d tdorp-parse-server
+
           - name: Build docker image
             run: |
-              docker build . --tag "ghcr.io/shoogland/timmerdorp-web-app:$GITHUB_SHA" --tag "ghcr.io/shoogland/timmerdorp-web-app:latest"
-    
+              docker build . --tag "ghcr.io/shoogland/timmerdorp-web-app:$GITHUB_SHA"
+
           - name: run docker image
             run: |
               docker run -d -p 8080:80 ghcr.io/shoogland/timmerdorp-web-app:$GITHUB_SHA
@@ -37,3 +49,9 @@
             run: curl localhost:8080
 
           - uses: cypress-io/github-action@v6
+
+          - uses: actions/upload-artifact@v4
+            if: always()
+            with:
+              name: cypress-videos
+              path: cypress/videos
