@@ -19,7 +19,7 @@ function ScanTicket() {
 		<>
 			{scanning ?
 				<>
-					<span onClick={() => { setScanning(false); navigate('/home')}} style={{
+					<span onClick={() => { setScanning(false); navigate('/')}} style={{
 						position: 'fixed',
 						top: 12,
 						left: 18,

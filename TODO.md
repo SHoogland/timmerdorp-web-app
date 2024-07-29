@@ -3,7 +3,6 @@ todo's, soortvan gesorteerd op prioriteit
 
 ## High-priority
 ### Login
-- wachtwoord vergeten implementeren
 - hele registratieproces implementeren (inclusief wachten op e-mail bevestigd, en wachten op admin)
 
 ### Zoekpagina
@@ -11,16 +10,16 @@ todo's, soortvan gesorteerd op prioriteit
 
 ### Instellingen
 - admins kunnen toevoegen/verwijderen
-- gebeurtenis-log implementeren voor stan & stephan
+- gebeurtenis-log implementeren voor stan & stephan (ook filteren op type gebeurtenis en gebruiker)
 
-### Hutjes beheren
-- Alles
 
 
 ## Mid-priority
 - zoekgeschiedenis (her)implementeren, bij zoekpagina, aanwezigheid en hutjes
 - een soortvan acceptabel design maken
-- Stan & Stephan tickets kunnen laten bewerken
+- Stan & Stephan tickets laten bewerken
+- eigenlijk even de hele oude app doorlopen en kijken wat er nog mist
+- wachtwoord vergeten implementeren
 
 
 ## Low-priority (maar overige dingen die uit de oude app kwamen)

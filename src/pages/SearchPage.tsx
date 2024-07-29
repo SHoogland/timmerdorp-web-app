@@ -23,7 +23,7 @@ function SearchPage() {
 	const [searchResults, setSearchResults] = useState<Ticket[]>([]);
 	const [lastSearchedTerm, setLastSearchedTerm] = useState('');
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState('');
+	const [errorTitle, setErrorTitle] = useState('');
 	const [errorHelpText, setErrorHelpText] = useState('');
 	const [modalShown, setModalShown] = useState(false);
 	const [selectedChild, setSelectedChild] = useState<Ticket>({});
@@ -49,9 +49,8 @@ function SearchPage() {
 	const navigate = useNavigate();
 
 	const search = async (ticketId?: string) => {
-		console.log('hallo?')
 		setSearchResults([]);
-		setError('');
+		setErrorTitle('');
 		setErrorHelpText('');
 		if (!ticketId && searchTerm.length < 3) {
 			return;
@@ -63,8 +62,8 @@ function SearchPage() {
 			setLoading(false);
 
 			if (!result || result.response !== 'success') {
-				setError(result.error || result.response);
-				setErrorHelpText(result.errorMessage || result.response);
+				setErrorTitle(result.errorTitle || result.response);
+				setErrorHelpText(result.errorTitleMessage || result.response);
 				return;
 			}
 
@@ -90,7 +89,7 @@ function SearchPage() {
 			}
 		} catch (e) {
 			setLoading(false);
-			setError(String(e));
+			setErrorTitle(String(e));
 		}
 	}
 
@@ -114,7 +113,7 @@ function SearchPage() {
 		}, 500);
 
 		return () => clearTimeout(timer);
-	}, [searchTerm, search]);
+	}, [searchTerm]);
 
 	const showModal = (child: Ticket) => {
 		window.history.pushState({}, '', '/zoek?q=' + searchTerm + '&ticket-id=' + child.id);
@@ -149,12 +148,14 @@ function SearchPage() {
 		<>
 			<Layout title="Zoek kinderen">
 				<center>
+					<h2>Zoek kinderen op naam, polsband of hutje: </h2>
 					<input
 						type="text"
 						title="Zoekterm"
 						onChange={changeSearchTerm}
 						value={searchTerm}
 						placeholder="Zoekterm"
+						className='big'
 					/>
 					<br />
 					{loading && "Laden..."}
@@ -194,15 +195,15 @@ function SearchPage() {
 					</div>
 				)}
 
-				{searchResults.length === 0 && hasSearched && !error && (
+				{searchResults.length === 0 && hasSearched && !errorTitle && (
 					<div>
 						<b>Geen zoekresultaten! Je kunt zoeken op polsbandje-nummer, hutnummer of op voor- of achternaam.</b>
 					</div>
 				)}
 
-				{error && (
+				{errorTitle && (
 					<div>
-						<b>{error}</b>
+						<b>{errorTitle}</b>
 						<br />
 						{errorHelpText}
 					</div>
@@ -234,10 +235,10 @@ function SearchPage() {
 						<button onClick={() => { hideModal() }}>Sluiten</button>
 						{canEditTickets && !isEditingTickets && <button onClick={() => setIsEditingTickets(true)}>Bewerken</button>}
 						{isEditingTickets && <button onClick={() => saveTicketEdit()}>Opslaan</button>}
-						<button onClick={() => navigate('/polsbandje?ticket-id=' + selectedChild.id)}>Polsbandje wijzigen</button>
+						<button onClick={() => navigate('/polsbandje?ticket-id=' + selectedChild.id + '&origin=search')}>Polsbandje wijzigen</button>
 						<button onClick={() => navigate('/hutje?ticket-id=' + selectedChild.id)}>Naar hutje</button>
 						<button onClick={() => navigate('/aanwezigheid?ticket-id=' + selectedChild.id)}>Naar aanwezigheid</button>
-						<button onClick={() => navigate('/home')}>Terug naar homepagina</button>
+						<button onClick={() => navigate('/')}>Terug naar homepagina</button>
 					</div>
 				}
 			</Layout>

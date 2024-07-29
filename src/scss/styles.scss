@@ -8,28 +8,43 @@ $yellow: #f5e31d;
 $green: #43a047;
 $red: #ee0202;
 
+* {
+	// disable text selection
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+p, span, b, i, strong, em, h1, h2, h3, h4, h5, h6 {
+	cursor: default;
+}
 
 @font-face {
 	font-family: Montserrat;
 	src: url("../assets/fonts/Montserrat.woff");
 }
 
-
 body {
-    background-color: #fafafa;
+	background-color: #fafafa;
 	font-family: Roboto, Arial, Helvetica, sans-serif;
-    margin: 0;
-    padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
 	font-family: Montserrat;
-	font-weight: bold;
+	font-weight: 400;
 }
-
 
 button {
-	// make clean
 	border: none;
 	cursor: pointer;
 	background-color: $blue;
@@ -38,11 +53,54 @@ button {
 	font-weight: bold;
 	font-size: 1.05em;
 	letter-spacing: 1px;
-	
+
 	&.big {
 		padding: 24px 32px;
 	}
 	&.green {
 		background-color: $green;
 	}
+}
+
+input {
+	border: none;
+	background: #e0e0e0;
+	&.big {
+		min-width: 200px;
+	}
+	&.big,
+	&.wristband-number {
+		height: 68px;
+		top: 2px;
+		position: relative;
+	}
+	&.wristband-number {
+		border-radius: 6px;
+		font-weight: bold;
+		padding: 0;
+		width: 68px;
+		text-align: center;
+		font-size: 1.4em;
+	}
+	// disable number input arrow buttons:
+	&::-webkit-outer-spin-button,
+	&::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+	&[type="number"] {
+		-moz-appearance: textfield;
+		appearance: textfield;
+	}
+	&:focus {
+		outline: none;
+	}
+}
+
+
+
+a {
+	color: $blue;
+	cursor: pointer;
+	text-decoration: underline;
 }

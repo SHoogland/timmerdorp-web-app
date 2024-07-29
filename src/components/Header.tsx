@@ -15,7 +15,7 @@ const Header: React.FC<HeaderProps> = ({ title, disableBackButton }) => {
 
 	return (
 		<header>
-			{ disableBackButton ? null : <FaArrowLeft id="back-btn" onClick={() => navigate('/home')} /> }
+			{ disableBackButton ? null : <FaArrowLeft id="back-btn" onClick={() => navigate('/')} /> }
 			<h1>{title}</h1>
 			<img src={logo} alt="tdorp logo" />
 		</header>

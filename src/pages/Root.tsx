@@ -2,6 +2,6 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Root() {
 	const navigate = useNavigate();
-	navigate('/home');
+	navigate('/');
 	return null;
 }

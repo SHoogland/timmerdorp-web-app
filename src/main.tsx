@@ -5,9 +5,8 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 
-import Root from './pages/Root.tsx';
-import ErrorPage from './pages/ErrorPage.tsx';
 import Home from './pages/Home.tsx';
+import ErrorPage from './pages/ErrorPage.tsx';
 import Login from './pages/Login.tsx';
 import SearchPage from './pages/SearchPage.tsx';
 import Attendance from './pages/Attendance.tsx';
@@ -27,12 +26,8 @@ initParse();
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Root />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: 'home',
     element: <Home />,
+    errorElement: <ErrorPage />,
   },
   {
     path: 'login',

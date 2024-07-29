@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Layout from '../layouts/layout';
 import apiCall from '../utils/apiCall';
+import { useNavigate } from 'react-router-dom';
 // import { useNavigate } from 'react-router-dom';
 
 interface Ticket {
@@ -18,15 +19,15 @@ function Attendance() {
 	const [foundChildIsAlreadyPresent, setFoundChildIsAlreadyPresent] = useState(false);
 	const [weekday, setWeekday] = useState('');
 	const [weekdayDisplayname, setWeekdayDisplayname] = useState('');
-	// const navigate = useNavigate();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const weekdays = ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'];
 		const today = new Date().getDay();
 		let weekday = weekdays[today];
 		if(today < 2 || today > 5) {
-			// alert('Nog even wachten tot Timmerdorp!');
-			// navigate('/home');
+			alert('Nog even wachten tot Timmerdorp!');
+			navigate('/');
 			weekday = 'Dinsdag';
 		}
 		setWeekdayDisplayname(weekday);
@@ -114,12 +115,13 @@ function Attendance() {
 				<input
 					type="number"
 					maxLength={3}
-					title="Zoekterm"
+					title="Polsbandnummer"
 					id="searchInput"
 					onChange={(e) => wristbandInputChange(e)}
 					onKeyUp={(e) => e.key == 'Enter' ? togglePresence() : null}
-					placeholder="Polsbandnummer"
-					style={{ "display": "inline-block" }}
+					placeholder="000"
+					style={{ "display": "inline-block", "right": "24px" }}
+					className="wristband-number"
 				/>
 				<button
 					onClick={togglePresence}
