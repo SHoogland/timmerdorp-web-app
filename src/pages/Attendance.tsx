@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import Layout from '../layouts/layout';
 import apiCall from '../utils/apiCall';
 import { useNavigate } from 'react-router-dom';
-// import { useNavigate } from 'react-router-dom';
 
 interface Ticket {
 	[key: string]: any;
@@ -11,7 +10,7 @@ interface Ticket {
 function Attendance() {
 	const [wristbandNumber, setWristbandNumber] = useState('');
 	const [togglePresenceIsLoading, setTogglePresenceIsLoading] = useState(false);
-	const [btnColor, setBtnColor] = useState('blue');
+	const [btnColor, setBtnColor] = useState('');
 	const [searchIsLoading, setSearchIsLoading] = useState(false);
 	const [hasSearched, setHasSearched] = useState(false);
 	const [hasFoundChild, setHasFoundChild] = useState(false);
@@ -67,7 +66,7 @@ function Attendance() {
 				searchInput.value = '';
 				setBtnColor('green');
 				setTimeout(() => {
-					setBtnColor('blue');
+					setBtnColor('');
 				}, 1200);
 			}
 		});

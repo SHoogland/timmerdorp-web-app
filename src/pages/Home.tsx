@@ -1,8 +1,17 @@
 import Parse from 'parse';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Home() {
+	const [isStanOfStephan, setIsStanOfStephan] = useState(false);
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		const email = Parse.User.current()?.get('username');
+		if(email === 'stanvanbaarsen@hotmail.com' || email === 'stephan@shoogland.com') {
+			setIsStanOfStephan(true);
+		}
+	}, []);
 
 	const logOut = async () => {
 		await Parse.User.logOut().catch(
@@ -45,7 +54,7 @@ function Home() {
 					<a href="/fotos">Foto's en bijlagen</a>
 				</li>
 				<li>
-					<a href="/instellingen">Instellingen</a>
+					<a href="/instellingen">{ isStanOfStephan ? "Instellingen" : "Account info" }</a>
 				</li>
 				<li>
 					<a href="#" onClick={logOut}>Uitloggen</a>

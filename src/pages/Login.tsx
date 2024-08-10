@@ -1,12 +1,18 @@
 import Parse from 'parse';
 import Layout from '../layouts/layout';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (Parse.User.current()) {
+			navigate('/');
+		}
+	}, []);
 
 	const login = async () => {
 		await Parse.User.logIn(email, password)

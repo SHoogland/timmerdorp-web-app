@@ -8,13 +8,14 @@ import { FaArrowLeft } from 'react-icons/fa';
 interface HeaderProps {
 	title: string;
 	disableBackButton?: boolean;
+	color?: string;
 }
 
-const Header: React.FC<HeaderProps> = ({ title, disableBackButton }) => {
+const Header: React.FC<HeaderProps> = ({ title, disableBackButton, color }) => {
 	const navigate = useNavigate();
 
 	return (
-		<header>
+		<header className={color || "blue"}>
 			{ disableBackButton ? null : <FaArrowLeft id="back-btn" onClick={() => navigate('/')} /> }
 			<h1>{title}</h1>
 			<img src={logo} alt="tdorp logo" />

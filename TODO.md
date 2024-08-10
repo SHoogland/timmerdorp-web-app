@@ -7,6 +7,7 @@ todo's, soortvan gesorteerd op prioriteit
 
 ### Zoekpagina
 - In het kind-overzicht (wat nog heel lelijk is) ontbreken nog sommige gegevens tov de oude app
+- op iPhone wordt er automatisch ingezoomd zodra je de zoekbalk selecteert, dit moet uitgezet worden
 
 ### Instellingen
 - admins kunnen toevoegen/verwijderen

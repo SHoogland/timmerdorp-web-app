@@ -1,12 +1,4 @@
-$white: #ffffff;
-$lightGrey: #ddd;
-$darkGrey: #cccccc;
-$mediumBlack: #101010;
-$blue: #2196f3;
-$liliac: #c393ff;
-$yellow: #f5e31d;
-$green: #43a047;
-$red: #ee0202;
+@import "vars";
 
 * {
 	// disable text selection
@@ -60,6 +52,12 @@ button {
 	&.green {
 		background-color: $green;
 	}
+	&.red {
+		background-color: $red;
+	}
+	&.yellow {
+		background-color: $yellow;
+	}
 }
 
 input {
@@ -103,4 +101,17 @@ a {
 	color: $blue;
 	cursor: pointer;
 	text-decoration: underline;
+}
+
+
+.main-content {
+	&.red button {
+		background-color: $red;
+	}
+	&.yellow button {
+		background-color: $yellow;
+	}
+	&.green button {
+		background-color: $green;
+	}
 }

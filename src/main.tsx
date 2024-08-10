@@ -8,8 +8,9 @@ import {
 import Home from './pages/Home.tsx';
 import ErrorPage from './pages/ErrorPage.tsx';
 import Login from './pages/Login.tsx';
-import SearchPage from './pages/SearchPage.tsx';
+import SearchPage from './pages/Search.tsx';
 import Attendance from './pages/Attendance.tsx';
+import ChangeWijk from './pages/ChangeWijk.tsx';
 import ScanTicket from './pages/ScanTicket.tsx';
 import HutjesManagement from './pages/HutjesManagement.tsx';
 import Statistics from './pages/Statistics.tsx';
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
   {
 	path: '/polsbandje',
 	element: <Wristband />,
+  },
+  {
+	path: '/wijzig-wijk',
+	element: <ChangeWijk />,
   },
 ]);
 

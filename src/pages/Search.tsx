@@ -2,7 +2,7 @@ import Layout from '../layouts/layout.tsx';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import apiCall from '../utils/apiCall.ts';
-import '../scss/SearchPage.scss';
+import '../scss/Search.scss';
 
 interface Ticket {
 	[key: string]: any;
