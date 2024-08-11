@@ -10,7 +10,7 @@ function ChangeWijk() {
 	}
 
 	return (
-		<Layout title="Wijk wijzigen" noPadding="true">
+		<Layout title="Wijk wijzigen" noPadding={true}>
 			<div id="wijk-keuze">
 				<div className="wijk blue" onClick={() => changeWijk('blue')}>Blauw</div>
 				<div className="wijk green" onClick={() => changeWijk('green')}>Groen</div>

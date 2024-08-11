@@ -54,7 +54,7 @@ function Home() {
 					<a href="/fotos">Foto's en bijlagen</a>
 				</li>
 				<li>
-					<a href="/instellingen">{ isStanOfStephan ? "Instellingen" : "Account info" }</a>
+					<a href="/instellingen">{ isStanOfStephan ? "App beheer" : "Instellingen" }</a>
 				</li>
 				<li>
 					<a href="#" onClick={logOut}>Uitloggen</a>

@@ -4,10 +4,10 @@ import redirectToLogin from './redirectToLogin.ts';
 
 const initParse = async () => {
 	Parse.initialize(
-		import.meta.env.VITE_APP_ID,
-		import.meta.env.VITE_JS_KEY
+		'myAppId',
+		'jsKey'
 	);
-	Parse.serverURL = import.meta.env.VITE_PARSE_URL
+	Parse.serverURL = 'http://localhost:1337/1'
 
 	const currentUser = Parse.User.current();
 	if (currentUser) {
