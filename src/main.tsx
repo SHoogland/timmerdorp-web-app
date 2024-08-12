@@ -31,48 +31,48 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: 'login',
+    path: '/login',
     element: <Login />,
   },
   {
-    path: 'zoek',
+    path: '/zoek',
     element: <SearchPage />,
   },
   {
-    path: 'aanwezigheid',
+    path: '/aanwezigheid',
     element: <Attendance />,
   },
   {
-    path: 'scan',
+    path: '/scan',
     element: <ScanTicket />,
   },
   {
-    path: 'hutjes',
+    path: '/hutjes',
     element: <HutjesManagement />,
   },
   {
-    path: 'statistieken',
+    path: '/statistieken',
     element: <Statistics />,
   },
   {
-    path: 'verjaardagen',
+    path: '/verjaardagen',
     element: <Birthdays />,
   },
   {
-    path: 'kaart',
+    path: '/kaart',
     element: <Map />,
   },
   {
-    path: 'fotos',
+    path: '/fotos',
     element: <PhotosAndAttachments />,
   },
   {
-    path: 'instellingen',
+    path: '/instellingen',
     element: <Settings />,
   },
   {
-	path: '/polsbandje',
-	element: <Wristband />,
+    path: '/polsbandje',
+    element: <Wristband />,
   },
   {
 	path: '/wijzig-wijk',
