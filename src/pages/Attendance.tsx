@@ -89,8 +89,6 @@ function Attendance() {
 		setSearchIsLoading(true);
 		setHasSearched(false);
 		apiCall('findChildByWristband', { wristband }).then((result) => {
-			// wat als zoekterm inmiddels veranderd is?
-			console.log(wristband, wristbandNumber)
 			setSearchIsLoading(false);
 			setHasSearched(true);
 			if (!result || (result || {}).response != "success") {

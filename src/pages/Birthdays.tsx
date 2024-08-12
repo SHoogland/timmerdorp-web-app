@@ -15,7 +15,7 @@ const Birthdays: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await apiCall('wijkStats'); // Use your apiCall utility
+        const result = await apiCall('wijkStats');
         if (result && result.response === 'success') {
           setData(result.birthdays);
         } else {

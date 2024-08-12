@@ -21,6 +21,8 @@ import Settings from './pages/Settings.tsx';
 import Wristband from './pages/Wristband.tsx';
 import './scss/styles.scss';
 import initParse from './utils/initParse.ts';
+import ForgotPassword from './pages/ForgotPassword.tsx';
+import NewPassword from './pages/NewPassword.tsx';
 
 initParse();
 
@@ -77,6 +79,14 @@ const router = createBrowserRouter([
   {
 	path: '/wijzig-wijk',
 	element: <ChangeWijk />,
+  },
+  {
+	path: '/wachtwoord-vergeten',
+	element: <ForgotPassword />,
+  },
+  {
+	path: '/new-password',
+	element: <NewPassword />,
   },
 ]);
 

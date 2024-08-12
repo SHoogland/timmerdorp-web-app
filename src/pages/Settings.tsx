@@ -92,9 +92,17 @@ function Settings() {
 	}
 
 	const removeAdmin = (email: string) => {
-		apiCall('removeAdmin', { email }).then(function (result) {
+		// force remove when removing a non-accepted admin
+		const forceRemove = !admins.find((a) => a.email === email);
+		apiCall('removeAdmin', { email, force: forceRemove }).then(function (result) {
 			if (result.success) {
+				const removedAdmin = admins.find((a) => a.email === email);
 				setAdmins(admins.filter((a) => a.email !== email));
+				if(forceRemove) {
+					setPotentialAdmins(potentialAdmins.filter((a) => a.email !== email));
+				} else {
+					setPotentialAdmins([...potentialAdmins, { email: removedAdmin?.email || '', name: removedAdmin?.name || '' }]);
+				}
 				alert('Gelukt! Admin verwijderd.');
 			} else {
 				alert("Admin verwijderen mislukt: " + JSON.stringify(result));
@@ -105,11 +113,11 @@ function Settings() {
 	const acceptAdmin = (email: string) => {
 		apiCall('addAdmin', { email }).then(function (result) {
 			if (result.success) {
+				const admittedAdmin = potentialAdmins.find((a) => a.email === email);
 				setPotentialAdmins(potentialAdmins.filter((a) => a.email !== email));
-				setAdmins([...admins, { email, name: result.name }]);
+				setAdmins([...admins, { email: admittedAdmin?.email || '', name: admittedAdmin?.name || '' }]);
 				alert('Gelukt! Admin toegevoegd.');
-			}
-			else {
+			} else {
 				alert("Admin toevoegen mislukt: " + JSON.stringify(result));
 			}
 		})
@@ -201,7 +209,7 @@ function Settings() {
 								<button key={category.name} className={'categoryButton ' + (category.selected ? 'selected' : '')} onClick={() => handleCategoryClick(category)}>{categoryNameMap[category.name]}</button>
 							))}
 							{eventHistory.length > 0 && (
-								<ul>
+								<ul id="eventHistory">
 									{eventHistory.filter(h => h.get('shown')).map((event, index) => (
 										<li key={index} dangerouslySetInnerHTML={{ __html: event.get('desc') }}>
 										</li>

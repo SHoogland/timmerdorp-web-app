@@ -115,3 +115,59 @@ a {
 		background-color: $green;
 	}
 }
+
+
+.form {
+	width: 90%;
+	max-width: 480px;
+	margin: 0 auto;
+
+	input[type=text], input[type=password], input[type=email], input[type=number] {
+		border: none !important;
+		background: #78bff8;
+		color: white;
+		border-radius: 6px;
+		height: 58px;
+		margin-bottom: 18px;
+		font-size: 18px;
+		padding: 0 16px;
+		width: calc(100% - 32px);
+		font-family: Montserrat, Roboto, Arial, Helvetica, sans-serif;
+		&:focus {
+			background: lighten(#78bff8, 10%);
+		}
+		&::placeholder {
+			color: #333;
+		}
+	}
+	
+	button {
+		display: block;
+		width: 100%;
+	}
+}
+
+
+p.helper-link {
+	text-align: center;
+	width: 100%;
+	font-weight: bold;
+	margin-top: 18px;
+}
+
+
+body.page-with-blue-background {
+	background: $blue;
+	
+	button, header {
+		background: darken($blue, 20%)!important;
+	}
+	
+	.card {
+		background: darken($blue, 25%);
+	}
+	
+	a, h1, h2, h3, h4, h5, h6, p {
+		color: white;
+	}
+}
