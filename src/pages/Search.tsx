@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import apiCall from '../utils/apiCall.ts';
 import '../scss/Search.scss';
+import LoadingIcon from '../components/LoadingIcon.tsx';
 
 interface Ticket {
 	[key: string]: any;
@@ -166,7 +167,7 @@ function SearchPage() {
 						className='big'
 					/>
 					<br />
-					{loading && "Laden..."}
+					<LoadingIcon shown={loading}/>
 				</center>
 
 				{searchResults.length > 0 && (

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Layout from '../layouts/layout';
 import { useNavigate } from 'react-router-dom';
 import apiCall from '../utils/apiCall';
+import LoadingIcon from '../components/LoadingIcon';
 
 interface Ticket {
 	[key: string]: any;
@@ -124,7 +125,7 @@ function Wristband() {
 	return (
 		<Layout title="Polsbandje toewijzen">
 			<center>
-				{loading && <p>Laden...</p>}
+				<LoadingIcon shown={loading}/>
 
 				{errorTitle && <p><b>{errorTitle}</b><br />{errorHelp}</p>}
 				{!loading && ticket.id && (
@@ -161,7 +162,8 @@ function Wristband() {
 										onClick={() => !ticket.collectedSole ? collectSole() : ''}
 										disabled={ticket.collectedSole}
 									/>
-									{loadingSole ? "Laden..." : (ticket.collectedSole ? "Ja" : "Nee")}
+									<LoadingIcon shown={loadingSole}/>
+									{!loadingSole && (ticket.collectedSole ? "Ja" : "Nee")}
 								</td>
 							</tr>
 						</tbody>

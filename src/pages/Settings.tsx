@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import generateGebeurtenisDescription from '../utils/generateGebeurtenisDescription';
 import logOut from '../utils/logOut';
 import '../scss/Settings.scss'
+import LoadingIcon from '../components/LoadingIcon';
 
 interface Admin {
 	email: string;
@@ -177,7 +178,7 @@ function Settings() {
 					</table>
 					{!isStanOfStephan && <button className="big red" onClick={deleteAccount}>Verwijder account</button>}
 
-					{loading && "Laden..."}
+					<LoadingIcon shown={loading}/>
 
 					{isStanOfStephan && !loading && (
 						<>

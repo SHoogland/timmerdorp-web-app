@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Layout from '../layouts/layout';
 import apiCall from '../utils/apiCall';
 import { useNavigate } from 'react-router-dom';
+import LoadingIcon from '../components/LoadingIcon';
 
 interface Ticket {
 	[key: string]: any;
@@ -131,10 +132,12 @@ function Attendance() {
 					style={{ "display": "inline-block" }}
 					className={btnColor + " big"}
 				>
-					{ togglePresenceIsLoading ? "Laden..." : (btnColor == 'green' ? 'Opgeslagen!' : (foundChildIsAlreadyPresent ? "Afwezig melden" : "Aanwezig melden"))}
+					<LoadingIcon color="white" shown={togglePresenceIsLoading} />
+					{ !togglePresenceIsLoading && (btnColor == 'green' ? 'Opgeslagen!' : (foundChildIsAlreadyPresent ? "Afwezig melden" : "Aanwezig melden"))}
 				</button>
 				<br />
-				{searchIsLoading && "Laden..."}
+
+				<LoadingIcon color="white" shown={searchIsLoading} />
 				<br />
 				<br />
 			</center>

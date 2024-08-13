@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Layout from '../layouts/layout';
 import apiCall from '../utils/apiCall';
+import LoadingIcon from '../components/LoadingIcon';
 
 function ForgotPassword() {
 	const [email, setEmail] = useState('')
@@ -48,7 +49,7 @@ function ForgotPassword() {
 						/>
 						<button className='big' onClick={() => forgotPassword()}>Nieuw wachtwoord opvragen</button>
 
-						{loading && <p className='loading'>Laden...</p>}
+						<LoadingIcon color="white" shown={loading}/>
 					</div>
 				</>
 			}

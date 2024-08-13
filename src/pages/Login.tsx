@@ -3,11 +3,16 @@ import Layout from '../layouts/layout';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../scss/Login.scss';
+import { FaExclamationTriangle } from 'react-icons/fa';
+import Card from '../components/Card';
+import LoadingIcon from '../components/LoadingIcon.tsx';
 
 function Login() {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const [loading, setLoading] = useState(false)
+	const [errorTitle, setErrorTitle] = useState('')
+	const [errorText, setErrorText] = useState('')
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -26,16 +31,21 @@ function Login() {
 
 	const login = async () => {
 		setLoading(true);
+		setErrorTitle('');
+		setErrorText('');
 		await Parse.User.logIn(email, password)
 			.catch(error => {
-				alert('Probleem bij inloggen ' + error);
+				setErrorTitle('Inloggen mislukt');
+				setErrorText('Controleer je e-mailadres en wachtwoord en probeer het opnieuw.');
+				console.log(error);
 				setLoading(false);
 			})
 			.then(function (user) {
 				if (user) {
 					navigate('/');
 				} else {
-					alert('Probleem bij inloggen');
+					setErrorTitle('Inloggen mislukt');
+					setErrorText('Controleer je e-mailadres en wachtwoord en probeer het opnieuw.');
 				}
 				setLoading(false);
 			})
@@ -62,9 +72,27 @@ function Login() {
 				/>
 				<button className='big' onClick={() => login()}>Inloggen</button>
 
-				{ loading && <p className='loading'>Laden...</p> }
+				<LoadingIcon color="white" shown={loading}/>
+
+				{errorText && <Card
+					icon={FaExclamationTriangle}
+					header={errorTitle}
+					bgColor='bg-red'
+				>
+					<p>{errorText}</p>
+				</Card>}
 
 				<p className='helper-link'><a href="/wachtwoord-vergeten">Wachtwoord vergeten?</a></p>
+
+				<Card
+					icon={FaExclamationTriangle}
+					header="Let op!"
+				>
+					<ul>
+						<li>Accounts van vorig jaar werken ook nog steeds!</li>
+						<li>Heb je al een account aangemaakt in de Timmerdorp-webshop, bijvoorbeeld om kaartjes te kopen voor je kinderen? Log dan in met dat webshop-account.</li>
+					</ul>
+				</Card>
 			</div>
 		</Layout>
 	)

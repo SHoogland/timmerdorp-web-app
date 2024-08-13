@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import apiCall from '../utils/apiCall';
 import { FaShareAlt, FaSearch, FaBirthdayCake } from 'react-icons/fa';
 import Layout from '../layouts/layout';
+import LoadingIcon from '../components/LoadingIcon';
 
 const Birthdays: React.FC = () => {
 	const [loading, setLoading] = useState<boolean>(true);
@@ -59,7 +60,7 @@ const Birthdays: React.FC = () => {
 	};
 
 	if (loading) {
-		return <div>Laden...</div>;
+		return <LoadingIcon color="white" />;
 	}
 
 	if (error) {
@@ -104,7 +105,7 @@ const Birthdays: React.FC = () => {
 													</p>
 												</td>
 												<td style={{ width: "48px" }}>
-													<button className='fab'>
+													<button className='fab' title='Zoek kind'>
 														<FaSearch />
 													</button>
 												</td>
