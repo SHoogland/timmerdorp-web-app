@@ -91,7 +91,7 @@ function Wristband() {
 		wristbandInput.value = newWristbandNumber;
 
 		setIsSaving(true);
-		apiCall('assignWristband', { id: ticket.id, wristband: newWristbandNumber }).then((res) => {
+		apiCall('assignWristband', { id: ticket.id, wristband: newWristbandNumber }).then((result) => {
 			setIsSaving(false);
 			if (result.response == 'duplicate') {
 				setErrorTitle('Fout!');
