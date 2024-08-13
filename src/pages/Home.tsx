@@ -54,31 +54,31 @@ function Home() {
 			<h1>Timmerdorp app</h1>
 			<ul>
 				<li>
-					<a href="/zoek">Zoek kinderen</a>
+					<a onClick={() => navigate('zoek')}>Zoek kinderen</a>
 				</li>
 				<li>
-					<a href="/aanwezigheid">Aanwezigheid</a>
+					<a onClick={() => navigate('aanwezigheid')}>Aanwezigheid</a>
 				</li>
 				<li>
-					<a href="/scan">Scan ticket</a>
+					<a onClick={() => navigate('scan')}>Scan ticket</a>
 				</li>
 				<li>
-					<a href="/hutjes">Beheer hutjes</a>
+					<a onClick={() => navigate('hutjes')}>Beheer hutjes</a>
 				</li>
 				<li>
-					<a href="/statistieken">Statistieken</a>
+					<a onClick={() => navigate('statistieken')}>Statistieken</a>
 				</li>
 				<li>
-					<a href="/verjaardagen">Verjaardagen</a>
+					<a onClick={() => navigate('verjaardagen')}>Verjaardagen</a>
 				</li>
 				<li>
-					<a href="/kaart">Kaart... (doen we dat nog dit jaar?)</a>
+					<a onClick={() => navigate('kaart')}>Kaart... (doen we dat nog dit jaar?)</a>
 				</li>
 				<li>
-					<a href="/fotos">Foto's en bijlagen</a>
+					<a onClick={() => navigate('fotos')}>Foto's en bijlagen</a>
 				</li>
 				<li>
-					<a href="/instellingen">{isStanOfStephan ? "App beheer" : "Instellingen"}</a>
+					<a onClick={() => navigate('instellingen')}>{isStanOfStephan ? "App beheer" : "Instellingen"}</a>
 				</li>
 				<li>
 					<a href="#" onClick={logOutFunction}>Uitloggen</a>

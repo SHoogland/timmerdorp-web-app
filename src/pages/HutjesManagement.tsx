@@ -211,9 +211,10 @@ function HutjesManagement() {
 						<button
 							onClick={addChildToHut}
 							style={{ "display": "inline-block" }}
-							className={"big"}
+							className={"big" + (addChildToHutIsLoading ? " with-loading-icon" : "")}
 						>
-							{addChildToHutIsLoading ? <LoadingIcon color="white"/> : "Toevoegen"}
+							<LoadingIcon color="white" shown={addChildToHutIsLoading}/>
+							{!addChildToHutIsLoading && "Toevoegen"}
 						</button>
 						<br />
 						<LoadingIcon shown={wristbandSearchIsLoading} />

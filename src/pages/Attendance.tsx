@@ -130,14 +130,14 @@ function Attendance() {
 				<button
 					onClick={togglePresence}
 					style={{ "display": "inline-block" }}
-					className={btnColor + " big"}
+					className={btnColor + " big" + (togglePresenceIsLoading ? " with-loading-icon" : "")}
 				>
 					<LoadingIcon color="white" shown={togglePresenceIsLoading} />
 					{ !togglePresenceIsLoading && (btnColor == 'green' ? 'Opgeslagen!' : (foundChildIsAlreadyPresent ? "Afwezig melden" : "Aanwezig melden"))}
 				</button>
 				<br />
 
-				<LoadingIcon color="white" shown={searchIsLoading} />
+				<LoadingIcon shown={searchIsLoading} />
 				<br />
 				<br />
 			</center>

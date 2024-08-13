@@ -46,6 +46,20 @@ button {
 	font-size: 1.05em;
 	letter-spacing: 1px;
 
+	&.with-loading-icon {
+		position: relative;
+		height: 66px;
+		.loading-icon {
+			position: absolute;
+			top: 0;
+			left: 0;
+			img {
+				width: 50px;
+				height: 40px;
+			}
+		}
+	}
+
 	&.big {
 		padding: 24px 32px;
 	}
