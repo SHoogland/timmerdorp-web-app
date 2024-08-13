@@ -23,6 +23,7 @@ import './scss/styles.scss';
 import initParse from './utils/initParse.ts';
 import ForgotPassword from './pages/ForgotPassword.tsx';
 import NewPassword from './pages/NewPassword.tsx';
+import IsNoAdmin from './pages/IsNoAdmin.tsx';
 
 initParse();
 
@@ -87,6 +88,10 @@ const router = createBrowserRouter([
   {
 	path: '/new-password',
 	element: <NewPassword />,
+  },
+  {
+	path: '/is-geen-beheerder',
+	element: <IsNoAdmin />,
   },
 ]);
 

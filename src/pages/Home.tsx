@@ -1,6 +1,8 @@
 import Parse from 'parse';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import apiCall from '../utils/apiCall';
+import logOut from '../utils/logOut';
 
 function Home() {
 	const [isStanOfStephan, setIsStanOfStephan] = useState(false);
@@ -8,19 +10,41 @@ function Home() {
 
 	useEffect(() => {
 		const email = Parse.User.current()?.get('username');
-		if(email === 'stanvanbaarsen@hotmail.com' || email === 'stephan@shoogland.com') {
+		if (email === 'stanvanbaarsen@hotmail.com' || email === 'stephan@shoogland.com') {
 			setIsStanOfStephan(true);
 		}
+
+
+		let wantsAdmin = false;
+		if(!localStorage.getItem('isAdmin')) {
+			// we have not registered that this user is an admin yet
+			wantsAdmin = true;
+		}
+		apiCall('checkIfLoggedIn', { wantsToBecomeAdmin: wantsAdmin }).then((response) => {
+			if (!response.result) {
+				logOut().then(() => {
+					navigate('/login');
+				});
+			}
+			if(!response.admin) {
+				localStorage.setItem('isAdmin', 'false');
+				navigate('/is-geen-beheerder');
+			}
+		}).catch((error) => {
+			if (error.message == 'Invalid session token') {
+				logOut().then(() => {
+					navigate('/login');
+				});
+			}
+		})
 	}, []);
 
-	const logOut = async () => {
-		await Parse.User.logOut().catch(
+	const logOutFunction = async () => {
+		await logOut().catch(
 			error => {
 				alert('Probleem tijdens uitloggen: ' + error);
 			}
-		).then(function (user) {
-			console.log('User logged out', user);
-		})
+		);
 
 		navigate('/login');
 	}
@@ -54,10 +78,10 @@ function Home() {
 					<a href="/fotos">Foto's en bijlagen</a>
 				</li>
 				<li>
-					<a href="/instellingen">{ isStanOfStephan ? "App beheer" : "Instellingen" }</a>
+					<a href="/instellingen">{isStanOfStephan ? "App beheer" : "Instellingen"}</a>
 				</li>
 				<li>
-					<a href="#" onClick={logOut}>Uitloggen</a>
+					<a href="#" onClick={logOutFunction}>Uitloggen</a>
 				</li>
 			</ul>
 		</>

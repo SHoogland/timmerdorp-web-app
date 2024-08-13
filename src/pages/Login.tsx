@@ -34,7 +34,6 @@ function Login() {
 			.then(function (user) {
 				if (user) {
 					navigate('/');
-					console.log('User logged in', user);
 				} else {
 					alert('Probleem bij inloggen');
 				}

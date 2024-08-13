@@ -62,6 +62,12 @@ function SearchPage() {
 			setLoading(false);
 
 			if (!result || result.response !== 'success') {
+				if (result.response === 'unauthorized') {
+					// one of two reasons: either the user is not logged in, or the user is not an admin
+					// at /is-geen-beheerder both cases are handled
+					navigate('/is-geen-beheerder');
+					return;
+				}
 				setErrorTitle(result.errorTitle || result.response);
 				setErrorHelpText(result.errorTitleMessage || result.response);
 				return;
@@ -132,7 +138,9 @@ function SearchPage() {
 				search(window.location.href.split('ticket-id=')[1].split('&')[0]);
 			}
 		} else if (window.location.href.includes('q=')) {
-			setSearchTerm(window.location.href.split('q=')[1].split('&')[0]);
+			let searchQuery = window.location.href.split('q=')[1].split('&')[0];
+			searchQuery = decodeURIComponent(searchQuery);
+			setSearchTerm(searchQuery);
 			if(!hasSearched && !loading) {
 				search();
 			}

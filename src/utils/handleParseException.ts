@@ -1,11 +1,12 @@
 import Parse from 'parse';
 
 import redirectToLogin from './redirectToLogin';
+import logOut from './logOut';
 
 const handleParseException = (error: Parse.Error) => {
     switch (error.code) {
         case Parse.Error.INVALID_SESSION_TOKEN:
-            Parse.User.logOut();
+            logOut();
             redirectToLogin();
             break;
         default:

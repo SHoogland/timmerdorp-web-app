@@ -5,16 +5,12 @@ import Layout from '../layouts/layout';
 import apiCall from '../utils/apiCall';
 import { useEffect, useState } from 'react';
 import generateGebeurtenisDescription from '../utils/generateGebeurtenisDescription';
+import logOut from '../utils/logOut';
 import '../scss/Settings.scss'
 
 interface Admin {
 	email: string;
 	name: string;
-}
-
-interface EventCategory {
-	name: string;
-	selected: boolean;
 }
 
 function Settings() {
@@ -26,7 +22,8 @@ function Settings() {
 	const [potentialAdmins, setPotentialAdmins] = useState<Admin[]>([]);
 	const [eventHistory, setEventHistory] = useState<Parse.Object[]>([]);
 	const [historyLength, setHistoryLength] = useState(0);
-	const [eventCategories, setEventCategories] = useState<EventCategory[]>([]);
+	const eventCategories = ['set-hutnr', 'marked-present', 'marked-absent', 'save-hut-location', 'collected-sole', 'gave-wristband']
+	const [selectedEventCategories, setSelectedEventCategories] = useState(eventCategories);
 	const categoryNameMap: { [key: string]: string } = {
 		'set-hutnr': 'Hutnummers',
 		'marked-present': 'Presenties',
@@ -56,10 +53,6 @@ function Settings() {
 					return h;
 				});
 
-				let eventCategories = history.map((h: Parse.Object) => h.get('eventType'));
-				eventCategories = [...new Set(eventCategories)]; // remove duplicates
-				eventCategories = eventCategories.map((name: string) => ({ name, selected: true }));
-				setEventCategories(eventCategories);
 				setEventHistory(history);
 				setHistoryLength(result.historyLength);
 				setLoading(false);
@@ -84,7 +77,7 @@ function Settings() {
 		if (confirm("Wil je echt je account verwijderen?")) {
 			apiCall('deleteAccount').then(function (result) {
 				if (result.result === 'success') {
-					Parse.User.logOut();
+					logOut();
 					navigate('/login');
 				}
 			})
@@ -98,7 +91,7 @@ function Settings() {
 			if (result.success) {
 				const removedAdmin = admins.find((a) => a.email === email);
 				setAdmins(admins.filter((a) => a.email !== email));
-				if(forceRemove) {
+				if (forceRemove) {
 					setPotentialAdmins(potentialAdmins.filter((a) => a.email !== email));
 				} else {
 					setPotentialAdmins([...potentialAdmins, { email: removedAdmin?.email || '', name: removedAdmin?.name || '' }]);
@@ -123,26 +116,43 @@ function Settings() {
 		})
 	}
 
-	const handleCategoryClick = (category: EventCategory) => {
-		const newEventCategories = eventCategories.map((c) => {
-			if (c.name === category.name) {
-				return { ...c, selected: !c.selected };
-			}
-			return c;
+	const handleCategoryClick = (category: string) => {
+		let newEventCategories = [...selectedEventCategories];
+		if (selectedEventCategories.includes(category)) {
+			newEventCategories = newEventCategories.filter((c) => c !== category);
+		} else {
+			newEventCategories.push(category);
+		}
+		setSelectedEventCategories(newEventCategories);
+	}
+
+	const filterEvents = (oldHistory: Parse.Object[]) => {
+		const newHistory = oldHistory.map((h) => {
+			h.set('shown', selectedEventCategories.includes(h.get('eventType')));
+			return h;
 		});
-		setEventCategories(newEventCategories);
+		return newHistory
 	}
 
 	useEffect(() => {
-		const selectedCategories = eventCategories.filter((c) => c.selected).map((c) => c.name);
-		const newHistory = eventHistory.map((h) => {
-			console.log(selectedCategories, h.get('eventType'));
-			h.set('shown', selectedCategories.includes(h.get('eventType')));
-			return h;
+		setEventHistory(filterEvents(eventHistory));
+	}, [selectedEventCategories]);
+
+
+	const getMoreEvents = () => {
+		apiCall('getAdmins', { justMoreHistory: true, skip: eventHistory.length }).then(function (result) {
+			if (result.denied) {
+				return;
+			}
+			let newHistory = result.result.map((h: Parse.Object) => {
+				h.set('desc', generateGebeurtenisDescription(h, true));
+				h.set('shown', true);
+				return h;
+			});
+			newHistory = filterEvents([...eventHistory, ...newHistory]);
+			setEventHistory(newHistory);
 		});
-		console.log(newHistory)
-		setEventHistory(newHistory);
-	}, [eventCategories]);
+	}
 
 
 	return (
@@ -206,7 +216,7 @@ function Settings() {
 
 							<h2>Event history (0-{eventHistory.filter(h => h.get('shown')).length} van {historyLength})</h2>
 							{eventCategories.map((category) => (
-								<button key={category.name} className={'categoryButton ' + (category.selected ? 'selected' : '')} onClick={() => handleCategoryClick(category)}>{categoryNameMap[category.name]}</button>
+								<button key={category} className={'categoryButton ' + (selectedEventCategories.includes(category) ? 'selected' : '')} onClick={() => handleCategoryClick(category)}>{categoryNameMap[category]}</button>
 							))}
 							{eventHistory.length > 0 && (
 								<ul id="eventHistory">
@@ -215,6 +225,9 @@ function Settings() {
 										</li>
 									))}
 								</ul>
+							)}
+							{historyLength > eventHistory.length && (
+								<p className="link" onClick={() => getMoreEvents()}>Laad meer</p>
 							)}
 						</>
 					)

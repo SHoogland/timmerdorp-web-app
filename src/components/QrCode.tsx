@@ -14,7 +14,6 @@ const QrCode = (props: QrCodeProps) => {
     let htmlScanner: Html5Qrcode | null = null;
 
     const render = async () => {
-        console.log('starting');
         // Success callback is required.
         if (!(props.qrCodeSuccessCallback)) {
             throw "qrCodeSuccessCallback is required callback.";
@@ -31,7 +30,6 @@ const QrCode = (props: QrCodeProps) => {
     };
 
     const stop = async () => {
-        console.log('stopping');
         if (htmlScanner?.getState() === Html5QrcodeScannerState.SCANNING) {
             await htmlScanner?.stop();
         }

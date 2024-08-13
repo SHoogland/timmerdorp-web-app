@@ -92,6 +92,12 @@ function Attendance() {
 			setSearchIsLoading(false);
 			setHasSearched(true);
 			if (!result || (result || {}).response != "success") {
+				if (result.response === 'unauthorized') {
+					// one of two reasons: either the user is not logged in, or the user is not an admin
+					// at /is-geen-beheerder both cases are handled
+					navigate('/is-geen-beheerder');
+					return;
+				}
 				setHasFoundChild(false);
 				return;
 			}

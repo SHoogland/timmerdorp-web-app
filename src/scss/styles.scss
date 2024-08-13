@@ -171,3 +171,14 @@ body.page-with-blue-background {
 		color: white;
 	}
 }
+
+p.link {
+	color: $blue;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+
+button.fab {
+	padding: 12px;
+}
