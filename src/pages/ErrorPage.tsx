@@ -6,7 +6,7 @@ export default function ErrorPage() {
     console.error(error);
 
     return (
-        <Layout id="error-page" title="Oeps!" backgroundColor='red' disableBackButton="true">
+        <Layout title="Oeps!" backgroundColor='red' disableBackButton={true}>
             <p>Sorry, er is iets fout gegaan.</p>
             <p>
                 <b>Foutmelding: </b><i>{error.statusText || error.message}</i>

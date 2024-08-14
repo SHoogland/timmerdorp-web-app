@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Layout from '../layouts/layout';
 import apiCall from '../utils/apiCall';
 import LoadingIcon from '../components/LoadingIcon';

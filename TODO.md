@@ -13,7 +13,6 @@ todo's, soortvan gesorteerd op prioriteit
 - een soortvan acceptabel design maken
 - Stan & Stephan tickets laten bewerken
 - eigenlijk even de hele oude app doorlopen en kijken wat er nog mist
-- stan weer admins laten bevestigen vanuit email (doorsturen naar app.timmerdorp.com)
 
 
 ## Low-priority (maar overige dingen die uit de oude app kwamen)

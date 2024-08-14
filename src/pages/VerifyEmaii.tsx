@@ -37,6 +37,9 @@ function VerifyEmail() {
 					});
 				} else if (result === 'success' || result === 'already_verified') {
 					setSuccess(true);
+					setTimeout(() => {
+						navigate('/is-geen-beheerder');
+					}, 5000);
 				} else {
 					alert('Er is iets misgegaan. Probeer het later opnieuw. ' + JSON.stringify(result));
 					navigate('/email-niet-bevestigd');
@@ -52,7 +55,7 @@ function VerifyEmail() {
 				{loading && <LoadingIcon color="white" shown={loading} />}
 			</> : <>
 				<h2>E-mailadres bevestigd!</h2>
-				<p>Je e-mailadres is bevestigd. Zodra je door Stan of Stephan als beheerder bent bevestigd, kun je gebruik maken van de app.</p>
+				<p>Je e-mailadres is bevestigd. Zodra je door Stan of Stephan als beheerder bent bevestigd, kun je gebruik maken van de app. Je wordt automatisch doorgestuurd over 5 seconden.</p>
 				<button className='big' onClick={() => { navigate('/is-geen-beheerder') }}>Naar stap 3/3</button>
 			</>
 			}

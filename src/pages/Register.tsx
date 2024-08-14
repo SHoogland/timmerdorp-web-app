@@ -52,7 +52,7 @@ function Register() {
 			if (e.message === 'Account already exists for this username.') {
 				setErrorText('Er bestaat al een account met dit e-mailadres! Accounts van vorig jaar, en accounts uit de webshop, zijn nog steeds geldig. Probeer in te loggen.')
 			} else {
-				setErrorText('Er is iets misgegaan bij het registreren. Probeer het later nog eens. Foutmelding: ', e.message)
+				setErrorText('Er is iets misgegaan bij het registreren. Probeer het later nog eens. Foutmelding: ' + e.message)
 			}
 			setLoading(false)
 		}).then(async function (result) {

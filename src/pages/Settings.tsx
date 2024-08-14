@@ -35,43 +35,6 @@ function Settings() {
 	}
 	const navigate = useNavigate();
 
-	useEffect(() => {
-		const email = Parse.User.current()?.get('username');
-		if (email === 'stanvanbaarsen@hotmail.com' || email === 'stephan@shoogland.com') {
-			setIsStanOfStephan(true);
-
-			setLoading(true);
-			apiCall('getAdmins').then(function (result) {
-				if (result.denied) {
-					return;
-				}
-				setAdmins(result.admins);
-				setPotentialAdmins(result.potentialAdmins);
-				let history = result.history;
-				history = history.map((h: Parse.Object) => {
-					h.set('desc', generateGebeurtenisDescription(h, true));
-					h.set('shown', true);
-					return h;
-				});
-
-				setEventHistory(history);
-				setHistoryLength(result.historyLength);
-				setLoading(false);
-			})
-		}
-
-		const englishWijkName = localStorage.getItem('wijkName') || '';
-		const wijkNaam = {
-			blue: 'Blauw',
-			green: 'Groen',
-			red: 'Rood',
-			yellow: 'Geel',
-			white: 'Wit/EHBO',
-		}[englishWijkName];
-		setWijkName(wijkNaam || 'Onbekend');
-
-		setIsInitialized(true);
-	}, []);
 
 	const deleteAccount = () => {
 		if (confirm("Wil je echt je account verwijderen?")) {
@@ -134,10 +97,6 @@ function Settings() {
 		return newHistory
 	}
 
-	useEffect(() => {
-		setEventHistory(filterEvents(eventHistory));
-	}, [selectedEventCategories]);
-
 
 	const getMoreEvents = () => {
 		apiCall('getAdmins', { justMoreHistory: true, skip: eventHistory.length }).then(function (result) {
@@ -154,6 +113,56 @@ function Settings() {
 		});
 	}
 
+
+	useEffect(() => {
+		const email = Parse.User.current()?.get('username');
+		if (email === 'stanvanbaarsen@hotmail.com' || email === 'stephan@shoogland.com') {
+			setIsStanOfStephan(true);
+
+			setLoading(true);
+			apiCall('getAdmins').then(function (result) {
+				if (result.denied) {
+					return;
+				}
+				setAdmins(result.admins);
+				setPotentialAdmins(result.potentialAdmins);
+				let history = result.history;
+				history = history.map((h: Parse.Object) => {
+					h.set('desc', generateGebeurtenisDescription(h, true));
+					h.set('shown', true);
+					return h;
+				});
+
+				setEventHistory(history);
+				setHistoryLength(result.historyLength);
+				setLoading(false);
+			})
+		}
+
+		const englishWijkName = localStorage.getItem('wijkName') || '';
+		const wijkNaam = {
+			blue: 'Blauw',
+			green: 'Groen',
+			red: 'Rood',
+			yellow: 'Geel',
+			white: 'Wit/EHBO',
+		}[englishWijkName];
+		setWijkName(wijkNaam || 'Onbekend');
+
+		setIsInitialized(true);
+
+		if(window.location.href.includes('confirm-admin-email')) {
+			const URLEmail = window.location.href.split('confirm-admin-email=')[1].split('&')[0];
+			// stan is trying to add someone as an admin
+			if(confirm(`Wil je ${URLEmail} toevoegen als admin?`)) {
+				acceptAdmin(URLEmail);
+			}
+		}
+	}, []);
+
+	useEffect(() => {
+		setEventHistory(filterEvents(eventHistory));
+	}, [selectedEventCategories]);
 
 	return (
 		<Layout title={isStanOfStephan ? "Instellingen" : "Account info"}>
