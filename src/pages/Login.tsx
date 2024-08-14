@@ -52,6 +52,7 @@ function Login() {
 					onKeyUp={(e) => e.key == 'Enter' ? login() : null}
 					type="email"
 					placeholder="E-mailadres"
+					autoComplete="email"
 				/>
 				<input
 					name="password"
@@ -60,6 +61,7 @@ function Login() {
 					onKeyUp={(e) => e.key == 'Enter' ? login() : null}
 					type="password"
 					placeholder="Wachtwoord"
+					autoComplete="current-password"
 				/>
 				<button className='big' onClick={() => login()}>Inloggen</button>
 
