@@ -75,6 +75,7 @@ function Register() {
 					type="text"
 					id="firstName"
 					placeholder="Voornaam"
+					autoComplete="given-name"
 				/>
 				<input
 					name="lastName"
@@ -84,6 +85,7 @@ function Register() {
 					type="text"
 					id="lastName"
 					placeholder="Achternaam"
+					autoComplete="family-name"
 				/>
 				<input
 					name="email"
@@ -92,6 +94,7 @@ function Register() {
 					onKeyUp={(e) => e.key == 'Enter' ? register() : null}
 					type="email"
 					placeholder="E-mailadres"
+					autoComplete="email"
 				/>
 				<input
 					name="password"
@@ -100,6 +103,7 @@ function Register() {
 					onKeyUp={(e) => e.key == 'Enter' ? register() : null}
 					type="password"
 					placeholder="Wachtwoord"
+					autoComplete="new-password"
 				/>
 				<button className='big' onClick={() => register()}>Registreren</button>
 
