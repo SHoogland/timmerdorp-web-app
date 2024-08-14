@@ -1,4 +1,4 @@
-
+@import "vars";
 
 @font-face {
 	font-family: Mikado-Bold;
@@ -6,11 +6,10 @@
 }
 
 header {
-	background: #2196f3;
+	background: $blue;
 	height: 80px;
 	-webkit-box-shadow: none;
 	box-shadow: none;
-	border-bottom: 2px solid #2196f3;
 	* {
 		display: inline-block;
 	}
@@ -30,13 +29,13 @@ header {
 		position: relative;
 		float: left;
 		margin-left: 18px;
-		margin-top: calc(80px / 2 - 42px / 2);
+		margin-top: calc(80px / 2 - 40px / 2);
 		color: white;
 		cursor: pointer;
 	}
 
 	h1 {
-		font-family: 'Mikado-Bold'!important;
+		font-family: "Mikado-Bold" !important;
 		font-weight: normal;
 		letter-spacing: 2px;
 		position: absolute;
@@ -54,13 +53,40 @@ header {
 		text-align: center;
 		left: 66px;
 		color: white;
+		&.no-back-button {
+			left: 12px;
+			width: calc(100% - 66px);
+		}
+		&.no-logo {
+			width: calc(100% - 66px);
+		}
+		&.no-logo.no-back-button {
+			width: calc(100% - 12px);
+		}
 		@media only screen and (max-width: 360px) {
-		  font-size: 24px !important;
-		  line-height: 24px;
-		  padding-top: 28px;
+			font-size: 24px !important;
+			line-height: 24px;
+			padding-top: 28px;
 		}
-		&.yellow, &.white {
-		  color: #333;
+		&.yellow,
+		&.white {
+			color: #333;
 		}
+		.small {
+			font-size: 20px;
+		}
+	}
+
+	&.red {
+		background: $red;
+	}
+	&.yellow {
+		background: $yellow;
+	}
+	&.green {
+		background: $green;
+	}
+	&.blue {
+		background: $blue;
 	}
 }

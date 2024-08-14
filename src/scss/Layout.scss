@@ -1,3 +1,108 @@
+@import "vars";
+
+html,
+body,
+#root,
 .main-content {
-	padding: 20px 36px;
+	height: 100%;
+	margin: 0;
+}
+
+.main-content {
+	&:not(.no-padding):not(.has-footer) {
+		padding: 20px 28px;
+	}
+
+	&.has-footer {
+		display: flex;
+		flex-direction: column;
+
+		.content-excluding-footer {
+			flex: 1;
+			padding: 20px 28px;
+		}
+	}
+
+	&.no-padding {
+		padding: 0;
+	}
+}
+
+body {
+	background-color: #fafafa;
+	font-family: Roboto, Arial, Helvetica, sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+body.page-with-blue-background {
+	&,
+	header {
+		background: darken($blue, 12%) !important;
+	}
+
+	button,
+	.card {
+		&:not(.bg-red) {
+			background: darken($blue, 24%);
+		}
+	}
+}
+
+body.page-with-red-background {
+	&,
+	header {
+		background: darken($red, 12%) !important;
+	}
+
+	button,
+	.card {
+		&:not(.bg-red) {
+			background: darken($red, 24%);
+		}
+	}
+}
+
+body.page-with-blue-background, body.page-with-red-background {
+	header h1 {
+		font-size: 2.4em;
+		margin-top: 18px;
+	}
+	.card {
+		border: none;
+		box-shadow: none;
+	}
+
+	a,
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	p,
+	.icon,
+	li {
+		color: white;
+	}
+}
+
+
+
+footer.one-button-footer {
+	height: 100px;
+    min-height: 100px;
+	width: 100%;
+	background: darken($blue, 25%);
+	
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	button {
+		background: white!important;
+		color: black;
+		padding: 16px 24px;
+		text-transform: uppercase;
+		letter-spacing: 3px;
+	}
 }

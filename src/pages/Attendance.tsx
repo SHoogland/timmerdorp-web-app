@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Layout from '../layouts/layout';
 import apiCall from '../utils/apiCall';
 import { useNavigate } from 'react-router-dom';
-// import { useNavigate } from 'react-router-dom';
+import LoadingIcon from '../components/LoadingIcon';
 
 interface Ticket {
 	[key: string]: any;
@@ -11,7 +11,7 @@ interface Ticket {
 function Attendance() {
 	const [wristbandNumber, setWristbandNumber] = useState('');
 	const [togglePresenceIsLoading, setTogglePresenceIsLoading] = useState(false);
-	const [btnColor, setBtnColor] = useState('blue');
+	const [btnColor, setBtnColor] = useState('');
 	const [searchIsLoading, setSearchIsLoading] = useState(false);
 	const [hasSearched, setHasSearched] = useState(false);
 	const [hasFoundChild, setHasFoundChild] = useState(false);
@@ -67,7 +67,7 @@ function Attendance() {
 				searchInput.value = '';
 				setBtnColor('green');
 				setTimeout(() => {
-					setBtnColor('blue');
+					setBtnColor('');
 				}, 1200);
 			}
 		});
@@ -90,11 +90,15 @@ function Attendance() {
 		setSearchIsLoading(true);
 		setHasSearched(false);
 		apiCall('findChildByWristband', { wristband }).then((result) => {
-			// wat als zoekterm inmiddels veranderd is?
-			console.log(wristband, wristbandNumber)
 			setSearchIsLoading(false);
 			setHasSearched(true);
 			if (!result || (result || {}).response != "success") {
+				if (result.response === 'unauthorized') {
+					// one of two reasons: either the user is not logged in, or the user is not an admin
+					// at /is-geen-beheerder both cases are handled
+					navigate('/is-geen-beheerder');
+					return;
+				}
 				setHasFoundChild(false);
 				return;
 			}
@@ -126,12 +130,14 @@ function Attendance() {
 				<button
 					onClick={togglePresence}
 					style={{ "display": "inline-block" }}
-					className={btnColor + " big"}
+					className={btnColor + " big" + (togglePresenceIsLoading ? " with-loading-icon" : "")}
 				>
-					{ togglePresenceIsLoading ? "Laden..." : (btnColor == 'green' ? 'Opgeslagen!' : (foundChildIsAlreadyPresent ? "Afwezig melden" : "Aanwezig melden"))}
+					<LoadingIcon color="white" shown={togglePresenceIsLoading} />
+					{ !togglePresenceIsLoading && (btnColor == 'green' ? 'Opgeslagen!' : (foundChildIsAlreadyPresent ? "Afwezig melden" : "Aanwezig melden"))}
 				</button>
 				<br />
-				{searchIsLoading && "Laden..."}
+
+				<LoadingIcon shown={searchIsLoading} />
 				<br />
 				<br />
 			</center>

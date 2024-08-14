@@ -1,5 +1,8 @@
+
+const permittedPages = ['/login', '/registreren', '/wachtwoord-vergeten', '/new-password/'];
+
 const redirectToLogin = () => {
-    window.location.href.indexOf('/login') < 0 ? window.location.href = "/login" : null;
+	!permittedPages.includes(window.location.pathname) ? window.location.href = "/login" : null;
 }
 
 export default redirectToLogin;

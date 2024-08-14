@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Layout from '../layouts/layout';
 import { useNavigate } from 'react-router-dom';
 import apiCall from '../utils/apiCall';
+import LoadingIcon from '../components/LoadingIcon';
 
 interface Ticket {
 	[key: string]: any;
@@ -21,20 +22,25 @@ function Wristband() {
 
 
 	useEffect(() => {
-		console.log('x');
 		if (window.location.href.includes('ticket-id=')) {
 			setLoading(true);
 			const ticketId = window.location.href.split('ticket-id=')[1].split('&')[0];
-			apiCall('findChildById', { id: ticketId }).then((res) => {
+			apiCall('findChildById', { id: ticketId }).then((result) => {
 				setLoading(false);
-				if (res.response !== 'success') {
-					setErrorTitle(res.error || res.response);
-					setErrorHelp(res.errorMessage || res.response);
+				if (result.response !== 'success') {
+					if (result.response === 'unauthorized') {
+						// one of two reasons: either the user is not logged in, or the user is not an admin
+						// at /is-geen-beheerder both cases are handled
+						navigate('/is-geen-beheerder');
+						return;
+					}
+					setErrorTitle(result.error || result.response);
+					setErrorHelp(result.errorMessage || result.response);
 					return;
 				}
 
-				setTicket(res.ticket);
-				if (res.ticket.wristbandNumber) {
+				setTicket(result.ticket);
+				if (result.ticket.wristbandNumber) {
 					if (!confirm('Dit kind heeft al een polsbandje. Wil je een nieuw polsbandje toewijzen?')) {
 						navigate('/');
 					}
@@ -86,16 +92,16 @@ function Wristband() {
 		wristbandInput.value = newWristbandNumber;
 
 		setIsSaving(true);
-		apiCall('assignWristband', { id: ticket.id, wristband: newWristbandNumber }).then((res) => {
+		apiCall('assignWristband', { id: ticket.id, wristband: newWristbandNumber }).then((result) => {
 			setIsSaving(false);
-			if (res.response == 'duplicate') {
+			if (result.response == 'duplicate') {
 				setErrorTitle('Fout!');
 				setErrorHelp('Dit polsbandje is al toegewezen aan een ander kind.');
 				return;
 			}
-			if (res.response !== 'success') {
-				setErrorTitle(res.error || res.response);
-				setErrorHelp(res.errorMessage || res.response);
+			if (result.response !== 'success') {
+				setErrorTitle(result.error || result.response);
+				setErrorHelp(result.errorMessage || result.response);
 				return;
 			}
 			localStorage.setItem('lastWristbandAssignmentDate', '' + +new Date()); // save unix timestamp as string
@@ -106,10 +112,10 @@ function Wristband() {
 
 	const collectSole = () => {		
 		setLoadingSole(true);
-		apiCall('collectSole', { id:  ticket.id }).then((res) => {
+		apiCall('collectSole', { id:  ticket.id }).then((result) => {
 			setLoadingSole(false);
-			if (res.response !== 'success') {
-				alert(res.error || res.response);
+			if (result.response !== 'success') {
+				alert(result.error || result.response);
 				return;
 			}
 			setTicket({ ...ticket, collectedSole: true });
@@ -119,7 +125,7 @@ function Wristband() {
 	return (
 		<Layout title="Polsbandje toewijzen">
 			<center>
-				{loading && <p>Laden...</p>}
+				<LoadingIcon shown={loading}/>
 
 				{errorTitle && <p><b>{errorTitle}</b><br />{errorHelp}</p>}
 				{!loading && ticket.id && (
@@ -156,7 +162,8 @@ function Wristband() {
 										onClick={() => !ticket.collectedSole ? collectSole() : ''}
 										disabled={ticket.collectedSole}
 									/>
-									{loadingSole ? "Laden..." : (ticket.collectedSole ? "Ja" : "Nee")}
+									<LoadingIcon shown={loadingSole}/>
+									{!loadingSole && (ticket.collectedSole ? "Ja" : "Nee")}
 								</td>
 							</tr>
 						</tbody>

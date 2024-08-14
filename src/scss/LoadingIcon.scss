@@ -1,0 +1,16 @@
+.loading-icon {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	top: -8px;
+	width: 100%;
+
+	img {
+		width: 100px;
+		height: 80px;
+	}
+	&:not(.shown) {
+		display: none;
+	}
+}

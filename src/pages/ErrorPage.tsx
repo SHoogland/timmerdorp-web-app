@@ -1,16 +1,16 @@
 import { useRouteError } from 'react-router-dom';
+import Layout from '../layouts/layout';
 
 export default function ErrorPage() {
     const error: any = useRouteError();
     console.error(error);
 
     return (
-        <div id="error-page">
-            <h1>Oeps!</h1>
+        <Layout title="Oeps!" backgroundColor='red' disableBackButton={true}>
             <p>Sorry, er is iets fout gegaan.</p>
             <p>
-                <i>{error.statusText || error.message}</i>
+                <b>Foutmelding: </b><i>{error.statusText || error.message}</i>
             </p>
-        </div>
+        </Layout>
     );
 }

@@ -1,12 +1,4 @@
-$white: #ffffff;
-$lightGrey: #ddd;
-$darkGrey: #cccccc;
-$mediumBlack: #101010;
-$blue: #2196f3;
-$liliac: #c393ff;
-$yellow: #f5e31d;
-$green: #43a047;
-$red: #ee0202;
+@import "vars";
 
 * {
 	// disable text selection
@@ -25,13 +17,6 @@ p, span, b, i, strong, em, h1, h2, h3, h4, h5, h6 {
 @font-face {
 	font-family: Montserrat;
 	src: url("../assets/fonts/Montserrat.woff");
-}
-
-body {
-	background-color: #fafafa;
-	font-family: Roboto, Arial, Helvetica, sans-serif;
-	margin: 0;
-	padding: 0;
 }
 
 h1,
@@ -54,11 +39,31 @@ button {
 	font-size: 1.05em;
 	letter-spacing: 1px;
 
+	&.with-loading-icon {
+		position: relative;
+		height: 66px;
+		.loading-icon {
+			position: absolute;
+			top: 0;
+			left: 0;
+			img {
+				width: 50px;
+				height: 40px;
+			}
+		}
+	}
+
 	&.big {
 		padding: 24px 32px;
 	}
 	&.green {
 		background-color: $green;
+	}
+	&.red {
+		background-color: $red;
+	}
+	&.yellow {
+		background-color: $yellow;
 	}
 }
 
@@ -103,4 +108,68 @@ a {
 	color: $blue;
 	cursor: pointer;
 	text-decoration: underline;
+}
+
+
+.main-content {
+	&.red button {
+		background-color: $red;
+	}
+	&.yellow button {
+		background-color: $yellow;
+	}
+	&.green button {
+		background-color: $green;
+	}
+}
+
+
+.form {
+	width: 100%;
+	max-width: 480px;
+	margin: 0 auto;
+
+	input[type=text], input[type=password], input[type=email], input[type=number] {
+		border: none !important;
+		background: #78bff8;
+		color: white;
+		border-radius: 6px;
+		height: 58px;
+		margin-bottom: 18px;
+		font-size: 18px;
+		padding: 0 16px;
+		width: calc(100% - 32px);
+		font-family: Montserrat, Roboto, Arial, Helvetica, sans-serif;
+		&:focus {
+			background: lighten(#78bff8, 10%);
+		}
+		&::placeholder {
+			color: #333;
+		}
+	}
+	
+	button {
+		display: block;
+		width: 100%;
+	}
+}
+
+
+p.helper-link {
+	text-align: center;
+	width: 100%;
+	font-weight: bold;
+	margin-top: 18px;
+}
+
+
+p.link {
+	color: $blue;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+
+button.fab {
+	padding: 12px;
 }

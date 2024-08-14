@@ -1,0 +1,10 @@
+@import "vars";
+
+#firstName, #lastName {
+	width: calc(50% - 2 * 16px - 8px);
+	display: inline-block;
+}
+
+#lastName {
+	margin-left: 16px;
+}

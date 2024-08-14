@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import Layout from '../layouts/layout';
 import apiCall from '../utils/apiCall';
+import LoadingIcon from '../components/LoadingIcon';
 
 
 interface Ticket {
@@ -145,7 +146,7 @@ function HutjesManagement() {
 					className="wristband-number"
 				/>
 				<br />
-				{loading && "Laden..."}
+				<LoadingIcon shown={loading}/>
 			</center>
 
 			{kidsInHut.length > 0 && (
@@ -210,12 +211,13 @@ function HutjesManagement() {
 						<button
 							onClick={addChildToHut}
 							style={{ "display": "inline-block" }}
-							className={"big"}
+							className={"big" + (addChildToHutIsLoading ? " with-loading-icon" : "")}
 						>
-							{addChildToHutIsLoading ? "Laden..." : "Toevoegen"}
+							<LoadingIcon color="white" shown={addChildToHutIsLoading}/>
+							{!addChildToHutIsLoading && "Toevoegen"}
 						</button>
 						<br />
-						{wristbandSearchIsLoading && "Laden..."}
+						<LoadingIcon shown={wristbandSearchIsLoading} />
 						{!wristbandSearchIsLoading && hasFoundChildToAdd && <>
 							<b>Gevonden kind:</b> {foundChildToAdd.firstName} {foundChildToAdd.lastName}
 						</>
