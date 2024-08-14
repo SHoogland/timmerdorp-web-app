@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Layout from '../layouts/layout';
 import apiCall from '../utils/apiCall';
 import { useEffect, useState } from 'react';
-import generateGebeurtenisDescription from '../utils/generateGebeurtenisDescription';
+import generateGebeurtenisDescription from '../utils/generateGebeurtenisDescription.tsx';
 import logOut from '../utils/logOut';
 import '../scss/Settings.scss'
 import LoadingIcon from '../components/LoadingIcon';
@@ -72,7 +72,6 @@ function Settings() {
 
 		setIsInitialized(true);
 	}, []);
-
 
 	const deleteAccount = () => {
 		if (confirm("Wil je echt je account verwijderen?")) {
@@ -222,7 +221,8 @@ function Settings() {
 							{eventHistory.length > 0 && (
 								<ul id="eventHistory">
 									{eventHistory.filter(h => h.get('shown')).map((event, index) => (
-										<li key={index} dangerouslySetInnerHTML={{ __html: event.get('desc') }}>
+										<li key={index}>
+											{ event.get('desc') }
 										</li>
 									))}
 								</ul>

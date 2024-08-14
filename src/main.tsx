@@ -24,6 +24,9 @@ import initParse from './utils/initParse.ts';
 import ForgotPassword from './pages/ForgotPassword.tsx';
 import NewPassword from './pages/NewPassword.tsx';
 import IsNoAdmin from './pages/IsNoAdmin.tsx';
+import Register from './pages/Register.tsx';
+import EmailNotConfirmed from './pages/EmailNotConfirmed.tsx';
+import VerifyEmail from './pages/VerifyEmaii.tsx';
 
 initParse();
 
@@ -92,6 +95,18 @@ const router = createBrowserRouter([
   {
 	path: '/is-geen-beheerder',
 	element: <IsNoAdmin />,
+  },
+  {
+	path: '/registreren',
+	element: <Register />,
+  },
+  {
+	path: '/email-niet-bevestigd',
+	element: <EmailNotConfirmed />,
+  },
+  {
+	path: '/verify-email',
+	element: <VerifyEmail />,
   },
 ]);
 

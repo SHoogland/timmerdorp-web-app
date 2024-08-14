@@ -1,12 +1,13 @@
-
+import { useNavigate } from 'react-router-dom';
 import Layout from '../layouts/layout';
 import '../scss/ChangeWijk.scss';
 
 function ChangeWijk() {
+	const navigate = useNavigate();
 
 	const changeWijk = (wijk: string) => {
 		localStorage.setItem('wijkName', wijk);
-		window.location.href = '/instellingen';
+		navigate('/instellingen');
 	}
 
 	return (

@@ -53,6 +53,16 @@ header {
 		text-align: center;
 		left: 66px;
 		color: white;
+		&.no-back-button {
+			left: 12px;
+			width: calc(100% - 66px);
+		}
+		&.no-logo {
+			width: calc(100% - 66px);
+		}
+		&.no-logo.no-back-button {
+			width: calc(100% - 12px);
+		}
 		@media only screen and (max-width: 360px) {
 			font-size: 24px !important;
 			line-height: 24px;
@@ -61,6 +71,9 @@ header {
 		&.yellow,
 		&.white {
 			color: #333;
+		}
+		.small {
+			font-size: 20px;
 		}
 	}
 

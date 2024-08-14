@@ -19,13 +19,6 @@ p, span, b, i, strong, em, h1, h2, h3, h4, h5, h6 {
 	src: url("../assets/fonts/Montserrat.woff");
 }
 
-body {
-	background-color: #fafafa;
-	font-family: Roboto, Arial, Helvetica, sans-serif;
-	margin: 0;
-	padding: 0;
-}
-
 h1,
 h2,
 h3,
@@ -132,7 +125,7 @@ a {
 
 
 .form {
-	width: 90%;
+	width: 100%;
 	max-width: 480px;
 	margin: 0 auto;
 
@@ -169,36 +162,6 @@ p.helper-link {
 	margin-top: 18px;
 }
 
-
-body.page-with-blue-background {
-	&, header {
-		background: darken($blue, 12%)!important;
-	}
-
-	header img {
-		display: none; // hide logo
-	}
-
-	header h1 {
-		font-size: 3.5em;
-		margin-top: 18px;
-	}
-	
-	button, .card {
-		&:not(.bg-red) {
-			background: darken($blue, 24%)!important;
-		}
-	}
-
-	.card {
-		border: none;
-		box-shadow: none;
-	}
-	
-	a, h1, h2, h3, h4, h5, h6, p, .icon, li {
-		color: white;
-	}
-}
 
 p.link {
 	color: $blue;

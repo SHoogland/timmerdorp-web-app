@@ -2,7 +2,6 @@ import Parse from 'parse';
 import Layout from '../layouts/layout';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../scss/Login.scss';
 import { FaExclamationTriangle } from 'react-icons/fa';
 import Card from '../components/Card';
 import LoadingIcon from '../components/LoadingIcon.tsx';
@@ -14,14 +13,6 @@ function Login() {
 	const [errorTitle, setErrorTitle] = useState('')
 	const [errorText, setErrorText] = useState('')
 	const navigate = useNavigate();
-
-	useEffect(() => {
-		document.body.classList.add('page-with-blue-background');
-
-		return () => {
-			document.body.classList.remove('page-with-blue-background');
-		};
-	}, []);
 
 	useEffect(() => {
 		if (Parse.User.current()) {
@@ -52,7 +43,7 @@ function Login() {
 	}
 
 	return (
-		<Layout title='Inloggen' disableBackButton={true}>
+		<Layout title='Inloggen' disableBackButton={true} disableLogo={true} backgroundColor='blue'>
 			<div className="form">
 				<input
 					name="email"
@@ -90,10 +81,15 @@ function Login() {
 				>
 					<ul>
 						<li>Accounts van vorig jaar werken ook nog steeds!</li>
-						<li>Heb je al een account aangemaakt in de Timmerdorp-webshop, bijvoorbeeld om kaartjes te kopen voor je kinderen? Log dan in met dat webshop-account.</li>
+						<li>Heb je al een account gemaakt in de Timmerdorp-webshop, bijvoorbeeld om kaartjes te kopen voor je kinderen? Log dan in met dat webshop-account.</li>
 					</ul>
 				</Card>
 			</div>
+			<footer className="one-button-footer">
+				<button onClick={() => navigate('/registreren')}>
+					Registreren
+				</button>
+			</footer>
 		</Layout>
 	)
 }

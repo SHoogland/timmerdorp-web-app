@@ -8,14 +8,6 @@ function ForgotPassword() {
 	const [loading, setLoading] = useState(false)
 	const [hasRequested, setHasRequested] = useState(false)
 
-	useEffect(() => {
-		document.body.classList.add('page-with-blue-background');
-
-		return () => {
-			document.body.classList.remove('page-with-blue-background');
-		};
-	}, []);
-
 	const forgotPassword = async () => {
 		setLoading(true);
 		const response = await apiCall('forgotPassword', {
@@ -34,7 +26,7 @@ function ForgotPassword() {
 
 
 	return (
-		<Layout title="Wachtwoord Vergeten" disableBackButton={true}>
+		<Layout title="Wachtwoord Vergeten" disableBackButton={true} disableLogo={true} backgroundColor='blue'>
 			{!hasRequested &&
 				<>
 					<div className="form">

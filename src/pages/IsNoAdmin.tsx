@@ -15,14 +15,15 @@ function IsNoAdmin() {
 		if (!response.result) {
 			navigate('/login');
 		}
+		if (!response.emailConfirmed) {
+			navigate('/email-niet-bevestigd');
+		}
 		if (response.admin) {
 			navigate('/');
 		}
 	}
 
 	useEffect(() => {
-		document.body.classList.add('page-with-blue-background');
-
 		const user = Parse.User.current();
 		if (user) {
 			setEmail(user.get('username'));
@@ -34,14 +35,14 @@ function IsNoAdmin() {
 		refresh();
 
 		return () => {
-			document.body.classList.remove('page-with-blue-background');
 			clearInterval(refreshInterval);
 			setRefreshInterval(0);
 		};
 	}, []);
 
 	return (
-		<Layout title="Nog geen beheerder!" disableBackButton={true}>
+		<Layout title="Registreren <<(stap 3/3)>>" disableBackButton={true} disableLogo={true} backgroundColor='blue'>
+			<h2>Nog geen beheerder!</h2>
 			<p>Je bent door Stan en Stephan nog niet aangewezen als app-beheerder! Daarom heb je nog geen toegang tot de app. Vraag een van hen om je toe te voegen als beheerder. Je bent ingelogd als {email}.</p>
 			<br/>
 			<button className='big' onClick={() => {logOut(); navigate('/login')}}>Uitloggen</button>

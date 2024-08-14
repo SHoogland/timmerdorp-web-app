@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Layout from '../layouts/layout';
 import apiCall from '../utils/apiCall';
 import LoadingIcon from '../components/LoadingIcon';
+import { useNavigate } from 'react-router-dom';
 
 function NewPassword() {
 	const [email, setEmail] = useState('')
@@ -10,25 +11,20 @@ function NewPassword() {
 	const [password, setPassword] = useState('')
 	const [loading, setLoading] = useState(false)
 	const [hasSaved, setHasSaved] = useState(false)
+	const navigate = useNavigate();
 
 	useEffect(() => {
-		document.body.classList.add('page-with-blue-background');
-
 		const urlParams = new URLSearchParams(window.location.search);
 		const email = urlParams.get('email');
-		let code = urlParams.get('code');
+		const code = urlParams.get('code');
 
 		if (!email || !code) {
 			alert('Er is iets misgegaan. Probeer het later opnieuw.');
-			window.location.href = '/login';
+			navigate('/login');
 		} else {
 			setEmail(atob(email));
 			setCode(atob(code));
 		}
-
-		return () => {
-			document.body.classList.remove('page-with-blue-background');
-		};
 	}, []);
 
 	const saveNewPassword = async () => {
@@ -54,7 +50,7 @@ function NewPassword() {
 	}
 
 	return (
-		<Layout title="Nieuw Wachtwoord" disableBackButton={true}>
+		<Layout title="Nieuw Wachtwoord" disableBackButton={true} disableLogo={true} backgroundColor='blue'>
 			{!hasSaved &&
 				<>
 					<div className="form">
