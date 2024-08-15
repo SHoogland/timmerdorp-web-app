@@ -7,7 +7,6 @@ import Parse from 'parse';
 
 function IsNoAdmin() {
 	const [email, setEmail] = useState('')
-	const [refreshInterval, setRefreshInterval] = useState(0);
 	const navigate = useNavigate();
 
 	const refresh = async () => {
@@ -31,13 +30,12 @@ function IsNoAdmin() {
 			navigate('/login');
 		}
 
-		setRefreshInterval(+setInterval(refresh, 5000));
+		const refreshInterval = setInterval(refresh, 5000);
 		refresh();
 
 		return () => {
 			clearInterval(refreshInterval);
-			setRefreshInterval(0);
-		};
+		}
 	}, []);
 
 	return (
