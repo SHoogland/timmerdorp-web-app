@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Layout from '../layouts/layout';
 import apiCall from '../utils/apiCall';
 import LoadingIcon from '../components/LoadingIcon';
+import generateGebeurtenisDescription from '../utils/generateGebeurtenisDescription';
 
 
 interface Ticket {
@@ -23,13 +24,14 @@ function HutjesManagement() {
 	const [addChildToHutIsLoading, setAddChildToHutIsLoading] = useState(false);
 	const [hasFoundChildToAdd, setHasFoundChildToAdd] = useState(false);
 	const [foundChildToAdd, setFoundChildToAdd] = useState<Ticket>({});
+	const [hutHistory, setHutHistory] = useState<Parse.Object[]>([]);
 
 
-	const search = async (ticketId?: string) => {
+	const search = async () => {
 		setKidsInHut([]);
 		setErrorTitle('');
 		setErrorHelpText('');
-		if (!ticketId && hutNummer.length < 3) {
+		if (hutNummer.length < 3) {
 			return;
 		}
 		setLoading(true);
@@ -46,6 +48,7 @@ function HutjesManagement() {
 
 			setHasSearchedForHut(true);
 			setLastSearchedHut(hutNummer);
+			setHutHistory(result.history);
 			setKidsInHut(result.tickets.sort((a: Ticket, b: Ticket) => a.firstName.localeCompare(b.firstName)));
 		} catch (e) {
 			setLoading(false);
@@ -64,7 +67,6 @@ function HutjesManagement() {
 		setLoading(true);
 
 		const timer = setTimeout(() => {
-
 			search();
 		}, 500);
 
@@ -103,7 +105,7 @@ function HutjesManagement() {
 				if (result.response === 'success') {
 					const tickets = result.tickets;
 					const foundTicket = tickets.find((ticket: Ticket) => ticket.wristband == wb);
-					if(!foundTicket) {
+					if (!foundTicket) {
 						alert('Kind niet gevonden');
 						return;
 					}
@@ -146,7 +148,7 @@ function HutjesManagement() {
 					className="wristband-number"
 				/>
 				<br />
-				<LoadingIcon shown={loading}/>
+				<LoadingIcon shown={loading} />
 			</center>
 
 			{kidsInHut.length > 0 && (
@@ -173,15 +175,27 @@ function HutjesManagement() {
 				</div>
 			)}
 
-			{hasSearchedForHut && (
+			{hasSearchedForHut && <>
 				<button
 					onClick={() => setShowAddChildModal(true)}
-					style={{ "display": "inline-block" }}
+					type="button"
 					className={"big"}
 				>
 					Kind toevoegen aan hutje
 				</button>
-			)}
+				<h2>Hut-geschiedenis</h2>
+				{hutHistory.length == 0 && <p>Er zijn nog geen kinderen toegevoegd/verwijderd uit deze hut.</p>}
+				{hutHistory.length > 0 && <ul>
+					{hutHistory.map((historyItem, index) => (
+						<li key={index}>
+							{generateGebeurtenisDescription(historyItem, true)}
+						</li>
+					))
+					}
+				</ul>}
+			</>}
+
+
 
 			{errorTitle && (
 				<div>
@@ -213,7 +227,7 @@ function HutjesManagement() {
 							style={{ "display": "inline-block" }}
 							className={"big" + (addChildToHutIsLoading ? " with-loading-icon" : "")}
 						>
-							<LoadingIcon color="white" shown={addChildToHutIsLoading}/>
+							<LoadingIcon color="white" shown={addChildToHutIsLoading} />
 							{!addChildToHutIsLoading && "Toevoegen"}
 						</button>
 						<br />
