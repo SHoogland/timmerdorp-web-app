@@ -66,8 +66,9 @@ function Settings() {
 		})
 	}
 
-	const acceptAdmin = (email: string) => {
-		apiCall('addAdmin', { email }).then(function (result) {
+	const acceptAdmin = (email: string, force?: boolean) => {
+		if(!email) return;
+		apiCall('addAdmin', { email, force }).then(function (result) {
 			if (result.success) {
 				const admittedAdmin = potentialAdmins.find((a) => a.email === email);
 				setPotentialAdmins(potentialAdmins.filter((a) => a.email !== email));
@@ -220,6 +221,10 @@ function Settings() {
 									</tbody>
 								</table>
 							)}
+
+							<p onClick={() => acceptAdmin(prompt('E-mailadres van nieuwe admin:') || '', true)} className="link">
+								Handmatig een beheerder toevoegen
+							</p>
 
 							{potentialAdmins.length === 0 && <p>Geen admin-verzoeken</p>}
 

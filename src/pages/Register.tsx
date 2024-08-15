@@ -46,7 +46,7 @@ function Register() {
 			email,
 			firstName,
 			lastName,
-			domain: location.hostname + (location.port ? ':' + location.port : ''),
+			domain: location.origin + (location.port ? ':' + location.port : ''),
 		}, true).catch((e) => {
 			setErrorTitle('Registreren mislukt!')
 			if (e.message === 'Account already exists for this username.') {

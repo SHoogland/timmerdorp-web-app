@@ -14,21 +14,21 @@ const generateGebeurtenisDescription = (h: Parse.Object, withChildName: boolean)
 		case 'marked-absent':
 			result = (
 				<>
-					<u>Afwezig</u> gemeld door {admin} met als reden: <i>{h.get('reason')}</i>.
+					<u>afwezig</u> gemeld door {admin} met als reden: <i>{h.get('reason')}</i>.
 				</>
 			);
 			break;
 		case 'marked-present':
 			result = (
 				<>
-					Aanwezig gemeld door {admin}.
+					aanwezig gemeld door {admin}.
 				</>
 			);
 			break;
 		case 'collected-sole':
 			result = (
 				<>
-					Veiligheidszooltjes gemarkeerd als opgehaald door {admin}.
+					veiligheidszooltjes gemarkeerd als opgehaald door {admin}.
 				</>
 			);
 			break;
@@ -36,19 +36,19 @@ const generateGebeurtenisDescription = (h: Parse.Object, withChildName: boolean)
 			if (!h.get('old')) {
 				result = (
 					<>
-						Toegevoegd aan hutje met nummer <u>{h.get('new')}</u> door {admin}.
+						toegevoegd aan hutje met nummer <u>{h.get('new')}</u> door {admin}.
 					</>
 				);
 			} else if (!h.get('new')) {
 				result = (
 					<>
-						Verwijderd uit hutje <u>{h.get('old')}</u> door {admin}.
+						verwijderd uit hutje <u>{h.get('old')}</u> door {admin}.
 					</>
 				);
 			} else {
 				result = (
 					<>
-						Overgeplaatst van hutje <u>{h.get('old')}</u> naar hutje <u>{h.get('new')}</u> door {admin}.
+						overgeplaatst van hutje <u>{h.get('old')}</u> naar hutje <u>{h.get('new')}</u> door {admin}.
 					</>
 				);
 			}
@@ -57,13 +57,13 @@ const generateGebeurtenisDescription = (h: Parse.Object, withChildName: boolean)
 			if (!h.get('old')) {
 				result = (
 					<>
-						Polsbandje gegeven met nummer <u>{h.get('new')}</u> door {admin}.
+						polsbandje gegeven met nummer <u>{h.get('new')}</u> door {admin}.
 					</>
 				);
 			} else {
 				result = (
 					<>
-						Nieuw polsbandje gegeven met nummer <u>{h.get('new')}</u> (eerst: {h.get('old')}) door {admin}.
+						nieuw polsbandje gegeven met nummer <u>{h.get('new')}</u> (eerst: {h.get('old')}) door {admin}.
 					</>
 				);
 			}
@@ -71,12 +71,12 @@ const generateGebeurtenisDescription = (h: Parse.Object, withChildName: boolean)
 		case 'save-hut-location':
 			result = (
 				<>
-					Hut-locatie van hutje {h.get('new')} {h.get('old') === '0' ? 'ingesteld' : <u>gewijzigd</u>} door {admin}.
+					hut-locatie van hutje {h.get('new')} {h.get('old') === '0' ? 'ingesteld' : <u>gewijzigd</u>} door {admin}.
 				</>
 			);
 			break;
 		default:
-			result = null; // Handle unknown event types
+			result = null;
 			break;
 	}
 

@@ -33,7 +33,12 @@ function Login() {
 			})
 			.then(function (user) {
 				if (user) {
-					navigate('/');
+					if(location.href.includes('redirect-to')) {
+						const redirect = location.href.split('redirect-to=')[1].split('&')[0];
+						navigate(decodeURIComponent(redirect));
+					} else {
+						navigate('/');
+					}
 				} else {
 					setErrorTitle('Inloggen mislukt');
 					setErrorText('Controleer je e-mailadres en wachtwoord en probeer het opnieuw.');

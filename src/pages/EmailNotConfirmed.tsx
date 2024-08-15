@@ -45,7 +45,7 @@ function EmailNotConfirmed() {
 
 	const requestNewCode = async () => {
 		setLoading(true);
-		await apiCall('sendEmailCode', { domain: location.hostname + (location.port ? ':' + location.port : '') }, true).catch((e) => {
+		await apiCall('sendEmailCode', { domain: location.origin + (location.port ? ':' + location.port : '') }, true).catch((e) => {
 			alert('Er is iets misgegaan bij het versturen van de e-mail. Probeer het later nog eens. Foutmelding: ' + JSON.stringify(e));
 			setLoading(false);
 		});
