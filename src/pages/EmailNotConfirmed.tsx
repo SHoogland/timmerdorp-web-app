@@ -9,7 +9,6 @@ import LoadingIcon from '../components/LoadingIcon';
 function EmailNotConfirmed() {
 	const [email, setEmail] = useState('')
 	const [loading, setLoading] = useState(false);
-	const [refreshInterval, setRefreshInterval] = useState(0);
 	const navigate = useNavigate();
 
 	const refresh = async () => {
@@ -34,12 +33,11 @@ function EmailNotConfirmed() {
 			navigate('/login');
 		}
 
-		setRefreshInterval(+setInterval(refresh, 5000));
+		const refreshInterval = setInterval(refresh, 5000);
 		refresh();
 
 		return () => {
 			clearInterval(refreshInterval);
-			setRefreshInterval(0);
 		};
 	}, []);
 
