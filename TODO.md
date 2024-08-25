@@ -10,11 +10,10 @@ todo's, soortvan gesorteerd op prioriteit
 - een soortvan acceptabel design maken
 - Stan & Stephan tickets laten bewerken
 - eigenlijk even de hele oude app doorlopen en kijken wat er nog mist
-- settings pagina past niet op mobile (de stan&stephan-versie tenminste)
 
 
 ## Low-priority (maar overige dingen die uit de oude app kwamen)
-- Statistieken
 - Foto's/bijlagen
 - Weerbericht
+- In oude app: als je registreert is stap 4/4 het aangeven bij welke wijk je hoort.
 - Plattegrond
