@@ -83,6 +83,7 @@ function Attendance() {
 			setHasFoundChild(false);
 			setHasSearched(false);
 			setSearchIsLoading(false);
+			setFoundChildIsAlreadyPresent(false);
 		}
 	}
 

@@ -10,7 +10,18 @@
 	user-select: none;
 }
 
-p, span, b, i, strong, em, h1, h2, h3, h4, h5, h6 {
+p,
+span,
+b,
+i,
+strong,
+em,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
 	cursor: default;
 }
 
@@ -102,14 +113,11 @@ input {
 	}
 }
 
-
-
 a {
 	color: $blue;
 	cursor: pointer;
 	text-decoration: underline;
 }
-
 
 .main-content {
 	&.red button {
@@ -123,13 +131,15 @@ a {
 	}
 }
 
-
 .form {
 	width: 100%;
 	max-width: 480px;
 	margin: 0 auto;
 
-	input[type=text], input[type=password], input[type=email], input[type=number] {
+	input[type="text"],
+	input[type="password"],
+	input[type="email"],
+	input[type="number"] {
 		border: none !important;
 		background: #78bff8;
 		color: white;
@@ -147,13 +157,12 @@ a {
 			color: #333;
 		}
 	}
-	
+
 	button {
 		display: block;
 		width: 100%;
 	}
 }
-
 
 p.helper-link {
 	text-align: center;
@@ -162,14 +171,106 @@ p.helper-link {
 	margin-top: 18px;
 }
 
-
 p.link {
 	color: $blue;
 	text-decoration: underline;
 	cursor: pointer;
 }
 
-
 button.fab {
 	padding: 12px;
+
+	&.sticky {
+		position: fixed;
+		background: white;
+		border-radius: 50%;
+		width: 48px;
+		height: 48px;
+		color: black;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		transition: all 0.3s;
+		z-index: 5;
+
+		&:hover {
+			transform: scale(1.1);
+			background: #f0f0f0;
+		}
+
+		&.bottom-right {
+			bottom: 24px;
+			right: 24px;
+		}
+	}
+}
+
+table {
+	text-align: left;
+	width: 100%;
+	display: block;
+	font-size: 18px;
+	border-collapse: collapse;
+	overflow-x: auto;
+
+	tbody {
+		display: table;
+		width: 100%;
+	}
+	tr:nth-of-type(2n) {
+		&,
+		td {
+			background: #e5e5e5;
+		}
+	}
+
+	tr:nth-of-type(2n + 1) {
+		&,
+		td {
+			background: #fafafa;
+		}
+	}
+	td {
+		padding: 16px 18px !important;
+	}
+	&.left-column-fixed {
+		tr {
+			td:first-of-type {
+				position: sticky;
+				left: 0;
+				z-index: 1;
+			}
+		}
+	}
+
+
+	&.top-column-fixed {
+		tr:first-of-type {
+		  position: sticky;
+		  top: 0;
+		  z-index: 2;
+		}
+	  }
+
+	&.withHeader tr:first-of-type {
+		td {
+			font-weight: bold;
+		}
+	}
+}
+
+.isRotating {
+	// for for example a loading spinner
+	animation-name: rotate;
+	animation-duration: 1000ms;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}
+
+@keyframes rotate {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.hidden {
+	display: none;
 }

@@ -1,0 +1,55 @@
+@import "vars";
+
+#main {
+	text-align: center;
+	button {
+		span span {
+			font-weight: normal;
+			font-size: 20px;
+		}
+	}
+}
+
+#allStatsTable {
+	margin-bottom: 18px;
+}
+
+tr.isYou {
+	td {
+		text-decoration: underline;
+		font-weight: bold;
+	}
+}
+
+g[aria-label="Chart"] + g {
+	display: none; // hide advertisement for chart framework
+}
+
+#presencesByTimeChart {
+	width: 100%;
+	height: 375px;
+}
+
+td.white {
+	color: gray;
+}
+td.blue {
+	color: $blue;
+}
+td.yellow {
+	color: $yellow;
+}
+td.red {
+	color: $red;
+}
+td.green {
+	color: $green;
+}
+
+thead td {
+	font-weight: bold;
+}
+
+h2 {
+	padding-left: 20px;
+}

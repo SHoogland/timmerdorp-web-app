@@ -19,7 +19,7 @@ function ScanTicket() {
 		<>
 			{scanning ?
 				<>
-					<span onClick={() => { setScanning(false); navigate('/')}} style={{
+					<span onClick={() => { setScanning(false); navigate('/') }} style={{
 						position: 'fixed',
 						top: 12,
 						left: 18,
@@ -38,7 +38,7 @@ function ScanTicket() {
 						display: 'flex',
 						justifyContent: 'center',
 						alignItems: 'center',
-						zIndex: 2, 
+						zIndex: 2,
 					}}>
 						<div style={{ width: '100%' }}>
 							<QrCode
@@ -50,7 +50,7 @@ function ScanTicket() {
 						</div>
 					</div>
 				</>
-			: ''}
+				: ''}
 		</>
 	);
 }

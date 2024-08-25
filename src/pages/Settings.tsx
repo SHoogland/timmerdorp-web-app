@@ -166,7 +166,7 @@ function Settings() {
 	}, [selectedEventCategories]);
 
 	return (
-		<Layout title={isStanOfStephan ? "Instellingen" : "Account info"}>
+		<Layout title={isStanOfStephan ? "Instellingen" : "Account info"} noPadding={true}>
 			{isInitialized && (
 				<>
 					<table>
@@ -242,7 +242,7 @@ function Settings() {
 								</ul>
 							)}
 							{historyLength > eventHistory.length && (
-								<p className="link" onClick={() => getMoreEvents()}>Laad meer</p>
+								<p className="link" onClick={() => getMoreEvents()}>Nog 50 resultaten ophalen (van de overgebleven { historyLength - eventHistory.length })</p>
 							)}
 						</>
 					)
