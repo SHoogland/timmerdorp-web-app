@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import apiCall from '../utils/apiCall';
 import logOut from '../utils/logOut';
+import '../scss/Home.scss';
 
 function Home() {
 	const [isStanOfStephan, setIsStanOfStephan] = useState(false);
@@ -50,7 +51,7 @@ function Home() {
 	}
 
 	return (
-		<>
+		<div className='home'>
 			<h1>Timmerdorp app</h1>
 			<ul>
 				<li>
@@ -84,7 +85,7 @@ function Home() {
 					<a href="#" onClick={logOutFunction}>Uitloggen</a>
 				</li>
 			</ul>
-		</>
+		</div>
 	)
 }
 
