@@ -1,0 +1,143 @@
+/* Import global variables */
+@import "vars";
+
+/* Container for the entire home page */
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: $background-color; /* Main background color of the app */
+  min-height: 100vh;
+
+  /* Header section */
+  &__header {
+    width: 100%;
+    background-color: $header-background-color; /* Variable from vars.scss */
+    padding: 1rem;
+    box-shadow: $header-box-shadow; /* Shadow for depth effect */
+
+    h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      color: $header-text-color;
+      text-align: center;
+    }
+
+    .icon {
+      position: absolute;
+      right: 1rem;
+      font-size: 1.5rem;
+      color: $icon-color;
+      cursor: pointer;
+    }
+  }
+
+  /* Navigation buttons section */
+  &__nav-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2rem;
+    width: 100%;
+
+    button {
+      flex: 1 1 calc(33.333% - 1rem);
+      background-color: $button-bg-color;
+      color: $button-text-color;
+      border: none;
+      padding: 1rem;
+      font-size: 1rem;
+      border-radius: $border-radius;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: darken($button-bg-color, 10%);
+      }
+
+      &.active {
+        background-color: $button-active-bg-color;
+      }
+    }
+  }
+
+  /* Weather and data information section */
+  &__info-section {
+    width: 100%;
+    background-color: $info-bg-color;
+    padding: 1.5rem;
+    margin-top: 2rem;
+    border-radius: $border-radius;
+    box-shadow: $info-box-shadow;
+
+    .info-item {
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      color: $info-text-color;
+
+      h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        color: $info-title-color;
+      }
+
+      p {
+        margin: 0.5rem 0;
+      }
+    }
+  }
+
+  /* Neighborhood choice section */
+  &__wijk-choice {
+    width: 100%;
+    margin-top: 2.5rem;
+    padding: 1rem;
+    background-color: $wijk-choice-bg-color;
+    border-radius: $border-radius;
+
+    h1 {
+      font-size: 1.8rem;
+      color: $wijk-choice-text-color;
+      text-align: center;
+    }
+
+    .select-wrapper {
+      margin-top: 1rem;
+      width: 100%;
+
+      select {
+        width: 100%;
+        padding: 0.8rem;
+        border-radius: $border-radius;
+        border: 1px solid $border-color;
+        background-color: $select-bg-color;
+        color: $select-text-color;
+      }
+    }
+
+    .save-button {
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 0.8rem;
+      font-size: 1rem;
+      background-color: $save-button-bg-color;
+      color: $save-button-text-color;
+      border: none;
+      border-radius: $border-radius;
+      cursor: pointer;
+
+      &:hover {
+        background-color: darken($save-button-bg-color, 10%);
+      }
+    }
+  }
+
+  /* Error message styling */
+  &__error-message {
+    color: $error-color;
+    font-size: 1rem;
+    text-align: center;
+    margin-top: 1.5rem;
+  }
+}
