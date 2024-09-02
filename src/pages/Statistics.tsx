@@ -33,7 +33,6 @@ function Statistics() {
 		{ title: "Aanwezig di", prop: "aanwezig_di" },
 		{ title: "Aanwezig wo", prop: "aanwezig_wo" },
 		{ title: "Aanwezig do", prop: "aanwezig_do" },
-		{ title: "Aanwezig vr", prop: "aanwezig_vr" }
 	];
 
 	const allprops = [
@@ -331,9 +330,6 @@ function Statistics() {
 									Donderdag
 								</td>
 								<td>
-									Vrijdag
-								</td>
-								<td>
 									Totaal
 								</td>
 							</tr>
@@ -343,7 +339,6 @@ function Statistics() {
 									<td>{admin.di || 0} </td>
 									<td>{admin.wo || 0} </td>
 									<td>{admin.do || 0} </td>
-									<td>{admin.vr || 0} </td>
 									<td>{admin.total || 0} </td>
 								</tr>
 							))}
