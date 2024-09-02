@@ -9,15 +9,6 @@ interface Ticket {
 	[key: string]: any;
 }
 
-
-interface TicketProperty {
-	label: string;
-}
-
-interface TicketPropertiesMap {
-	[key: string]: TicketProperty;
-}
-
 function SearchPage() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [hasSearched, setHasSearched] = useState(false);
@@ -26,40 +17,20 @@ function SearchPage() {
 	const [loading, setLoading] = useState(false);
 	const [errorTitle, setErrorTitle] = useState('');
 	const [errorHelpText, setErrorHelpText] = useState('');
-	const [modalShown, setModalShown] = useState(false);
-	const [selectedChild, setSelectedChild] = useState<Ticket>({});
-	const [canEditTickets, setCanEditTickets] = useState(false);
-	const [ticketPropertiesMap, setTicketPropertiesMap] = useState<TicketPropertiesMap>({});
-	const [isEditingTickets, setIsEditingTickets] = useState(false);
-
-	const tableCategories = [
-		{
-			name: 'Gegevens Kind',
-			props: ['birthdate', 'wristband', 'opmerkingen']
-		},
-		{
-			name: 'Gegevens huisarts',
-			props: ['naam_huisarts', 'tel_huisarts']
-		},
-		{
-			name: 'Contactgegevens ouders',
-			props: ['tel1', 'tel2', 'parent_email']
-		},
-	];
 
 	const navigate = useNavigate();
 
-	const search = async (ticketId?: string) => {
+	const search = async () => {
 		setSearchResults([]);
 		setErrorTitle('');
 		setErrorHelpText('');
-		if (!ticketId && searchTerm.length < 3) {
+		if (searchTerm.length < 3) {
 			return;
 		}
 		setLoading(true);
 
 		try {
-			const result = await apiCall('search', { searchTerm: ticketId || searchTerm });
+			const result = await apiCall('search', { searchTerm });
 			setLoading(false);
 
 			if (!result || result.response !== 'success') {
@@ -87,13 +58,6 @@ function SearchPage() {
 			};
 
 			setSearchResults(result.tickets.sort((a: Ticket, b: Ticket) => rankResult(a) - rankResult(b)));
-			setCanEditTickets(result.canEditTickets);
-			setTicketPropertiesMap(result.ticketPropertiesMap);
-
-			if (ticketId) {
-				setModalShown(result.tickets[0]);
-				setSearchTerm(result.tickets[0].firstName + ' ' + result.tickets[0].lastName);
-			}
 		} catch (e) {
 			setLoading(false);
 			setErrorTitle(String(e));
@@ -122,23 +86,8 @@ function SearchPage() {
 		return () => clearTimeout(timer);
 	}, [searchTerm]);
 
-	const showModal = (child: Ticket) => {
-		window.history.pushState({}, '', '/zoek?q=' + searchTerm + '&ticket-id=' + child.id);
-		setModalShown(true);
-		setSelectedChild(child);
-	};
-
-	const hideModal = () => {
-		window.history.pushState({}, '', '/zoek');
-		setModalShown(false);
-	}
-
 	useEffect(() => {
-		if (window.location.href.includes('ticket-id=')) {
-			if (!hasSearched && !loading) {
-				search(window.location.href.split('ticket-id=')[1].split('&')[0]);
-			}
-		} else if (window.location.href.includes('q=')) {
+		if (window.location.href.includes('q=')) {
 			let searchQuery = window.location.href.split('q=')[1].split('&')[0];
 			searchQuery = decodeURIComponent(searchQuery);
 			setSearchTerm(searchQuery);
@@ -147,10 +96,6 @@ function SearchPage() {
 			}
 		}
 	}, []);
-
-	const saveTicketEdit = async () => {
-		alert('Opslaan is nog niet geïmplementeerd');
-	};
 
 
 	return (
@@ -177,7 +122,7 @@ function SearchPage() {
 							{searchResults.map((child) => (
 								<table
 									key={child.id}
-									onClick={() => showModal(child)}
+									onClick={() => navigate('/bekijk-ticket?ticket-id=' + child.id + '&q=' + searchTerm)}
 									style={{ borderBottom: '1px solid #ccc', width: '100%', textAlign: 'left' }}
 								>
 									<tbody className='ticketListItem'>
@@ -219,37 +164,6 @@ function SearchPage() {
 				)}
 
 				<br />
-
-				{modalShown &&
-					<div id="modal">
-						{selectedChild.firstName} {selectedChild.lastName}
-						<br />
-						{tableCategories.map((cat) => (
-							<div key={cat.name}>
-								<h3>{cat.name}</h3>
-								<table>
-									<tbody>
-										{cat.props.map((prop) => (
-											<tr key={prop}>
-												<td>{(ticketPropertiesMap[prop] || {}).label}</td>
-												<td>{selectedChild[prop]}</td>
-											</tr>
-										))}
-									</tbody>
-								</table>
-							</div>
-						))}
-						<br />
-						<br />
-						<button onClick={() => { hideModal() }}>Sluiten</button>
-						{canEditTickets && !isEditingTickets && <button onClick={() => setIsEditingTickets(true)}>Bewerken</button>}
-						{isEditingTickets && <button onClick={() => saveTicketEdit()}>Opslaan</button>}
-						<button onClick={() => navigate('/polsbandje?ticket-id=' + selectedChild.id + '&origin=search')}>Polsbandje wijzigen</button>
-						<button onClick={() => navigate('/hutje?ticket-id=' + selectedChild.id)}>Naar hutje</button>
-						<button onClick={() => navigate('/aanwezigheid?ticket-id=' + selectedChild.id)}>Naar aanwezigheid</button>
-						<button onClick={() => navigate('/')}>Terug naar homepagina</button>
-					</div>
-				}
 			</Layout>
 		</>
 	);

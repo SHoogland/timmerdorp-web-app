@@ -274,3 +274,15 @@ table {
 .hidden {
 	display: none;
 }
+
+
+.ticketCard {
+	button {
+		width: 100%;
+		border-radius: 0;
+		display: block;
+		margin: 0;
+		font-weight: normal;
+		height: 48px;
+	}
+}
