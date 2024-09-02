@@ -27,6 +27,8 @@ import IsNoAdmin from './pages/IsNoAdmin.tsx';
 import Register from './pages/Register.tsx';
 import EmailNotConfirmed from './pages/EmailNotConfirmed.tsx';
 import VerifyEmail from './pages/VerifyEmaii.tsx';
+import EditTicket from './pages/EditTicket.tsx';
+import ViewTicket from './pages/ViewTicket.tsx';
 
 initParse();
 
@@ -107,6 +109,14 @@ const router = createBrowserRouter([
   {
 	path: '/verify-email',
 	element: <VerifyEmail />,
+  },
+  {
+	path: '/bewerk-ticket',
+	element: <EditTicket />,
+  },
+  {
+	path: '/bekijk-ticket',
+	element: <ViewTicket />,
   },
 ]);
 

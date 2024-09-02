@@ -125,8 +125,8 @@ function Settings() {
 				if (result.denied) {
 					return;
 				}
-				setAdmins(result.admins);
-				setPotentialAdmins(result.potentialAdmins);
+				setAdmins(result.admins.sort((a: Admin, b: Admin) => a.name.localeCompare(b.name)));
+				setPotentialAdmins(result.potentialAdmins.sort((a: Admin, b: Admin) => a.name.localeCompare(b.name)));
 				let history = result.history;
 				history = history.map((h: Parse.Object) => {
 					h.set('desc', generateGebeurtenisDescription(h, true));
@@ -242,7 +242,7 @@ function Settings() {
 								</ul>
 							)}
 							{historyLength > eventHistory.length && (
-								<p className="link" onClick={() => getMoreEvents()}>Nog 50 resultaten ophalen (van de overgebleven { historyLength - eventHistory.length })</p>
+								<p className="link" onClick={() => getMoreEvents()}>Nog 100 resultaten ophalen (van de overgebleven { historyLength - eventHistory.length })</p>
 							)}
 						</>
 					)

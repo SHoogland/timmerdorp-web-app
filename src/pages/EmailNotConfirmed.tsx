@@ -60,7 +60,7 @@ function EmailNotConfirmed() {
 			<br />
 			<button className='big' onClick={() => { loading || requestNewCode() }}>Nieuwe code aanvragen</button>
 			<br />
-			{ loading && <LoadingIcon color="white" /> }
+			<LoadingIcon color="white" shown={loading} />
 			<br />
 			<button className='big' onClick={() => { logOut(); navigate('/login') }}>Uitloggen</button>
 		</Layout>
