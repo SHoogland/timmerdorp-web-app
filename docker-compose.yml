@@ -15,3 +15,13 @@ services:
       - DATABASE_URI=mongodb://mongodb:27017/dev
       - APP_ID=myAppId
       - JS_KEY=jsKey
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      start_period: 5s
+      retries: 10

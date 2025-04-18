@@ -26,7 +26,9 @@
             run: echo ${{ secrets.GH_PAT }} | docker login ghcr.io -u shoogland --password-stdin
 
           - name: Start mongodb
-            run: docker compose up -d mongodb
+            run: |
+              docker compose up -d mongodb
+              docker compose up -d redis
 
           - name: restore dump
             run: docker compose exec mongodb mongorestore --uri "mongodb://localhost:27017/dev" --nsExclude "admin.system.*" /dump
