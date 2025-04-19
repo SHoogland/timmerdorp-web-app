@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import '../scss/Layout.scss';
-import Header from '../components/Header';
+import Header from '../components/Header.tsx';
 
 interface LayoutProps {
 	title?: string;

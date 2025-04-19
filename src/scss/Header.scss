@@ -1,4 +1,4 @@
-@import "vars";
+@use "vars";
 
 @font-face {
 	font-family: Mikado-Bold;
@@ -6,7 +6,7 @@
 }
 
 header {
-	background: $blue;
+	background: vars.$blue;
 	height: 80px;
 	-webkit-box-shadow: none;
 	box-shadow: none;
@@ -78,15 +78,15 @@ header {
 	}
 
 	&.red {
-		background: $red;
+		background: vars.$red;
 	}
 	&.yellow {
-		background: $yellow;
+		background: vars.$yellow;
 	}
 	&.green {
-		background: $green;
+		background: vars.$green;
 	}
 	&.blue {
-		background: $blue;
+		background: vars.$blue;
 	}
 }

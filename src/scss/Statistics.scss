@@ -1,4 +1,4 @@
-@import "vars";
+@use "vars";
 
 #main {
 	text-align: center;
@@ -34,16 +34,16 @@ td.white {
 	color: gray;
 }
 td.blue {
-	color: $blue;
+	color: vars.$blue;
 }
 td.yellow {
-	color: $yellow;
+	color: vars.$yellow;
 }
 td.red {
-	color: $red;
+	color: vars.$red;
 }
 td.green {
-	color: $green;
+	color: vars.$green;
 }
 
 thead td {
