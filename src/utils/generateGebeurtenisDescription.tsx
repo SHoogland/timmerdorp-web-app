@@ -1,4 +1,6 @@
 import parse from 'html-react-parser';
+import { JSX } from 'react';
+
 const prependZero = (n: number): string => (n < 10 ? '0' : '') + n;
 
 const generateGebeurtenisDescription = (h: Parse.Object, withChildName: boolean, ticketPropertiesMap?: any): JSX.Element => {

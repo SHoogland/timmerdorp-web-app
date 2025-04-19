@@ -1,4 +1,4 @@
-@import "vars";
+@use "vars";
 
 // make a 2x2 fullpage grid
 #wijk-keuze {
@@ -19,19 +19,19 @@
 	}
 
 	.wijk.red {
-		background-color: $red;
+		background-color: vars.$red;
 	}
 
 	.wijk.green {
-		background-color: $green;
+		background-color: vars.$green;
 	}
 
 	.wijk.blue {
-		background-color: $blue;
+		background-color: vars.$blue;
 	}
 
 	.wijk.yellow {
-		background-color: $yellow;
+		background-color: vars.$yellow;
 	}
 
 }

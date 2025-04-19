@@ -1,4 +1,5 @@
-@import "vars";
+@use "sass:color";
+@use "vars";
 
 
 .categoryButton {
@@ -16,8 +17,8 @@
 	transition: all 0.3s;
 
 	&.selected {
-		background-color: $blue!important;
-		border-color: darken($blue, 10%);
+		background-color: vars.$blue!important;
+		border-color: color.adjust(vars.$blue, $lightness: -10%);
 		color: white;
 	}
 }

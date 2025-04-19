@@ -1,4 +1,5 @@
-@import "vars";
+@use "sass:color";
+@use "vars";
 
 html,
 body,
@@ -38,13 +39,13 @@ body {
 body.page-with-blue-background {
 	&,
 	header {
-		background: darken($blue, 12%) !important;
+		background: color.adjust(vars.$blue, $lightness: -12%) !important;
 	}
 
 	button,
 	.card {
 		&:not(.bg-red) {
-			background: darken($blue, 24%);
+			background: color.adjust(vars.$blue, $lightness: -24%);
 		}
 	}
 }
@@ -52,13 +53,13 @@ body.page-with-blue-background {
 body.page-with-red-background {
 	&,
 	header {
-		background: darken($red, 12%) !important;
+		background: color.adjust(vars.$red, $lightness: -12%) !important;
 	}
 
 	button,
 	.card {
 		&:not(.bg-red) {
-			background: darken($red, 24%);
+			background: color.adjust(vars.$red, $lightness: -24%);
 		}
 	}
 }
@@ -93,7 +94,7 @@ footer.one-button-footer {
 	height: 100px;
     min-height: 100px;
 	width: 100%;
-	background: darken($blue, 25%);
+	background: color.adjust(vars.$blue, $lightness: -25%);
 	
 	display: flex;
 	justify-content: center;
