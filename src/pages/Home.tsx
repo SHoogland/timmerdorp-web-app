@@ -71,12 +71,12 @@ function Home() {
 				<li>
 					<a onClick={() => navigate('verjaardagen')}>Verjaardagen</a>
 				</li>
-				<li>
+				{/* <li>
 					<a onClick={() => navigate('kaart')}>Kaart... (doen we dat nog dit jaar?)</a>
-				</li>
-				<li>
+				</li> */}
+				{/* <li>
 					<a onClick={() => navigate('fotos')}>Foto's en bijlagen</a>
-				</li>
+				</li> */}
 				<li>
 					<a onClick={() => navigate('instellingen')}>{isStanOfStephan ? "App beheer" : "Instellingen"}</a>
 				</li>
