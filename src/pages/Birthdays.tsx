@@ -10,7 +10,7 @@ const Birthdays: React.FC = () => {
 	const [error, setError] = useState<boolean>(false);
 	const [data, setData] = useState<any>(null);
 	const [days] = useState<string[]>(['di', 'wo', 'do', 'vr']);
-	const [dates] = useState<string[]>(['Dinsdag 27 augustus', 'Woensdag 28 augustus', 'Donderdag 29 augustus', 'Vrijdag 30 augustus']);
+	const [dates] = useState<string[]>(['Dinsdag 19 augustus', 'Woensdag 20 augustus', 'Donderdag 21 augustus', 'Vrijdag 22 augustus']);
 	const navigate = useNavigate();
 
 	useEffect(() => {
