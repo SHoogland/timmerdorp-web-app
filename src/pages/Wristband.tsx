@@ -110,9 +110,9 @@ function Wristband() {
 		});
 	}
 
-	const collectSole = () => {		
+	const collectSole = () => {
 		setLoadingSole(true);
-		apiCall('collectSole', { id:  ticket.id }).then((result) => {
+		apiCall('collectSole', { id: ticket.id }).then((result) => {
 			setLoadingSole(false);
 			if (result.response !== 'success') {
 				alert(result.error || result.response);
@@ -125,7 +125,7 @@ function Wristband() {
 	return (
 		<Layout title="Polsbandje toewijzen">
 			<center>
-				<LoadingIcon shown={loading}/>
+				<LoadingIcon shown={loading} />
 
 				{errorTitle && <p><b>{errorTitle}</b><br />{errorHelp}</p>}
 				{!loading && ticket.id && (
@@ -153,19 +153,21 @@ function Wristband() {
 								<td><b>Zooltjes besteld:</b></td>
 								<td>{ticket.hasSole ? 'Ja' : 'Nee'}</td>
 							</tr>
-							<tr>
-								<td><b>Zooltjes opgehaald:</b></td>
-								<td>
-									<input
-										type="checkbox"
-										checked={ticket.collectedSole}
-										onClick={() => !ticket.collectedSole ? collectSole() : ''}
-										disabled={ticket.collectedSole}
-									/>
-									<LoadingIcon shown={loadingSole}/>
-									{!loadingSole && (ticket.collectedSole ? "Ja" : "Nee")}
-								</td>
-							</tr>
+							{ticket.hasSole && (
+								<tr>
+									<td><b>Zooltjes opgehaald:</b></td>
+									<td>
+										<input
+											type="checkbox"
+											checked={ticket.collectedSole}
+											onClick={() => !ticket.collectedSole ? collectSole() : ''}
+											disabled={ticket.collectedSole}
+										/>
+										<LoadingIcon shown={loadingSole} />
+										{!loadingSole && (ticket.collectedSole ? "Ja" : "Nee")}
+									</td>
+								</tr>
+							)}
 						</tbody>
 					</table>
 				)}
