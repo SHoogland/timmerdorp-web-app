@@ -76,7 +76,35 @@ function ViewTicket() {
 			<LoadingIcon shown={loading} />
 			{!loading &&
 				<div className="ticketCard">
-					{ticket.firstName} {ticket.lastName}
+					<h3>Naam</h3>
+					<table>
+						<tbody>
+							<tr>
+								<td>Voornaam</td>
+								<td>
+									<input
+										type="text"
+										title="Voornaam"
+										onChange={(e) => setTicket({ ...ticket, firstName: e.target.value })}
+										value={ticket.firstName || ''}
+										placeholder="Voornaam"
+									/>
+								</td>
+							</tr>
+							<tr>
+								<td>Achternaam</td>
+								<td>
+									<input
+										type="text"
+										title="Achternaam"
+										onChange={(e) => setTicket({ ...ticket, lastName: e.target.value })}
+										value={ticket.lastName || ''}
+										placeholder="Achternaam"
+									/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 					<br />
 					{tableCategories.map((cat) => (
 						<div key={cat.name}>
