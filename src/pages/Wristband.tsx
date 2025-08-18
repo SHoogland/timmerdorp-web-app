@@ -3,6 +3,7 @@ import Layout from '../layouts/layout';
 import { useNavigate } from 'react-router-dom';
 import apiCall from '../utils/apiCall';
 import LoadingIcon from '../components/LoadingIcon';
+import { useIsMounted } from '../utils/useIsMounted';
 
 interface Ticket {
 	[key: string]: any;
@@ -19,13 +20,16 @@ function Wristband() {
 	const [errorHelp, setErrorHelp] = useState('');
 	const [ticket, setTicket] = useState<Ticket>({});
 	const navigate = useNavigate();
-
+	const isMountedRef = useIsMounted();
 
 	useEffect(() => {
 		if (window.location.href.includes('ticket-id=')) {
 			setLoading(true);
 			const ticketId = window.location.href.split('ticket-id=')[1].split('&')[0];
 			apiCall('findChildById', { id: ticketId }).then((result) => {
+				// Check if component is still mounted before updating state
+				if (!isMountedRef.current) return;
+				
 				setLoading(false);
 				if (result.response !== 'success') {
 					if (result.response === 'unauthorized') {
@@ -40,10 +44,12 @@ function Wristband() {
 				}
 
 				setTicket(result.ticket);
-				if (result.ticket.wristbandNumber) {
+				if (result.ticket.wristband) {
 					if (!confirm('Dit kind heeft al een polsbandje. Wil je een nieuw polsbandje toewijzen?')) {
 						navigate('/');
 					}
+					// Prefill de textbox met het bestaande polsbandnummer
+					setWristbandNumber(result.ticket.wristband);
 				}
 				// add kid to search history, as long as user didn't come from search page
 				if (!window.location.href.includes('&origin=search')) {
@@ -61,6 +67,14 @@ function Wristband() {
 							setWristbandSuggestions([formatWristbandNr(lastAssignedWristband - 1), formatWristbandNr(lastAssignedWristband + 1)]);
 						}
 					}
+				}
+			}).catch((error) => {
+				// Handle any errors that might occur
+				console.error('Error finding child by ID:', error);
+			}).finally(() => {
+				// Always reset loading state, but only if component is still mounted
+				if (isMountedRef.current) {
+					setLoading(false);
 				}
 			});
 		} else {
@@ -81,6 +95,9 @@ function Wristband() {
 	}
 
 	const saveWristband = (wristbandNumberParam?: string) => {
+		// Prevent multiple simultaneous calls
+		if (isSaving) return;
+		
 		// implement save logic
 		const newWristbandNumber = wristbandNumberParam || wristbandNumber;
 		if (!newWristbandNumber || newWristbandNumber.length != 3) {
@@ -93,6 +110,9 @@ function Wristband() {
 
 		setIsSaving(true);
 		apiCall('assignWristband', { id: ticket.id, wristband: newWristbandNumber }).then((result) => {
+			// Check if component is still mounted before updating state
+			if (!isMountedRef.current) return;
+			
 			setIsSaving(false);
 			if (result.response == 'duplicate') {
 				setErrorTitle('Fout!');
@@ -107,18 +127,40 @@ function Wristband() {
 			localStorage.setItem('lastWristbandAssignmentDate', '' + +new Date()); // save unix timestamp as string
 			localStorage.setItem('lastAssignedWristband', newWristbandNumber);
 			navigate('/');
+		}).catch((error) => {
+			// Handle any errors that might occur
+			console.error('Error saving wristband:', error);
+		}).finally(() => {
+			// Always reset saving state, but only if component is still mounted
+			if (isMountedRef.current) {
+				setIsSaving(false);
+			}
 		});
 	}
 
 	const collectSole = () => {
+		// Prevent multiple simultaneous calls
+		if (loadingSole) return;
+		
 		setLoadingSole(true);
 		apiCall('collectSole', { id: ticket.id }).then((result) => {
-			setLoadingSole(false);
+			// Check if component is still mounted before updating state
+			if (!isMountedRef.current) return;
+			
 			if (result.response !== 'success') {
 				alert(result.error || result.response);
 				return;
 			}
-			setTicket({ ...ticket, collectedSole: true });
+			// Only update state if the component is still mounted
+			setTicket(prevTicket => ({ ...prevTicket, collectedSole: true }));
+		}).catch((error) => {
+			// Handle any errors that might occur
+			console.error('Error collecting sole:', error);
+		}).finally(() => {
+			// Always reset loading state, but only if component is still mounted
+			if (isMountedRef.current) {
+				setLoadingSole(false);
+			}
 		});
 	}
 
@@ -179,6 +221,7 @@ function Wristband() {
 					maxLength={3}
 					title="Polsbandnummer"
 					id="wristbandInput"
+					value={wristbandNumber}
 					onChange={(e) => setWristbandNumber(e.target.value)}
 					onKeyUp={(e) => e.key == 'Enter' ? saveWristband() : null}
 					placeholder="000"
