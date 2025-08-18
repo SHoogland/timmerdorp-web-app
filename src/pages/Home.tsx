@@ -1,4 +1,4 @@
-// import Parse from 'parse';
+import Parse from 'parse';
 import { useEffect, useState } from 'react';
 import BottomBar from '../components/BottomBar';
 import { useNavigate } from 'react-router-dom';
@@ -6,8 +6,7 @@ import apiCall from '../utils/apiCall';
 import logOut from '../utils/logOut';
 import getCurrentWijk from '../utils/getCurrentWijk';
 
-interface WeatherData {
-  temp: number;
+interface WeatherData {temp: number;
   msg: string;
   icon: string;
 }
@@ -23,7 +22,7 @@ interface PageItem {
 }
 
 function Home() {
-	// const [isStanOfStephan, setIsStanOfStephan] = useState(false);
+	const [isStanOfStephan, setIsStanOfStephan] = useState(false);
 	const [weather, setWeather] = useState<WeatherData | null>(null);
 	const [childrenCount, setChildrenCount] = useState(0);
 	const [birthdays, setBirthdays] = useState(0);
@@ -31,9 +30,9 @@ function Home() {
 	const [waitingPotentialAdmins, setWaitingPotentialAdmins] = useState(0);
 	const [showWijkChoice, setShowWijkChoice] = useState(false);
 	const [currentWijkChoice, setCurrentWijkChoice] = useState('');
-	// const [onlyChangeWijk, setOnlyChangeWijk] = useState(false);
+	const [onlyChangeWijk, setOnlyChangeWijk] = useState(false);
 	const [finishedWijkChoice, setFinishedWijkChoice] = useState(false);
-	// const [error, setError] = useState('');
+	const [error, setError] = useState('');
 	const navigate = useNavigate();
 
 	const currentYear = new Date().getFullYear();
@@ -126,10 +125,10 @@ function Home() {
 	];
 
 	useEffect(() => {
-		// const email = Parse.User.current()?.get('username');
-		// if (email === 'stanvanbaarsen@hotmail.com' || email === 'stephan@shoogland.com') {
-		// 	setIsStanOfStephan(true);
-		// }
+		const email = Parse.User.current()?.get('username');
+		if (email === 'stanvanbaarsen@hotmail.com' || email === 'stephan@shoogland.com') {
+		 setIsStanOfStephan(true);
+		}
 
 		let wantsAdmin = false;
 		if(!localStorage.getItem('isAdmin')) {
@@ -319,14 +318,14 @@ function Home() {
 		}
 	};
 
-	// const logOutFunction = async () => {
-	// 	await logOut().catch(
-	// 		error => {
-	// 			alert('Probleem tijdens uitloggen: ' + error);
-	// 		}
-	// 	);
-	// 	navigate('/login');
-	// };
+	const logOutFunction = async () => {
+		await logOut().catch(
+			error => {
+				alert('Probleem tijdens uitloggen: ' + error);
+			}
+		);
+		navigate('/login');
+	};
 
        // Import BottomBar
        // ...existing code...
