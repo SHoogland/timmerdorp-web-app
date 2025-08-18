@@ -67,14 +67,6 @@ const router = createBrowserRouter([
     element: <Birthdays />,
   },
   {
-    path: '/kaart',
-    element: <Map />,
-  },
-  {
-    path: '/fotos',
-    element: <PhotosAndAttachments />,
-  },
-  {
     path: '/instellingen',
     element: <Settings />,
   },

@@ -1,5 +1,6 @@
 // import Parse from 'parse';
 import { useEffect, useState } from 'react';
+import BottomBar from '../components/BottomBar';
 import { useNavigate } from 'react-router-dom';
 import apiCall from '../utils/apiCall';
 import logOut from '../utils/logOut';
@@ -36,7 +37,16 @@ function Home() {
 	const navigate = useNavigate();
 
 	const currentYear = new Date().getFullYear();
-	const wijk = getCurrentWijk();
+	const [wijk, setWijk] = useState(getCurrentWijk());
+
+	// Update wijkkleur als localStorage wijzigt (bijvoorbeeld na wijkkeuze)
+	useEffect(() => {
+		const onStorage = () => {
+			setWijk(getCurrentWijk());
+		};
+		window.addEventListener('storage', onStorage);
+		return () => window.removeEventListener('storage', onStorage);
+	}, []);
 
 	const wijken = {
 		blue: "blauw",
@@ -98,20 +108,7 @@ function Home() {
 			icon: "cake",
 			small: true
 		},
-		{
-			title: 'Hutjeskaart',
-			component: "map",
-			class: 'small',
-			icon: "map",
-			small: true
-		},
-		{
-			title: 'Foto\'s en Bijlagen',
-			component: "files",
-			class: 'small',
-			icon: "image",
-			small: true
-		},
+		// Hutjeskaart en Foto's en Bijlagen knop verwijderd
 		{
 			title: 'Instellingen',
 			component: "settings",
@@ -311,10 +308,11 @@ function Home() {
 			// 	// Navigate back if this was just a wijk change
 			// 	navigate(-1);
 			// } else {
-				setFinishedWijkChoice(true);
-				setTimeout(() => {
-				setShowWijkChoice(false);
-			}, 500);
+		       setWijk(currentWijkChoice); // update wijkkleur direct
+		       setFinishedWijkChoice(true);
+		       setTimeout(() => {
+			       setShowWijkChoice(false);
+		       }, 500);
 			// }
 		} catch (error) {
 			console.error('Error saving wijk choice:', error);
@@ -330,103 +328,130 @@ function Home() {
 	// 	navigate('/login');
 	// };
 
-	return (
-		<div className={`${wijk} homeContent`}>
-			<header>
-				<div id="overlay">
-					<div id="titleContainer">
-						<h1 id="ptitle">
-							Timmerdorp <br/>{currentYear}
-						</h1>
-					</div>
-				</div>
-			</header>
+       // Import BottomBar
+       // ...existing code...
+       // Herstel originele rendering van weer-widget en statistiekenblok
+       const mainButtons = pages.filter(p => !p.small && !p.weather && !p.data);
+       const menuButtons = pages.filter(p => p.small);
+       const bottomBarButtons = menuButtons.map(page => ({
+	       icon: page.icon,
+	       onClick: () => openPage(page)
+       }));
 
-			<div id="homeBtnContainer">
-				<div id="homeButtons">
-					{pages.map((page, index) => (
-						<button
-							key={index}
-							onClick={() => openPage(page)}
-							className={`${page.class} alternate bg-${wijk} ${wijk}`}
-						>
-							<div className="homeBtnD">
-								<i className={`material-icons ${page.data ? 'data' : ''}`}>
-									{page.weather && weather ? weather.icon : page.icon}
-								</i>
-								
-								{page.weather && weather && (
-									<>
-										<h2>Het is {weather.temp}°C</h2>
-										<div className="weatherMsg">
-											<p>{weather.msg}</p>
-										</div>
-									</>
-								)}
-								
-								{page.data && (
-									<div id="data">
-										<div className="weatherMsg" style={{top: '3px', fontSize: '80%'}}>
-											<p>{childrenCount} kind{childrenCount !== 1 ? "eren" : ""} hier</p>
-										</div>
-										<div className="weatherMsg" style={{top: '22px', fontSize: '80%'}}>
-											<p>{wijkCount} in wijk {wijken[wijk as keyof typeof wijken]}</p>
-										</div>
-										<div className="weatherMsg" style={{top: '41px', fontSize: '80%'}}>
-											<p>{birthdays} {birthdays === 1 ? "jarige" : "jarigen"} vandaag</p>
-										</div>
-									</div>
-								)}
-								
-								{!page.small && !page.weather && !page.data && (
-									<span>{page.title}</span>
-								)}
-								
-								{waitingPotentialAdmins > 0 && page.title === 'Instellingen' && (
-									<div id="potentialAdminsNotification">
-										{waitingPotentialAdmins}
-									</div>
-								)}
-							</div>
-						</button>
-					))}
-				</div>
-			</div>
-			
-			{/* <span>{error}</span> */}
+       // Vind weather en data knoppen
+       const weatherPage = pages.find(p => p.weather);
+       const dataPage = pages.find(p => p.data);
 
-			{showWijkChoice && (
-				<div id="wijkChoice" className={`${currentWijkChoice} ${finishedWijkChoice ? ' fadedOut' : ''}`}>
-					<h1>Wijk-keuze</h1>
-					{/* <p>{!onlyChangeWijk ? 'Het allerlaatste wat je moet doen voor je de app kunt gebruiken, is hieronder selecteren bij welke wijk je hoort:' : ''}</p> */}
-					<div className="wijk-select-container">
-						<select 
-							value={currentWijkChoice} 
-							onChange={wijkChoiceChange}
-							className="wijk-select"
-							aria-label="Kies je wijk"
-						>
-							<option value="">Kies je wijk</option>
-							<option value="blue">Blauw</option>
-							<option value="yellow">Geel</option>
-							<option value="red">Rood</option>
-							<option value="green">Groen</option>
-							<option value="white">Wit/EHBO</option>
-						</select>
-					</div>
-					<br/>
-					{currentWijkChoice && (
-						<button 
-							onClick={saveWijkChoice} 
-							className="modern wijk-save-btn"
-						>
-							Opslaan
-						</button>
-					)}
-				</div>
-			)}
-		</div>
-	);
+	   return (
+	   <div className={`${wijk} homeContent`}>
+		   <header className="home-header">
+			       <div id="overlay">
+				       <div id="titleContainer">
+						   <h1 id="ptitle" className="home-header">
+						       Timmerdorp <br/>{currentYear}
+					       </h1>
+				       </div>
+			       </div>
+		       </header>
+
+		       <div id="homeBtnContainer">
+			       <div id="homeButtons">
+				       {/* Weer-widget */}
+			       {weatherPage && (
+				       <button
+					       className={`halfWidth homeInfoCard weather realWeather alternate ${wijk}`}
+					       onClick={() => openPage(weatherPage)}
+				       >
+						       <div className="homeBtnD">
+							       <i className="material-icons">{weather && weather.icon ? weather.icon : weatherPage.icon}</i>
+							       {weather && (
+								       <>
+									       <h2>Het is {weather.temp}°C</h2>
+									       <div className="weatherMsg">
+										       <p>{weather.msg}</p>
+									       </div>
+								       </>
+							       )}
+						       </div>
+					       </button>
+				       )}
+				       {/* Statistiekenblok */}
+			       {dataPage && (
+				       <button
+					       className={`halfWidth homeInfoCard weather alternate ${wijk}`}
+					       onClick={() => openPage(dataPage)}
+				       >
+						       <div className="homeBtnD">
+							       <i className="material-icons data">{dataPage.icon}</i>
+							       <div id="data">
+								       <div className="weatherMsg" style={{top: '3px', fontSize: '80%'}}>
+									       <p>{childrenCount} kind{childrenCount !== 1 ? "eren" : ""} hier</p>
+								       </div>
+								       <div className="weatherMsg" style={{top: '22px', fontSize: '80%'}}>
+									       <p>{wijkCount} in wijk {wijken[wijk as keyof typeof wijken]}</p>
+								       </div>
+								       <div className="weatherMsg" style={{top: '41px', fontSize: '80%'}}>
+									       <p>{birthdays} {birthdays === 1 ? "jarige" : "jarigen"} vandaag</p>
+								       </div>
+							       </div>
+						       </div>
+					       </button>
+				       )}
+				       {/* Vier grote knoppen */}
+			       {mainButtons.map((page, index) => (
+				       <button
+					       key={index}
+					       onClick={() => openPage(page)}
+					       className={`homeBtn alternate ${wijk}`}
+				       >
+						       <div className="homeBtnD">
+							       <i className={`material-icons`}>{page.icon}</i>
+							       <span>{page.title}</span>
+						       </div>
+					       </button>
+				       ))}
+			       </div>
+		       </div>
+
+		       {/* BottomBar onderaan */}
+		       <div id="bottomBarContainer">
+			       <BottomBar buttons={bottomBarButtons} wijk={wijk} />
+		       </div>
+
+		       {/* <span>{error}</span> */}
+
+		       {showWijkChoice && (
+			       <div id="wijkChoice" className={`${currentWijkChoice} ${finishedWijkChoice ? ' fadedOut' : ''}`}>
+				       <h1>Wijk-keuze</h1>
+				       {/* <p>{!onlyChangeWijk ? 'Het allerlaatste wat je moet doen voor je de app kunt gebruiken, is hieronder selecteren bij welke wijk je hoort:' : ''}</p> */}
+				       <div className="wijk-select-container">
+					       <select 
+						       value={currentWijkChoice} 
+						       onChange={wijkChoiceChange}
+						       className="wijk-select"
+						       aria-label="Kies je wijk"
+					       >
+						       <option value="">Kies je wijk</option>
+						       <option value="blue">Blauw</option>
+						       <option value="yellow">Geel</option>
+						       <option value="red">Rood</option>
+						       <option value="green">Groen</option>
+						       <option value="white">Wit/EHBO</option>
+					       </select>
+				       </div>
+				       <br/>
+				       {currentWijkChoice && (
+					       <button 
+						       onClick={saveWijkChoice} 
+						       className="modern wijk-save-btn"
+					       >
+						       Opslaan
+					       </button>
+				       )}
+			       </div>
+		       )}
+	       </div>
+       );
 }
 
 export default Home;

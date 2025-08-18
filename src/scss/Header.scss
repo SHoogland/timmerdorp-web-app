@@ -52,6 +52,9 @@ header {
 		z-index: 2;
 		text-align: center;
 		left: 66px;
+		&.home-header {
+			left: 0;
+		}
 		color: white;
 		&.no-back-button {
 			left: 12px;

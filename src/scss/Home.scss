@@ -1,12 +1,12 @@
 @import "vars";
 
-// Ensure no scrolling on the page
+// Zorg dat alleen de home pagina niet scrollt
 html, body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
+  /* overflow en height niet forceren, zodat andere pagina's kunnen scrollen */
 }
 
   .homeContent {
@@ -200,10 +200,10 @@ html, body {
   }
 
   #homeBtnContainer {
-    flex: 1;
+    flex: 0.7;
     position: relative;
     padding: 0;
-    margin-top: -80px;
+    margin-top: -40px;
     min-height: 0;
     
     // Add subtle background pattern
@@ -254,7 +254,7 @@ html, body {
 
   header {
     position: relative;
-    height: 50vh;
+  height: clamp(32vh, 40vw, 60vh);
     z-index: 10;
     background-position: center;
     background-size: cover;
@@ -288,6 +288,16 @@ html, body {
     @media screen and (max-width: 480px) {
       background-position: center center;
     }
+    // Grotere header op grote schermen
+    @media screen and (min-height: 800px) {
+      height: 50vh;
+    }
+    @media screen and (min-height: 1200px) {
+      height: 60vh;
+    }
+    @media screen and (min-height: 1500px) {
+      height: 70vh;
+    }
   }
 
   #ptitle {
@@ -301,7 +311,7 @@ html, body {
     line-height: 1.1;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-    padding: 0 20px;
+  padding: 0 20px 32px 20px;
 
     @media screen and (max-height: 680px) {
       font-size: clamp(24px, 4vw, 36px);
