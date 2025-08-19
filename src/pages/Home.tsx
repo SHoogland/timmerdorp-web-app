@@ -61,7 +61,7 @@ function Home() {
 		},
 		{
 			title: '-',
-			component: "children",
+			component: "stats",
 			class: 'halfWidth homeInfoCard weather',
 			icon: "query_stats",
 			data: true

@@ -106,29 +106,30 @@ function ViewTicket() {
 			<LoadingIcon shown={loading} />
 			{!loading &&
 				<div className="ticketCard">
-					{ticket.firstName} {ticket.lastName}
-					<br />
-					{tableCategories.map((cat) => (
-						<div key={cat.name}>
-							<h3>{cat.name}</h3>
-							<table>
-								<tbody>
-									{cat.props.map((prop) => getPropTr(prop))}
-								</tbody>
-							</table>
-						</div>
-					))}
-					<br />
-					<h3>Gebeurtenissen</h3>
-					<ul>
-						{ticket.history && ticket.history.map((h: Parse.Object, index: number) => (
-							<li key={index}>
-								{h.get('desc')}
-							</li>
+					<div style={{ padding: "32px" }}>
+						<h1>{ticket.firstName} {ticket.lastName}</h1>
+						<br />
+						{tableCategories.map((cat) => (
+							<div key={cat.name}>
+								<h3>{cat.name}</h3>
+								<table>
+									<tbody>
+										{cat.props.map((prop) => getPropTr(prop))}
+									</tbody>
+								</table>
+							</div>
 						))}
-					</ul>
-					<br />
-					<br />
+						<br />
+						<h3>Gebeurtenissen</h3>
+						<ul>
+							{ticket.history && ticket.history.map((h: Parse.Object, index: number) => (
+								<li key={index}>
+									{h.get('desc')}
+								</li>
+							))}
+						</ul>
+						<br />
+					</div>
 					<button onClick={goBack}>Sluiten</button>
 					{canEditTickets && <button onClick={() => navigate('/bewerk-ticket?ticket-id=' + ticket.id)}>Bewerken</button>}
 					<button onClick={() => navigate('/polsbandje?ticket-id=' + ticket.id + '&origin=search')}>Polsbandje wijzigen</button>

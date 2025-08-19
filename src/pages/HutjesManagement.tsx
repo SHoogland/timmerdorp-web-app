@@ -139,7 +139,7 @@ function HutjesManagement() {
 			<center>
 				<h2>Hutnummer: </h2>
 				<input
-					type="number"
+					type="tel"
 					title="Hutnummer"
 					maxLength={3}
 					onChange={changeHutNummer}
@@ -213,7 +213,7 @@ function HutjesManagement() {
 						<h2>Kind toevoegen aan hutje {hutNummer}</h2>
 						<h4>Polsbandnummer:</h4>
 						<input
-							type="number"
+							type="tel"
 							maxLength={3}
 							title="Polsbandnummer"
 							id="wristbandInput"

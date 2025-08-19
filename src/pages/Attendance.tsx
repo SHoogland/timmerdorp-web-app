@@ -118,7 +118,7 @@ function Attendance() {
 			<center>
 				<h2>Aanwezigheid registreren voor {weekdayDisplayname}</h2>
 				<input
-					type="number"
+					type="tel"
 					maxLength={3}
 					title="Polsbandnummer"
 					id="searchInput"
