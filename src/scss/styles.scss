@@ -1,5 +1,5 @@
-@use "sass:color";
-@use "vars";
+@import "vars";
+@import "Home";
 
 * {
 	// disable text selection
@@ -44,7 +44,7 @@ h6 {
 button {
 	border: none;
 	cursor: pointer;
-	background-color: vars.$blue;
+	background-color: $blue;
 	color: white;
 	border-radius: 5px;
 	font-weight: bold;
@@ -69,13 +69,13 @@ button {
 		padding: 24px 32px;
 	}
 	&.green {
-		background-color: vars.$green;
+		background-color: $green;
 	}
 	&.red {
-		background-color: vars.$red;
+		background-color: $red;
 	}
 	&.yellow {
-		background-color: vars.$yellow;
+		background-color: $yellow;
 	}
 }
 
@@ -115,20 +115,20 @@ input {
 }
 
 a {
-	color: vars.$blue;
+	color: $blue;
 	cursor: pointer;
 	text-decoration: underline;
 }
 
 .main-content {
 	&.red button {
-		background-color: vars.$red;
+		background-color: $red;
 	}
 	&.yellow button {
-		background-color: vars.$yellow;
+		background-color: $yellow;
 	}
 	&.green button {
-		background-color: vars.$green;
+		background-color: $green;
 	}
 }
 
@@ -152,7 +152,7 @@ a {
 		width: calc(100% - 32px);
 		font-family: Montserrat, Roboto, Arial, Helvetica, sans-serif;
 		&:focus {
-			background: color.adjust(#78bff8, $lightness: 10%);
+			background: #8ac9f9;
 		}
 		&::placeholder {
 			color: #333;
@@ -173,7 +173,7 @@ p.helper-link {
 }
 
 p.link {
-	color: vars.$blue;
+	color: $blue;
 	text-decoration: underline;
 	cursor: pointer;
 }
