@@ -15,8 +15,6 @@ import ScanTicket from './pages/ScanTicket.tsx';
 import HutjesManagement from './pages/HutjesManagement.tsx';
 import Statistics from './pages/Statistics.tsx';
 import Birthdays from './pages/Birthdays.tsx';
-import Map from './pages/Map.tsx';
-import PhotosAndAttachments from './pages/PhotosAndAttachments.tsx';
 import Settings from './pages/Settings.tsx';
 import Wristband from './pages/Wristband.tsx';
 import './scss/styles.scss';

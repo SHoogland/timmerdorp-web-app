@@ -1,38 +1,35 @@
-import Parse from 'parse';
 import { useEffect, useState } from 'react';
 import BottomBar from '../components/BottomBar';
 import { useNavigate } from 'react-router-dom';
 import apiCall from '../utils/apiCall';
 import logOut from '../utils/logOut';
 import getCurrentWijk from '../utils/getCurrentWijk';
+import '../scss/Home.scss';
 
-interface WeatherData {temp: number;
-  msg: string;
-  icon: string;
+interface WeatherData {
+	temp: number;
+	msg: string;
+	icon: string;
 }
 
 interface PageItem {
-  title: string;
-  component: string;
-  class: string;
-  icon: string;
-  weather?: boolean;
-  data?: boolean;
-  small?: boolean;
+	title: string;
+	component: string;
+	class: string;
+	icon: string;
+	weather?: boolean;
+	data?: boolean;
+	small?: boolean;
 }
 
 function Home() {
-	const [isStanOfStephan, setIsStanOfStephan] = useState(false);
 	const [weather, setWeather] = useState<WeatherData | null>(null);
 	const [childrenCount, setChildrenCount] = useState(0);
 	const [birthdays, setBirthdays] = useState(0);
 	const [wijkCount, setWijkCount] = useState(0);
-	const [waitingPotentialAdmins, setWaitingPotentialAdmins] = useState(0);
 	const [showWijkChoice, setShowWijkChoice] = useState(false);
 	const [currentWijkChoice, setCurrentWijkChoice] = useState('');
-	const [onlyChangeWijk, setOnlyChangeWijk] = useState(false);
 	const [finishedWijkChoice, setFinishedWijkChoice] = useState(false);
-	const [error, setError] = useState('');
 	const navigate = useNavigate();
 
 	const currentYear = new Date().getFullYear();
@@ -49,7 +46,7 @@ function Home() {
 
 	const wijken = {
 		blue: "blauw",
-		red: "rood", 
+		red: "rood",
 		green: "groen",
 		yellow: "geel"
 	};
@@ -125,29 +122,23 @@ function Home() {
 	];
 
 	useEffect(() => {
-		const email = Parse.User.current()?.get('username');
-		if (email === 'stanvanbaarsen@hotmail.com' || email === 'stephan@shoogland.com') {
-		 setIsStanOfStephan(true);
-		}
-
 		let wantsAdmin = false;
-		if(!localStorage.getItem('isAdmin')) {
+		if (!localStorage.getItem('isAdmin')) {
 			wantsAdmin = true;
 		}
-		
+
 		apiCall('checkIfLoggedIn', { wantsToBecomeAdmin: wantsAdmin }).then((response) => {
 			if (!response.result) {
 				logOut().then(() => {
 					navigate('/login');
 				});
 			}
-			if(!response.admin) {
+			if (!response.admin) {
 				localStorage.setItem('isAdmin', 'false');
 				navigate('/is-geen-beheerder');
 			}
-			setWaitingPotentialAdmins(response.waitingPotentialAdmins || 0);
-			
-			if(!response.wijk) {
+
+			if (!response.wijk) {
 				setShowWijkChoice(true);
 			}
 		}).catch((error) => {
@@ -160,7 +151,7 @@ function Home() {
 
 		// Load weather data
 		loadWeatherData();
-		
+
 		// Load wijk stats
 		loadWijkStats();
 	}, []);
@@ -186,12 +177,12 @@ function Home() {
 
 	const processWeatherData = (data: any) => {
 		console.log('Processing weather data:', data);
-		
+
 		let weatherMessage = "Geen regen (?)";
 		let totalRain = 0;
 		let skipped = 0;
 		let weatherIcon = "wb_sunny";
-		
+
 		// Check if we have valid data
 		if (!data.list || !Array.isArray(data.list) || data.list.length === 0) {
 			console.error('Invalid weather data structure');
@@ -202,11 +193,11 @@ function Home() {
 			});
 			return;
 		}
-		
+
 		for (let i = 0; i < Math.min(2 + skipped, data.list.length); i++) {
 			let w = data.list[i];
 			if (!w || !w.dt) continue;
-			
+
 			let td = 1000 * w.dt - +new Date();
 			if (td < 30 * 60 * 1000) {
 				skipped++;
@@ -228,7 +219,7 @@ function Home() {
 
 		const temperature = Math.round(data.list[0].main.temp - 273.15);
 		console.log('Setting weather:', { temp: temperature, msg: weatherMessage, icon: weatherIcon });
-		
+
 		setWeather({
 			temp: temperature,
 			msg: weatherMessage,
@@ -241,18 +232,18 @@ function Home() {
 			console.log('Loading wijk stats...');
 			const result = await apiCall('wijkStats');
 			console.log('Wijk stats result:', result);
-			
+
 			if (result && result.response === 'success') {
 				let dag = ['di', 'wo', 'do', 'vr'][new Date().getDay() - 2];
 				console.log('Current day:', dag, 'Current wijk:', wijk);
-				
+
 				const currentWijk = wijk === 'white' ? 'blue' : wijk;
 				const wijkCountValue = result.quarters?.[currentWijk]?.['aanwezig_' + dag] || 0;
 				const childrenCountValue = result['aanwezig_' + dag] || 0;
 				const birthdaysValue = (result.birthdays?.[dag] || {}).count || 0;
-				
+
 				console.log('Setting stats:', { wijkCount: wijkCountValue, childrenCount: childrenCountValue, birthdays: birthdaysValue });
-				
+
 				setWijkCount(wijkCountValue);
 				setChildrenCount(childrenCountValue);
 				setBirthdays(birthdaysValue);
@@ -286,7 +277,7 @@ function Home() {
 				'files': 'fotos',
 				'settings': 'instellingen'
 			};
-			
+
 			const route = routeMap[page.component];
 			if (route) {
 				navigate(route);
@@ -302,155 +293,143 @@ function Home() {
 		try {
 			await apiCall('setAdminWijk', { wijk: currentWijkChoice });
 			localStorage.setItem('wijk', currentWijkChoice);
-			
+
 			// if (onlyChangeWijk) {
 			// 	// Navigate back if this was just a wijk change
 			// 	navigate(-1);
 			// } else {
-		       setWijk(currentWijkChoice); // update wijkkleur direct
-		       setFinishedWijkChoice(true);
-		       setTimeout(() => {
-			       setShowWijkChoice(false);
-		       }, 500);
+			setWijk(currentWijkChoice); // update wijkkleur direct
+			setFinishedWijkChoice(true);
+			setTimeout(() => {
+				setShowWijkChoice(false);
+			}, 500);
 			// }
 		} catch (error) {
 			console.error('Error saving wijk choice:', error);
 		}
 	};
 
-	const logOutFunction = async () => {
-		await logOut().catch(
-			error => {
-				alert('Probleem tijdens uitloggen: ' + error);
-			}
-		);
-		navigate('/login');
-	};
+	// Import BottomBar
+	// ...existing code...
+	// Herstel originele rendering van weer-widget en statistiekenblok
+	const mainButtons = pages.filter(p => !p.small && !p.weather && !p.data);
+	const menuButtons = pages.filter(p => p.small);
+	const bottomBarButtons = menuButtons.map(page => ({
+		icon: page.icon,
+		onClick: () => openPage(page)
+	}));
 
-       // Import BottomBar
-       // ...existing code...
-       // Herstel originele rendering van weer-widget en statistiekenblok
-       const mainButtons = pages.filter(p => !p.small && !p.weather && !p.data);
-       const menuButtons = pages.filter(p => p.small);
-       const bottomBarButtons = menuButtons.map(page => ({
-	       icon: page.icon,
-	       onClick: () => openPage(page)
-       }));
+	// Vind weather en data knoppen
+	const weatherPage = pages.find(p => p.weather);
+	const dataPage = pages.find(p => p.data);
 
-       // Vind weather en data knoppen
-       const weatherPage = pages.find(p => p.weather);
-       const dataPage = pages.find(p => p.data);
+	return (
+		<div className={`${wijk} homeContent`}>
+			<header className="home-header">
+				<div id="overlay">
+					<div id="titleContainer">
+						<h1 id="ptitle" className="home-header">
+							Timmerdorp <br />{currentYear}
+						</h1>
+					</div>
+				</div>
+			</header>
 
-	   return (
-	   <div className={`${wijk} homeContent`}>
-		   <header className="home-header">
-			       <div id="overlay">
-				       <div id="titleContainer">
-						   <h1 id="ptitle" className="home-header">
-						       Timmerdorp <br/>{currentYear}
-					       </h1>
-				       </div>
-			       </div>
-		       </header>
+			<div id="homeBtnContainer">
+				<div id="homeButtons">
+					{/* Weer-widget */}
+					{weatherPage && (
+						<button
+							className={`halfWidth homeInfoCard weather realWeather alternate ${wijk}`}
+							onClick={() => openPage(weatherPage)}
+						>
+							<div className="homeBtnD">
+								<i className="material-icons">{weather && weather.icon ? weather.icon : weatherPage.icon}</i>
+								{weather && (
+									<>
+										<h2>Het is {weather.temp}°C</h2>
+										<div className="weatherMsg">
+											<p>{weather.msg}</p>
+										</div>
+									</>
+								)}
+							</div>
+						</button>
+					)}
+					{/* Statistiekenblok */}
+					{dataPage && (
+						<button
+							className={`halfWidth homeInfoCard weather alternate ${wijk}`}
+							onClick={() => openPage(dataPage)}
+						>
+							<div className="homeBtnD">
+								<i className="material-icons data">{dataPage.icon}</i>
+								<div id="data">
+									<div className="weatherMsg" style={{ top: '3px', fontSize: '80%' }}>
+										<p>{childrenCount} kind{childrenCount !== 1 ? "eren" : ""} hier</p>
+									</div>
+									<div className="weatherMsg" style={{ top: '22px', fontSize: '80%' }}>
+										<p>{wijkCount} in wijk {wijken[wijk as keyof typeof wijken]}</p>
+									</div>
+									<div className="weatherMsg" style={{ top: '41px', fontSize: '80%' }}>
+										<p>{birthdays} {birthdays === 1 ? "jarige" : "jarigen"} vandaag</p>
+									</div>
+								</div>
+							</div>
+						</button>
+					)}
+					{/* Vier grote knoppen */}
+					{mainButtons.map((page, index) => (
+						<button
+							key={index}
+							onClick={() => openPage(page)}
+							className={`homeBtn alternate ${wijk}`}
+						>
+							<div className="homeBtnD">
+								<i className={`material-icons`}>{page.icon}</i>
+								<span>{page.title}</span>
+							</div>
+						</button>
+					))}
+				</div>
+			</div>
 
-		       <div id="homeBtnContainer">
-			       <div id="homeButtons">
-				       {/* Weer-widget */}
-			       {weatherPage && (
-				       <button
-					       className={`halfWidth homeInfoCard weather realWeather alternate ${wijk}`}
-					       onClick={() => openPage(weatherPage)}
-				       >
-						       <div className="homeBtnD">
-							       <i className="material-icons">{weather && weather.icon ? weather.icon : weatherPage.icon}</i>
-							       {weather && (
-								       <>
-									       <h2>Het is {weather.temp}°C</h2>
-									       <div className="weatherMsg">
-										       <p>{weather.msg}</p>
-									       </div>
-								       </>
-							       )}
-						       </div>
-					       </button>
-				       )}
-				       {/* Statistiekenblok */}
-			       {dataPage && (
-				       <button
-					       className={`halfWidth homeInfoCard weather alternate ${wijk}`}
-					       onClick={() => openPage(dataPage)}
-				       >
-						       <div className="homeBtnD">
-							       <i className="material-icons data">{dataPage.icon}</i>
-							       <div id="data">
-								       <div className="weatherMsg" style={{top: '3px', fontSize: '80%'}}>
-									       <p>{childrenCount} kind{childrenCount !== 1 ? "eren" : ""} hier</p>
-								       </div>
-								       <div className="weatherMsg" style={{top: '22px', fontSize: '80%'}}>
-									       <p>{wijkCount} in wijk {wijken[wijk as keyof typeof wijken]}</p>
-								       </div>
-								       <div className="weatherMsg" style={{top: '41px', fontSize: '80%'}}>
-									       <p>{birthdays} {birthdays === 1 ? "jarige" : "jarigen"} vandaag</p>
-								       </div>
-							       </div>
-						       </div>
-					       </button>
-				       )}
-				       {/* Vier grote knoppen */}
-			       {mainButtons.map((page, index) => (
-				       <button
-					       key={index}
-					       onClick={() => openPage(page)}
-					       className={`homeBtn alternate ${wijk}`}
-				       >
-						       <div className="homeBtnD">
-							       <i className={`material-icons`}>{page.icon}</i>
-							       <span>{page.title}</span>
-						       </div>
-					       </button>
-				       ))}
-			       </div>
-		       </div>
+			{/* BottomBar onderaan */}
+			<div id="bottomBarContainer">
+				<BottomBar buttons={bottomBarButtons} wijk={wijk} />
+			</div>
 
-		       {/* BottomBar onderaan */}
-		       <div id="bottomBarContainer">
-			       <BottomBar buttons={bottomBarButtons} wijk={wijk} />
-		       </div>
-
-		       {/* <span>{error}</span> */}
-
-		       {showWijkChoice && (
-			       <div id="wijkChoice" className={`${currentWijkChoice} ${finishedWijkChoice ? ' fadedOut' : ''}`}>
-				       <h1>Wijk-keuze</h1>
-				       {/* <p>{!onlyChangeWijk ? 'Het allerlaatste wat je moet doen voor je de app kunt gebruiken, is hieronder selecteren bij welke wijk je hoort:' : ''}</p> */}
-				       <div className="wijk-select-container">
-					       <select 
-						       value={currentWijkChoice} 
-						       onChange={wijkChoiceChange}
-						       className="wijk-select"
-						       aria-label="Kies je wijk"
-					       >
-						       <option value="">Kies je wijk</option>
-						       <option value="blue">Blauw</option>
-						       <option value="yellow">Geel</option>
-						       <option value="red">Rood</option>
-						       <option value="green">Groen</option>
-						       <option value="white">Wit/EHBO</option>
-					       </select>
-				       </div>
-				       <br/>
-				       {currentWijkChoice && (
-					       <button 
-						       onClick={saveWijkChoice} 
-						       className="modern wijk-save-btn"
-					       >
-						       Opslaan
-					       </button>
-				       )}
-			       </div>
-		       )}
-	       </div>
-       );
+			{showWijkChoice && (
+				<div id="wijkChoice" className={`${currentWijkChoice} ${finishedWijkChoice ? ' fadedOut' : ''}`}>
+					<h1>Wijk-keuze</h1>
+					<div className="wijk-select-container">
+						<select
+							value={currentWijkChoice}
+							onChange={wijkChoiceChange}
+							className="wijk-select"
+							aria-label="Kies je wijk"
+						>
+							<option value="">Kies je wijk</option>
+							<option value="blue">Blauw</option>
+							<option value="yellow">Geel</option>
+							<option value="red">Rood</option>
+							<option value="green">Groen</option>
+							<option value="white">Wit/EHBO</option>
+						</select>
+					</div>
+					<br />
+					{currentWijkChoice && (
+						<button
+							onClick={saveWijkChoice}
+							className="modern wijk-save-btn"
+						>
+							Opslaan
+						</button>
+					)}
+				</div>
+			)}
+		</div>
+	);
 }
 
 export default Home;
