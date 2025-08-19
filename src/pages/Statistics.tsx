@@ -284,7 +284,7 @@ function Statistics() {
 								<td style={{ textAlign: 'center' }}>{statistieken[p.prop] || ' – '}</td>
 								{wijken.map((w) => (
 									<td key={w} style={{ textAlign: 'center' }}>
-										{statistieken[w]?.[p.prop] || ' – '}
+										{statistieken?.quarters?.[w]?.[p.prop] || ' – '}
 									</td>
 								))}
 							</tr>
