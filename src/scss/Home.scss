@@ -110,7 +110,7 @@ body {
 			h2 {
 				position: absolute;
 				top: 20px;
-				left: 52px;
+				left: 32px;
 				margin: 0;
 				padding: 0!important;
 				padding-left: 20px!important;
@@ -118,7 +118,7 @@ body {
 			.weatherMsg {
 				position: absolute;
 				top: 42px;
-				left: 72px;
+				left: 52px;
 				margin: 0;
 				p {
 					padding: 0!important;
@@ -387,6 +387,10 @@ body {
 			justify-content: flex-start;
 			height: 100%;
 			box-sizing: border-box;
+
+			.material-icons {
+				margin: 0!important;
+			}
 		}
 
 		// Ensure all text is white

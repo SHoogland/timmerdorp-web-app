@@ -72,7 +72,6 @@ function ViewTicket() {
 	const [ticket, setTicket] = useState<Ticket>({});
 	const [ticketPropertiesMap, setTicketPropertiesMap] = useState<TicketPropertiesMap>({});
 	const [canEditTickets, setCanEditTickets] = useState(false);
-	const [searchQuery, setSearchQuery] = useState('');
 	const [themeColors, setThemeColors] = useState(getThemeColors(''));
 	const navigate = useNavigate();
 
@@ -94,7 +93,6 @@ function ViewTicket() {
 	useEffect(() => {
 		const urlParams = new URLSearchParams(window.location.search);
 		const ticketId = urlParams.get('ticket-id');
-		setSearchQuery(urlParams.get('q') || '');
 
 		if (!ticketId) {
 			navigate('/zoek');
@@ -147,11 +145,8 @@ function ViewTicket() {
 	}
 
 	const goBack = () => {
-		if (searchQuery) {
-			navigate('/zoek?q=' + searchQuery);
-		} else {
-			navigate('/zoek');
-		}
+		// navigate back
+		window.history.back();
 	}
 
 	return (

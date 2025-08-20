@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import '../scss/Layout.scss';
 import Header from '../components/Header.tsx';
+import { useStatusbarColor } from '../utils/useStatusbarColor';
 
 interface LayoutProps {
 	title?: string;
@@ -14,6 +15,9 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ title, children, disableBackButton, noPadding, backgroundColor, disableLogo, noHeader }) => {
 	const wijkName = localStorage.getItem('wijkName') || 'blue';
+	
+	// Update statusbar color based on current wijk
+	useStatusbarColor();
 
 	useEffect(() => {
 		if (backgroundColor) {
