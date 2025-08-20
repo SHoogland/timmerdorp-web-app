@@ -27,6 +27,12 @@ import EmailNotConfirmed from './pages/EmailNotConfirmed.tsx';
 import VerifyEmail from './pages/VerifyEmaii.tsx';
 import EditTicket from './pages/EditTicket.tsx';
 import ViewTicket from './pages/ViewTicket.tsx';
+import * as Sentry from "@sentry/react";
+
+Sentry.init({
+  dsn: "https://de8fe7740ac1c8855a7ee7e3bbbde861@o4509875464175616.ingest.de.sentry.io/4509875485671504",
+  sendDefaultPii: true
+});
 
 initParse();
 
@@ -73,40 +79,40 @@ const router = createBrowserRouter([
     element: <Wristband />,
   },
   {
-	path: '/wijzig-wijk',
-	element: <ChangeWijk />,
+    path: '/wijzig-wijk',
+    element: <ChangeWijk />,
   },
   {
-	path: '/wachtwoord-vergeten',
-	element: <ForgotPassword />,
+    path: '/wachtwoord-vergeten',
+    element: <ForgotPassword />,
   },
   {
-	path: '/new-password',
-	element: <NewPassword />,
+    path: '/new-password',
+    element: <NewPassword />,
   },
   {
-	path: '/is-geen-beheerder',
-	element: <IsNoAdmin />,
+    path: '/is-geen-beheerder',
+    element: <IsNoAdmin />,
   },
   {
-	path: '/registreren',
-	element: <Register />,
+    path: '/registreren',
+    element: <Register />,
   },
   {
-	path: '/email-niet-bevestigd',
-	element: <EmailNotConfirmed />,
+    path: '/email-niet-bevestigd',
+    element: <EmailNotConfirmed />,
   },
   {
-	path: '/verify-email',
-	element: <VerifyEmail />,
+    path: '/verify-email',
+    element: <VerifyEmail />,
   },
   {
-	path: '/bewerk-ticket',
-	element: <EditTicket />,
+    path: '/bewerk-ticket',
+    element: <EditTicket />,
   },
   {
-	path: '/bekijk-ticket',
-	element: <ViewTicket />,
+    path: '/bekijk-ticket',
+    element: <ViewTicket />,
   },
 ]);
 
