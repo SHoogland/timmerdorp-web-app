@@ -25,14 +25,14 @@ function Attendance() {
 		const weekdays = ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'];
 		const today = new Date().getDay();
 		let weekday = weekdays[today];
-		if(today < 2 || today > 5) {
+		if (today < 2 || today > 5) {
 			alert('Nog even wachten tot Timmerdorp!');
 			navigate('/');
 			weekday = 'Dinsdag';
 		}
 		setWeekdayDisplayname(weekday);
 		setWeekday(weekday.substring(0, 2).toLowerCase());
-	}, [])		
+	}, [])
 
 
 	const togglePresence = () => {
@@ -45,7 +45,7 @@ function Attendance() {
 		let absenceReason;
 		if (foundChildIsAlreadyPresent) {
 			absenceReason = prompt('Reden van afwezigheid:');
-			if(absenceReason == null) {
+			if (absenceReason == null) {
 				alert('Geef wel een reden op!');
 				return;
 			}
@@ -63,8 +63,10 @@ function Attendance() {
 				setWristbandNumber('');
 				setFoundChildIsAlreadyPresent(false);
 				const searchInput = document.getElementById('searchInput') as HTMLInputElement;
-				searchInput.focus();
-				searchInput.value = '';
+				if (searchInput) {
+					searchInput.focus();
+					searchInput.value = '';
+				}
 				setBtnColor('green');
 				setTimeout(() => {
 					setBtnColor('');
@@ -76,7 +78,7 @@ function Attendance() {
 	const wristbandInputChange = (e: any) => {
 		const wb = e.target.value;
 		setWristbandNumber(wb);
-		if(wb.length == 3) {
+		if (wb.length == 3) {
 			search(wb);
 		} else {
 			setFoundChild({});
@@ -110,9 +112,6 @@ function Attendance() {
 		});
 	}
 
-	
-
-
 	return (
 		<Layout title="Aanwezigheid">
 			<center>
@@ -134,7 +133,7 @@ function Attendance() {
 					className={btnColor + " big" + (togglePresenceIsLoading ? " with-loading-icon" : "")}
 				>
 					<LoadingIcon color="white" shown={togglePresenceIsLoading} />
-					{ !togglePresenceIsLoading && (btnColor == 'green' ? 'Opgeslagen!' : (foundChildIsAlreadyPresent ? "Afwezig melden" : "Aanwezig melden"))}
+					{!togglePresenceIsLoading && (btnColor == 'green' ? 'Opgeslagen!' : (foundChildIsAlreadyPresent ? "Afwezig melden" : "Aanwezig melden"))}
 				</button>
 				<br />
 
@@ -152,7 +151,7 @@ function Attendance() {
 									<td>Naam:</td>
 									<td>{foundChild.firstName} {foundChild.lastName}</td>
 								</tr>
-								
+
 								<tr>
 									<td>Hutnummer:</td>
 									<td>{foundChild.hutNr}</td>
@@ -163,7 +162,7 @@ function Attendance() {
 									<td>{foundChild['aanwezig_' + weekday] ? 'Ja' : 'Nee'}</td>
 								</tr>
 							</tbody>
-							
+
 						</table>
 					</div>
 				)
