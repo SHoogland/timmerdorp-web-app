@@ -17,7 +17,7 @@ function SearchPage() {
 	const [loading, setLoading] = useState(false);
 	const [errorTitle, setErrorTitle] = useState('');
 	const [errorHelpText, setErrorHelpText] = useState('');
-	const [searchParams, setSearchParams] = useSearchParams();
+		const [searchParams, setSearchParams] = useSearchParams();
 	
 	// Function to get wijk color based on hut number
 	const getWijkColor = (hutNr: string): string => {
@@ -83,12 +83,12 @@ function SearchPage() {
 		setSearchTerm(newSearchTerm);
 		setHasSearched(false);
 		setLastSearchedTerm('');
-		
-		// Update URL query parameters
+
+		// Update URL query parameters without adding to history (use replace)
 		if (newSearchTerm.length >= 3) {
-			setSearchParams({ q: newSearchTerm });
+			setSearchParams({ q: newSearchTerm }, { replace: true });
 		} else {
-			setSearchParams({});
+			setSearchParams({}, { replace: true });
 		}
 	};
 
@@ -111,7 +111,7 @@ function SearchPage() {
 		const queryParam = searchParams.get('q');
 		if (queryParam) {
 			setSearchTerm(queryParam);
-			if(!hasSearched && !loading) {
+			if (!hasSearched && !loading) {
 				search();
 			}
 		}
@@ -120,52 +120,49 @@ function SearchPage() {
 
 	return (
 		<>
-					<Layout title="Zoek kinderen">
-			<div className="search-container">
-				<h2>Zoek kinderen op naam, polsband of hutje</h2>
-				<div className="search-input-wrapper">
-					<span className="material-icons search-icon">search</span>
-					<input
-						type="text"
-						title="Zoekterm"
-						onChange={changeSearchTerm}
-						value={searchTerm}
-						placeholder="Zoekterm"
-					/>
+			<Layout title="Zoek kinderen">
+				<div className="search-container">
+					<h2>Zoek kinderen op naam, polsband of hutje</h2>
+					<div className="search-input-wrapper">
+						<i className="material-icons search-icon">search</i>
+						<input
+							type="text"
+							title="Zoekterm"
+							onChange={changeSearchTerm}
+							value={searchTerm}
+							placeholder="Zoekterm"
+						/>
+					</div>
+					<LoadingIcon shown={loading} />
 				</div>
-				<LoadingIcon shown={loading}/>
-			</div>
 
 				{searchResults.length > 0 && (
 					<div id="results">
 						<h3>Zoekresultaten ({searchResults.length})</h3>
 						<ul className="peopleList">
 							{searchResults.map((child) => (
-								<table
+								<div
 									key={child.id}
 									onClick={() => navigate('/bekijk-ticket?ticket-id=' + child.id + '&q=' + searchTerm)}
-									style={{ borderBottom: '1px solid #ccc', width: '100%', textAlign: 'left' }}
-									className={`wijk-${getWijkColor(child.hutNr)}`}
+									className={`search-result-card wijk-${getWijkColor(child.hutNr)}`}
 								>
-									<tbody className='ticketListItem'>
-										<tr>
-											<td>
-												<h3>Bandje <span className={`wijk-accent-${getWijkColor(child.hutNr)}`}>{child.wristband}</span></h3>
-												<h3>Hutje <span className={`wijk-accent-${getWijkColor(child.hutNr)}`}>{child.hutNr}</span></h3>
-											</td>
-											<td>
-												<h2>
-													{child.firstName}
-													<br />
-													{child.lastName}
-												</h2>
-											</td>
-											<td>
-												<button className={`wijk-accent-${getWijkColor(child.hutNr)}`}>i</button>
-											</td>
-										</tr>
-									</tbody>
-								</table>
+									<div className="result-content">
+										<div className="result-info">
+											<h3>Bandje <span className={`wijk-accent-${getWijkColor(child.hutNr)}`}>{child.wristband}</span></h3>
+											<h3>Hutje <span className={`wijk-accent-${getWijkColor(child.hutNr)}`}>{child.hutNr}</span></h3>
+										</div>
+										<div className="result-name">
+											<h2>
+												{child.firstName}
+												<br />
+												{child.lastName}
+											</h2>
+										</div>
+										<div className="info-button-cell">
+											<i className="material-icons info-icon">info</i>
+										</div>
+									</div>
+								</div>
 							))}
 						</ul>
 					</div>

@@ -293,6 +293,10 @@ function Home() {
 		try {
 			await apiCall('setAdminWijk', { wijk: currentWijkChoice });
 			localStorage.setItem('wijk', currentWijkChoice);
+			localStorage.setItem('wijkName', currentWijkChoice);
+
+			// Dispatch custom event to notify statusbar color update
+			window.dispatchEvent(new CustomEvent('wijkChanged', { detail: { wijk: currentWijkChoice } }));
 
 			// if (onlyChangeWijk) {
 			// 	// Navigate back if this was just a wijk change

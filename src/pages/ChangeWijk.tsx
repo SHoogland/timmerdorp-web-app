@@ -7,6 +7,10 @@ function ChangeWijk() {
 
 	const changeWijk = (wijk: string) => {
 		localStorage.setItem('wijkName', wijk);
+		
+		// Dispatch custom event to notify statusbar color update
+		window.dispatchEvent(new CustomEvent('wijkChanged', { detail: { wijk } }));
+		
 		navigate('/instellingen');
 	}
 
