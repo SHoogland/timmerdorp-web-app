@@ -1,4 +1,4 @@
-@import "vars";
+@use "vars";
 
 .attendance-container {
     max-width: 600px;
@@ -24,7 +24,7 @@
     
     h2 {
         margin: 0;
-        color: $mediumBlack;
+        color: vars.$mediumBlack;
         font-size: 1.8rem;
         font-weight: 600;
     }
@@ -51,12 +51,11 @@
         transition: all 0.2s ease;
         border: 2px solid transparent;
         line-height: 1;
-        vertical-align: middle;
         display: block;
         box-sizing: border-box;
         
         &:focus {
-            border-color: $blue;
+            border-color: vars.$blue;
             background: #f8f9fa;
             transform: scale(1.02);
             outline: none;
@@ -74,7 +73,7 @@
 
 .input-label {
     font-weight: 600;
-    color: $mediumBlack;
+    color: vars.$mediumBlack;
     font-size: 1.1rem;
 }
 
@@ -99,7 +98,7 @@
     }
     
     &.green {
-        background-color: $green;
+        background-color: vars.$green;
         &:hover {
             box-shadow: 0 6px 20px rgba(67, 160, 71, 0.3);
         }
@@ -112,7 +111,7 @@
     
     p {
         margin: 16px 0 0 0;
-        color: $mediumBlack;
+        color: vars.$mediumBlack;
         font-weight: 500;
     }
 }
@@ -139,26 +138,26 @@
         
         h3 {
             margin: 0;
-            color: $blue;
+            color: vars.$blue;
             font-size: 1.4rem;
             font-weight: 600;
         }
         
         // Wijk-based header colors
         &.wijk-yellow h3 {
-            color: $darkTextColor;
+            color: vars.$darkTextColor;
         }
         
         &.wijk-red h3 {
-            color: $red;
+            color: vars.$red;
         }
         
         &.wijk-blue h3 {
-            color: $blue;
+            color: vars.$blue;
         }
         
         &.wijk-green h3 {
-            color: $green;
+            color: vars.$green;
         }
     }
     
@@ -203,48 +202,48 @@
 
 .info-label {
     font-weight: 600;
-    color: $mediumBlack;
+    color: vars.$mediumBlack;
     font-size: 1rem;
 }
 
 .info-value {
     font-weight: 500;
-    color: $mediumBlack;
+    color: vars.$mediumBlack;
     font-size: 1rem;
     
     &.status-present {
-        color: $green;
+        color: vars.$green;
         font-weight: 600;
     }
     
     &.status-absent {
-        color: $red;
+        color: vars.$red;
         font-weight: 600;
     }
     
     // Wijk-based accent colors
     &.wijk-accent-yellow {
-        color: $yellow;
+        color: vars.$yellow;
         font-weight: 600;
     }
     
     &.wijk-accent-red {
-        color: $red;
+        color: vars.$red;
         font-weight: 600;
     }
     
     &.wijk-accent-blue {
-        color: $blue;
+        color: vars.$blue;
         font-weight: 600;
     }
     
     &.wijk-accent-green {
-        color: $green;
+        color: vars.$green;
         font-weight: 600;
     }
     
     &.wijk-accent-onbekend {
-        color: $mediumBlack;
+        color: vars.$mediumBlack;
         font-weight: 600;
     }
 }
@@ -261,29 +260,29 @@
     
     // Wijk-based accent colors for info icon
     &.wijk-accent-yellow {
-        color: $yellow;
+        color: vars.$yellow;
     }
     
     &.wijk-accent-red {
-        color: $red;
+        color: vars.$red;
     }
     
     &.wijk-accent-blue {
-        color: $blue;
+        color: vars.$blue;
     }
     
     &.wijk-accent-green {
-        color: $green;
+        color: vars.$green;
     }
     
     &.wijk-accent-onbekend {
-        color: $mediumBlack;
+        color: vars.$mediumBlack;
     }
 }
 
 .error-card {
     background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
-    border-color: $red;
+    border-color: vars.$red;
     
     .error-content {
         display: flex;

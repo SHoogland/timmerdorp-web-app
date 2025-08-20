@@ -1,17 +1,17 @@
-@import "vars";
-@import "Header";
-@import "Layout";
-@import "Card";
-@import "Attendance";
-@import "Birthdays";
-@import "Statistics";
-@import "Search";
-@import "BottomBar";
-@import "LoadingIcon";
-@import "ChangeWijk";
-@import "Settings";
-@import "Register";
-@import "Home";
+@use "vars";
+@use "Header";
+@use "Layout";
+@use "Card";
+@use "Attendance";
+@use "Birthdays";
+@use "Statistics";
+@use "Search";
+@use "BottomBar";
+@use "LoadingIcon";
+@use "ChangeWijk";
+@use "Settings";
+@use "Register";
+@use "Home";
 
 * {
 	// disable text selection
@@ -56,7 +56,7 @@ h6 {
 button {
 	border: none;
 	cursor: pointer;
-	background-color: $blue;
+	background-color: vars.$blue;
 	color: white;
 	border-radius: 5px;
 	font-weight: bold;
@@ -81,14 +81,14 @@ button {
 		padding: 24px 32px;
 	}
 	&.green {
-		background-color: $green;
+		background-color: vars.$green;
 	}
 	&.red {
-		background-color: $red;
+		background-color: vars.$red;
 	}
 	&.yellow {
-		background-color: $yellow;
-		color: $darkTextColor;
+		background-color: vars.$yellow;
+		color: vars.$darkTextColor;
 	}
 }
 
@@ -127,21 +127,21 @@ input {
 }
 
 a {
-	color: $blue;
+	color: vars.$blue;
 	cursor: pointer;
 	text-decoration: underline;
 }
 
 .main-content {
 	&.red button {
-		background-color: $red;
+		background-color: vars.$red;
 	}
 	&.yellow button {
-		background-color: $yellow;
-		color: $darkTextColor;
+		background-color: vars.$yellow;
+		color: vars.$darkTextColor;
 	}
 	&.green button {
-		background-color: $green;
+		background-color: vars.$green;
 	}
 }
 
@@ -186,7 +186,7 @@ p.helper-link {
 }
 
 p.link {
-	color: $blue;
+	color: vars.$blue;
 	text-decoration: underline;
 	cursor: pointer;
 }

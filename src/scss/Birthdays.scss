@@ -1,11 +1,12 @@
-@import "vars";
+@use "vars";
+@use "sass:color";
 
 // Enhanced birthdays page styling
 .peopleList {
 	margin: 20px 0;
 	
 	.list-header {
-		background: $blue;
+		background: vars.$blue;
 		color: white;
 		padding: 16px 20px !important;
 		border-radius: 12px 12px 0 0;
@@ -27,22 +28,22 @@
 	
 	// Wijk-based header colors
 	&.wijk-yellow .list-header {
-		background: $yellow;
-		color: $darkTextColor;
+		background: vars.$yellow;
+		color: vars.$darkTextColor;
 	}
 	
 	&.wijk-red .list-header {
-		background: $red;
+		background: vars.$red;
 		color: white;
 	}
 	
 	&.wijk-blue .list-header {
-		background: $blue;
+		background: vars.$blue;
 		color: white;
 	}
 	
 	&.wijk-green .list-header {
-		background: $green;
+		background: vars.$green;
 		color: white;
 	}
 	
@@ -84,7 +85,7 @@
 							text-align: center;
 							
 							svg {
-								color: $yellow;
+								color: vars.$yellow;
 								transition: transform 0.2s ease;
 							}
 						}
@@ -92,7 +93,7 @@
 						&:nth-child(2) {
 							h2 {
 								margin: 0 0 8px 0;
-								color: $mediumBlack;
+								color: vars.$mediumBlack;
 								font-size: 1.1em;
 								font-weight: 600;
 								line-height: 1.3;
@@ -111,7 +112,7 @@
 							text-align: center;
 							
 							button.fab {
-								background: $blue;
+								background: vars.$blue;
 								color: white;
 								border-radius: 50%;
 								width: 36px;
@@ -124,7 +125,7 @@
 								
 								&:hover {
 									transform: scale(1.05);
-									background: darken($blue, 10%);
+									background: color.adjust(vars.$blue, $lightness: -10%);
 								}
 							}
 						}
@@ -135,77 +136,77 @@
 		
 		// Birthday cake colors based on wijk
 		.birthday-cake-yellow {
-			color: $yellow;
+			color: vars.$yellow!important;
 		}
 		
 		.birthday-cake-red {
-			color: $red;
+			color: vars.$red!important;
 		}
 		
 		.birthday-cake-blue {
-			color: $blue;
+			color: vars.$blue!important;
 		}
 		
 		.birthday-cake-green {
-			color: $green;
+			color: vars.$green!important;
 		}
 		
 		.birthday-cake-onbekend {
-			color: $mediumBlack;
+			color: vars.$mediumBlack!important;
 		}
 		
 		// Wijk-based search button colors
 		&.wijk-yellow button.fab {
-			background: $yellow;
-			color: $darkTextColor;
+					background: vars.$yellow;
+		color: vars.$darkTextColor;
 			
 			&:hover {
-				background: darken($yellow, 10%);
+				background: color.adjust(vars.$yellow, $lightness: -10%);
 			}
 		}
 		
 		&.wijk-red button.fab {
-			background: $red;
+			background: vars.$red;
 			color: white;
 			
 			&:hover {
-				background: darken($red, 10%);
+				background: color.adjust(vars.$red, $lightness: -10%);
 			}
 		}
 		
 		&.wijk-blue button.fab {
-			background: $blue;
+			background: vars.$blue;
 			color: white;
 			
 			&:hover {
-				background: darken($blue, 10%);
+				background: color.adjust(vars.$blue, $lightness: -10%);
 			}
 		}
 		
 		&.wijk-green button.fab {
-			background: $green;
+			background: vars.$green;
 			color: white;
 			
 			&:hover {
-				background: darken($green, 10%);
+				background: color.adjust(vars.$green, $lightness: -10%);
 			}
 		}
 		
 		// Wijk color indicators
 		&.yellow {
-			border-left: 4px solid $yellow;
+			border-left: 4px solid vars.$yellow;
 		}
 		
 		&.red {
-			border-left: 4px solid $red;
+			border-left: 4px solid vars.$red;
 		}
 		
 		&.blue {
-			border-left: 4px solid $blue;
+			border-left: 4px solid vars.$blue;
 		}
 		
 		&.green {
-			border-left: 4px solid $green;
+			border-left: 4px solid vars.$green;
 		}
 	}
 	

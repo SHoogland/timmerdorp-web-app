@@ -1,4 +1,4 @@
-@import "vars";
+@use "vars";
 
 #main {
 	text-align: center;
@@ -26,55 +26,55 @@ table {
 		tbody {
 			tr {
 				&:first-child {
-					background: $blue !important;
+					background: vars.$blue !important;
 					color: white !important;
 					font-weight: 600 !important;
 					
 					td {
 						padding: 16px 18px !important;
 						border-bottom: 2px solid rgba(255, 255, 255, 0.2) !important;
-						background: $blue !important;
+						background: vars.$blue !important;
 						color: white !important;
 					}
 				}
 				
 				// Wijk-based table header colors
 				.wijk-yellow &:first-child {
-					background: $yellow !important;
-					color: $darkTextColor !important;
+					background: vars.$yellow !important;
+					color: vars.$darkTextColor !important;
 					
 					td {
-						background: $yellow !important;
-						color: $darkTextColor !important;
+						background: vars.$yellow !important;
+						color: vars.$darkTextColor !important;
 					}
 				}
 				
 				.wijk-red &:first-child {
-					background: $red !important;
+					background: vars.$red !important;
 					color: white !important;
 					
 					td {
-						background: $red !important;
+						background: vars.$red !important;
 						color: white !important;
 					}
 				}
 				
 				.wijk-blue &:first-child {
-					background: $blue !important;
+					background: vars.$blue !important;
 					color: white !important;
 					
 					td {
-						background: $blue !important;
+						background: vars.$blue !important;
 						color: white !important;
 					}
 				}
 				
 				.wijk-green &:first-child {
-					background: $green !important;
+					background: vars.$green !important;
 					color: white !important;
 					
 					td {
-						background: $green !important;
+						background: vars.$green !important;
 						color: white !important;
 					}
 				}
@@ -116,7 +116,7 @@ g[aria-label="Chart"] + g {
 h2 {
 	padding: 20px 20px 10px 20px;
 	margin: 0;
-	color: $mediumBlack;
+	color: vars.$mediumBlack;
 	font-size: 1.4em;
 	font-weight: 600;
 }
@@ -133,19 +133,19 @@ td.white {
 	color: gray;
 }
 td.blue {
-	color: $blue;
+	color: vars.$blue;
 	font-weight: 600;
 }
 td.yellow {
-	color: $yellow;
+	color: vars.$yellow;
 	font-weight: 600;
 }
 td.red {
-	color: $red;
+	color: vars.$red;
 	font-weight: 600;
 }
 td.green {
-	color: $green;
+	color: vars.$green;
 	font-weight: 600;
 }
 

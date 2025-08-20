@@ -20,14 +20,9 @@ function Attendance() {
 	const [foundChildIsAlreadyPresent, setFoundChildIsAlreadyPresent] = useState(false);
 	const [weekday, setWeekday] = useState('');
 	const [weekdayDisplayname, setWeekdayDisplayname] = useState('');
-	const [currentWijk, setCurrentWijk] = useState<string>('blue');
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		// Get current wijk for theming
-		const wijkName = localStorage.getItem('wijkName') || 'blue';
-		setCurrentWijk(wijkName);
-		
 		const weekdays = ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'];
 		const today = new Date().getDay();
 		let weekday = weekdays[today];

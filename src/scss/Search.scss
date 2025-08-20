@@ -1,4 +1,4 @@
-@import "vars";
+@use "vars";
 
 .ticketListItem {
 	* {
@@ -14,7 +14,7 @@
 
 	h2 {
 		margin-bottom: 20px;
-		color: $mediumBlack;
+		color: vars.$mediumBlack;
 		font-size: 1.4em;
 	}
 
@@ -45,7 +45,7 @@
 
 			&:focus {
 				outline: none;
-				border-color: $blue;
+				border-color: vars.$blue;
 				box-shadow: 0 4px 16px rgba(33, 150, 243, 0.2);
 				transform: translateY(-1px);
 			}
@@ -80,7 +80,7 @@
 	}
 
 	h3 {
-		color: $mediumBlack;
+		color: vars.$mediumBlack;
 		font-size: 1.8em;
 		margin-top: 48px;
 		margin-bottom: 24px;
@@ -105,25 +105,25 @@
 
 			// Wijk-based accent colors
 			.wijk-accent-yellow {
-				color: $yellow!important;
+				color: vars.$yellow!important;
 				font-weight: 600;
 			}
 
 			.wijk-accent-red {
-				color: $red!important;
+				color: vars.$red!important;
 				font-weight: 600;
 			}
 
 			.wijk-accent-blue {
-				color: $blue!important;
+				color: vars.$blue!important;
 				font-weight: 600;
 			}
 			.wijk-accent-green {
-				color: $green!important;
+				color: vars.$green!important;
 				font-weight: 600;
 			}
 			.wijk-accent-onbekend {
-				color: $mediumBlack;
+				color: vars.$mediumBlack;
 				font-weight: 600;
 			}
 
@@ -160,7 +160,7 @@
 
 								span {
 									font-weight: 600;
-									color: $blue;
+									color: vars.$blue;
 									display: block;
 									margin-top: 2px;
 								}
@@ -176,7 +176,7 @@
 								font-size: 1.4em;
 								top: -4px;
 								position: relative;
-								color: $mediumBlack;
+								color: vars.$mediumBlack;
 								font-weight: 600;
 								line-height: 1.3;
 							}
@@ -189,9 +189,9 @@
 								width: 32px;
 								height: 32px;
 								border-radius: 50%;
-								border: 2px solid $blue;
+								border: 2px solid vars.$blue;
 								background: white;
-								color: $blue;
+								color: vars.$blue;
 								font-weight: bold;
 								font-size: 14px;
 								cursor: pointer;
@@ -201,7 +201,7 @@
 								justify-content: center;
 
 								&:hover {
-									background: $blue;
+									background: vars.$blue;
 									color: white;
 									transform: scale(1.05);
 								}

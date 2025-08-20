@@ -1,4 +1,5 @@
-@import "vars";
+@use "vars";
+@use "sass:color";
 
 // Zorg dat alleen de home pagina niet scrollt
 html,
@@ -22,16 +23,16 @@ body {
 	flex-direction: column;
 
 	&.blue {
-		background: $blue;
+		background: vars.$blue;
 	}
 	&.green {
-		background: $green;
+		background: vars.$green;
 	}
 	&.yellow {
-		background: $yellow;
+		background: vars.$yellow;
 	}
 	&.red:not(.homeInfoCard) {
-		background: $red;
+		background: vars.$red;
 	}
 	&.white {
 		background: white;
@@ -55,33 +56,33 @@ body {
 		
 		// Set wijk-based background colors for buttons
 		&.blue:not(.homeInfoCard) {
-			background-color: $blue !important;
+			background-color: vars.$blue !important;
 			&:nth-child(2n) {
-				background: darken($blue, 4.5%)!important;
+				background: color.adjust(vars.$blue, $lightness: -4.5%)!important;
 			}
 		}
 		&.green:not(.homeInfoCard) {
-			background-color: $green !important;
+			background-color: vars.$green !important;
 			&:nth-child(2n) {
-				background: darken($green, 2.5%)!important;
+				background: color.adjust(vars.$green, $lightness: -2.5%)!important;
 			}
 		}
 		&.yellow:not(.homeInfoCard) {
-			background-color: $yellow !important;
-			color: $darkTextColor !important;
+			background-color: vars.$yellow !important;
+			color: vars.$darkTextColor !important;
 			&:nth-child(2n) {
-				background: darken($yellow, 5.5%)!important;
+				background: color.adjust(vars.$yellow, $lightness: -5.5%)!important;
 			}
 		}
 		&.red:not(.homeInfoCard) {
-			background-color: $red !important;
+			background-color: vars.$red !important;
 			&:nth-child(2n) {
-				background: darken($red, 2.5%)!important;
+				background: color.adjust(vars.$red, $lightness: -2.5%)!important;
 			}
 		}
 		&.white:not(.homeInfoCard) {
 			background-color: white !important;
-			color: $darkTextColor !important;
+			color: vars.$darkTextColor !important;
 		}
 
 		// Add hover effect with scale
@@ -493,7 +494,7 @@ body {
 	}
 
 	#potentialAdminsNotification {
-		background: $red;
+		background: vars.$red;
 		width: 24px;
 		height: 24px;
 		line-height: 24px;
@@ -515,7 +516,7 @@ body {
 			left: -2px;
 			right: -2px;
 			bottom: -2px;
-			background: $red;
+			background: vars.$red;
 			border-radius: 50%;
 			opacity: 0.3;
 			z-index: -1;
@@ -532,7 +533,7 @@ body {
 		top: 0;
 		left: 0;
 		color: white;
-		background: $blue;
+		background: vars.$blue;
 		opacity: 1;
 		transition-duration: 600ms;
 
@@ -662,8 +663,8 @@ body {
 	white-space: nowrap;
 	word-wrap: normal;
 	direction: ltr;
-	font-feature-settings: "liga";
 	-webkit-font-feature-settings: "liga";
+	font-feature-settings: "liga";
 	-webkit-font-smoothing: antialiased;
 }
 
