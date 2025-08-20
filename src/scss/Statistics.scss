@@ -1,4 +1,4 @@
-@use "vars";
+@import "vars";
 
 #main {
 	text-align: center;
@@ -14,10 +14,88 @@
 	margin-bottom: 18px;
 }
 
+// Enhanced table styling
+table {
+	&.left-column-fixed.withHeader,
+	&.cleanTable.withHeader.top-column-fixed {
+		border-radius: 12px;
+		overflow: hidden;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+		margin: 20px 12px;
+		
+		tbody {
+			tr {
+				&:first-child {
+					background: $blue !important;
+					color: white !important;
+					font-weight: 600 !important;
+					
+					td {
+						padding: 16px 18px !important;
+						border-bottom: 2px solid rgba(255, 255, 255, 0.2) !important;
+						background: $blue !important;
+						color: white !important;
+					}
+				}
+				
+				// Wijk-based table header colors
+				.wijk-yellow &:first-child {
+					background: $yellow !important;
+					color: $darkTextColor !important;
+					
+					td {
+						background: $yellow !important;
+						color: $darkTextColor !important;
+					}
+				}
+				
+				.wijk-red &:first-child {
+					background: $red !important;
+					color: white !important;
+					
+					td {
+						background: $red !important;
+						color: white !important;
+					}
+				}
+				
+				.wijk-blue &:first-child {
+					background: $blue !important;
+					color: white !important;
+					
+					td {
+						background: $blue !important;
+						color: white !important;
+					}
+				}
+				
+				.wijk-green &:first-child {
+					background: $green !important;
+					color: white !important;
+					
+					td {
+						background: $green !important;
+						color: white !important;
+					}
+				}
+				
+				&:not(:first-child) {
+					transition: background-color 0.2s ease;
+					
+					&:hover {
+						background: #f8f9fa !important;
+					}
+				}
+			}
+		}
+	}
+}
+
 tr.isYou {
 	td {
 		text-decoration: underline;
 		font-weight: bold;
+		background: rgba(33, 150, 243, 0.1) !important;
 	}
 }
 
@@ -28,28 +106,106 @@ g[aria-label="Chart"] + g {
 #presencesByTimeChart {
 	width: 100%;
 	height: 375px;
+	margin: 20px 0;
+	border-radius: 12px;
+	overflow: hidden;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
+// Enhanced section styling
+h2 {
+	padding: 20px 20px 10px 20px;
+	margin: 0;
+	color: $mediumBlack;
+	font-size: 1.4em;
+	font-weight: 600;
+}
+
+p {
+	padding: 8px 20px;
+	margin: 0;
+	color: #666;
+	line-height: 1.4;
+}
+
+// Wijk color styling
 td.white {
 	color: gray;
 }
 td.blue {
-	color: vars.$blue;
+	color: $blue;
+	font-weight: 600;
 }
 td.yellow {
-	color: vars.$yellow;
+	color: $yellow;
+	font-weight: 600;
 }
 td.red {
-	color: vars.$red;
+	color: $red;
+	font-weight: 600;
 }
 td.green {
-	color: vars.$green;
+	color: $green;
+	font-weight: 600;
 }
 
 thead td {
 	font-weight: bold;
 }
 
-h2 {
-	padding-left: 20px;
+// Mobile responsiveness
+@media (max-width: 768px) {
+	table {
+		&.left-column-fixed.withHeader,
+		&.cleanTable.withHeader.top-column-fixed {
+			margin: 15px 10px;
+			font-size: 16px;
+			
+			tbody {
+				tr {
+					td {
+						padding: 12px 14px !important;
+					}
+				}
+			}
+		}
+	}
+	
+	h2 {
+		padding: 15px 15px 8px 15px;
+		font-size: 1.3em;
+	}
+	
+	p {
+		padding: 6px 15px;
+		font-size: 15px;
+	}
+}
+
+@media (max-width: 480px) {
+	table {
+		&.left-column-fixed.withHeader,
+		&.cleanTable.withHeader.top-column-fixed {
+			margin: 10px 0;
+			font-size: 15px;
+			
+			tbody {
+				tr {
+					td {
+						padding: 10px 12px !important;
+					}
+				}
+			}
+		}
+	}
+	
+	h2 {
+		padding: 12px 12px 6px 12px;
+		font-size: 1.2em;
+	}
+	
+	p {
+		padding: 5px 12px;
+		font-size: 14px;
+	}
 }

@@ -1,4 +1,17 @@
 @import "vars";
+@import "Header";
+@import "Layout";
+@import "Card";
+@import "Attendance";
+@import "Birthdays";
+@import "Statistics";
+@import "Search";
+@import "BottomBar";
+@import "LoadingIcon";
+@import "ChangeWijk";
+@import "Settings";
+@import "Register";
+@import "Home";
 
 * {
 	// disable text selection
@@ -75,6 +88,7 @@ button {
 	}
 	&.yellow {
 		background-color: $yellow;
+		color: $darkTextColor;
 	}
 }
 
@@ -87,7 +101,6 @@ input {
 	&.big,
 	&.wristband-number {
 		height: 68px;
-		top: 2px;
 		position: relative;
 	}
 	&.wristband-number {
@@ -125,6 +138,7 @@ a {
 	}
 	&.yellow button {
 		background-color: $yellow;
+		color: $darkTextColor;
 	}
 	&.green button {
 		background-color: $green;

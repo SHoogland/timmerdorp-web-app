@@ -1,699 +1,754 @@
 @import "vars";
 
 // Zorg dat alleen de home pagina niet scrollt
-html, body {
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  width: 100vw;
-  /* overflow en height niet forceren, zodat andere pagina's kunnen scrollen */
+html,
+body {
+	margin: 0;
+	padding: 0;
+	min-height: 100vh;
+	width: 100vw;
+	/* overflow en height niet forceren, zodat andere pagina's kunnen scrollen */
 }
 
-  .homeContent {
-    position: relative;
-    margin: 0;
-    padding: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
+.homeContent {
+	position: relative;
+	margin: 0;
+	padding: 0;
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
 
-  &.blue {
-    background: $blue;
-  }
-  &.green {
-    background: $green;
-  }
-  &.yellow {
-    background: $yellow;
-  }
-  &.red {
-    background: $red;
-  }
-  &.white {
-    background: white;
-  }
+	&.blue {
+		background: $blue;
+	}
+	&.green {
+		background: $green;
+	}
+	&.yellow {
+		background: $yellow;
+	}
+	&.red:not(.homeInfoCard) {
+		background: $red;
+	}
+	&.white {
+		background: white;
+	}
 
-  button {
-    border-radius: 0px !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    border: none;
-    cursor: pointer;
-    color: white;
-    font-weight: bold;
-    font-size: 1.05em;
-    letter-spacing: 1px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-    
-    // Add subtle shadow for depth
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    
-    // Add hover effect with scale
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-    }
-    
-    // Add active state
-    &:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
+	button {
+		border-radius: 0px !important;
+		margin-top: 0 !important;
+		margin-bottom: 0 !important;
+		border: none;
+		cursor: pointer;
+		color: white;
+		font-weight: bold;
+		font-size: 1.05em;
+		letter-spacing: 1px;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		position: relative;
+		overflow: hidden;
+		box-shadow: none;
 
-    &.small {
-      grid-column: span 1;
-      height: 80px;
-    }
+		
+		// Set wijk-based background colors for buttons
+		&.blue:not(.homeInfoCard) {
+			background-color: $blue !important;
+			&:nth-child(2n) {
+				background: darken($blue, 4.5%)!important;
+			}
+		}
+		&.green:not(.homeInfoCard) {
+			background-color: $green !important;
+			&:nth-child(2n) {
+				background: darken($green, 2.5%)!important;
+			}
+		}
+		&.yellow:not(.homeInfoCard) {
+			background-color: $yellow !important;
+			color: $darkTextColor !important;
+			&:nth-child(2n) {
+				background: darken($yellow, 5.5%)!important;
+			}
+		}
+		&.red:not(.homeInfoCard) {
+			background-color: $red !important;
+			&:nth-child(2n) {
+				background: darken($red, 2.5%)!important;
+			}
+		}
+		&.white:not(.homeInfoCard) {
+			background-color: white !important;
+			color: $darkTextColor !important;
+		}
 
-    &.realWeather > .homeBtnD {
-      position: relative;
-      left: -13px;
+		// Add hover effect with scale
+		&:hover {
+			transform: translateY(-2px);
+			box-shadow: none;
+		}
 
-      h2 {
-        top: -8px;
-        left: 42px;
-      }
-      .weatherMsg {
-        top: -2px;
-        left: 42px;
-      }
-    }
+		// Add active state
+		&:active {
+			transform: translateY(0);
+			box-shadow: none;
+		}
 
-    &.small > .homeBtnD > i.material-icons {
-      font-size: 2em;
-      width: 100%;
-      text-align: center;
-      top: 24px;
-      left: 0px;
-    }
+		&.small {
+			grid-column: span 1;
+			height: 80px;
+		}
+		&.realWeather > .homeBtnD {
+			position: relative;
+			left: -10px;
+			flex-direction: row !important;
+			align-items: center !important;
 
-    &.small:last-of-type {
-      margin-right: 0px !important;
-    }
+			h2 {
+				position: absolute;
+				top: 20px;
+				left: 52px;
+				margin: 0;
+				padding: 0!important;
+				padding-left: 20px!important;
+			}
+			.weatherMsg {
+				position: absolute;
+				top: 42px;
+				left: 72px;
+				margin: 0;
+				p {
+					padding: 0!important;
+				}
+			}
+		}
 
-    &.halfWidth {
-      margin-left: 0 !important;
-    }
+		&.small > .homeBtnD > i.material-icons {
+			font-size: 2em;
+			width: 100%;
+			text-align: center;
+			top: 24px;
+			left: 0px;
+		}
 
-    &.bg-white {
-      color: #333;
-      background: #eaeaea;
-      &:hover,
-      &:active {
-        background: #ccc !important;
-      }
-    }
+		&.small:last-of-type {
+			margin-right: 0px !important;
+		}
 
-    i.material-icons {
-      font-size: 1.6em;
-      margin-right: 12px;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  }
+		&.halfWidth {
+			margin-left: 0 !important;
+		}
 
-  #homeButtons {
-    position: relative;
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0;
-    height: fit-content;
-    
-    button {
-      height: 80px;
-      margin: 0;
-      padding: 0;
-      position: relative;
-      overflow: hidden;
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      
-      // Add subtle inner glow effect
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-        transition: left 0.6s ease;
-      }
-      
-      &:hover::before {
-        left: 100%;
-      }
-      
-      // Add ripple effect on click
-      &::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 0;
-        height: 0;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.3);
-        transform: translate(-50%, -50%);
-        transition: width 0.6s ease, height 0.6s ease;
-      }
-      
-      &:active::after {
-        width: 300px;
-        height: 300px;
-      }
-      
-      &.small {
-        grid-column: span 1;
-        height: 80px;
-      }
-      
-      &.halfWidth {
-        grid-column: span 1;
-        height: 80px;
-      }
-      
-      &:not(.small):not(.halfWidth) {
-        grid-column: span 2;
-        height: 80px;
-      }
-      
-      // Responsive adjustments
-      @media screen and (max-width: 480px) {
-        font-size: 0.9em;
-        
-        i.material-icons {
-          font-size: 1.4em;
-        }
-      }
-    }
-  }
+		&.bg-white {
+			color: #333;
+			background: #eaeaea;
+			&:hover,
+			&:active {
+				background: #ccc !important;
+			}
+		}
 
-  #homeBtnContainer {
-    flex: 0.7;
-    position: relative;
-    padding: 0;
-    margin-top: -40px;
-    min-height: 0;
-    
-    // Add subtle background pattern
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
-                  radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
-      pointer-events: none;
-    }
-  }
+		i.material-icons {
+			font-size: 1.6em;
+			margin-right: 12px;
+			width: 24px;
+			height: 24px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+	}
 
-  #overlay {
-    z-index: 20;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.1) 100%);
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
+	#homeButtons {
+		position: relative;
+		width: 100%;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 0;
+		height: fit-content;
 
-  .homeBtnD {
-    text-align: left;
-    position: relative;
-    padding: 8px 16px;
-    display: flex;
-    align-items: center;
-    height: 100%;
-    width: 100%;
+		button {
+			height: 80px;
+			margin: 0;
+			padding: 0;
+			position: relative;
+			overflow: hidden;
+			font-family: "Montserrat", sans-serif;
+			font-weight: 600;
+			letter-spacing: 0.5px;
 
-    > span {
-      font-size: 18px;
-      font-weight: 600;
-      margin-left: 8px;
-      flex: 1;
-    }
-  }
+			// Add subtle inner glow effect
+			&::before {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: -100%;
+				width: 100%;
+				height: 100%;
+				// background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+				transition: left 0.6s ease;
+			}
 
-  header {
-    position: relative;
-  height: clamp(32vh, 40vw, 60vh);
-    z-index: 10;
-    background-position: center;
-    background-size: cover;
-    background-image: url(../assets/header_bg.jpg);
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    // Add a subtle overlay for better text readability
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 100%);
-      z-index: 15;
-    }
+			&:hover::before {
+				left: 100%;
+			}
+			
+			// Flip gradient direction for second weather card
+			&.second-weather::before {
+				// background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+				left: 100%;
+			}
+			
+			&.second-weather:hover::before {
+				left: -100%;
+			}
 
-    * {
-      z-index: 25;
-    }
+			// Add ripple effect on click
+			&::after {
+				content: "";
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				width: 0;
+				height: 0;
+				border-radius: 50%;
+				background: rgba(255, 255, 255, 0.3);
+				transform: translate(-50%, -50%);
+				transition:
+					width 0.6s ease,
+					height 0.6s ease;
+			}
 
-    // Responsive adjustments
-    @media screen and (max-height: 680px) {
-      height: 35vh;
-    }
-    
-    @media screen and (max-width: 480px) {
-      background-position: center center;
-    }
-    // Grotere header op grote schermen
-    @media screen and (min-height: 800px) {
-      height: 50vh;
-    }
-    @media screen and (min-height: 1200px) {
-      height: 60vh;
-    }
-    @media screen and (min-height: 1500px) {
-      height: 70vh;
-    }
-  }
+			&:active::after {
+				width: 300px;
+				height: 300px;
+			}
 
-  #ptitle {
-    text-align: center;
-    font-family: 'Mikado-Bold', sans-serif !important;
-    margin: 0;
-    font-size: clamp(28px, 5vw, 48px);
-    position: relative;
-    z-index: 20;
-    color: white;
-    line-height: 1.1;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-  padding: 0 20px 32px 20px;
+			&.small {
+				grid-column: span 1;
+				height: 80px;
+			}
 
-    @media screen and (max-height: 680px) {
-      font-size: clamp(24px, 4vw, 36px);
-      br {
-        display: none;
-      }
-    }
-  }
+			&.halfWidth {
+				grid-column: span 1;
+				height: 80px;
+			}
 
-  #titleContainer {
-    width: 100%;
-    text-align: center;
-    z-index: 20;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+			&:not(.small):not(.halfWidth) {
+				grid-column: span 2;
+				height: 80px;
+			}
 
-  .homeInfoCard {
-    transition-duration: 500ms;
-    z-index: 20;
-    color: white !important;
-    
-    // Add glassmorphism effect
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    
-    // Add subtle border
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    
-    // Make background more transparent to overlay header
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%);
-    
-    // Improve text alignment
-    .homeBtnD {
-      padding: 16px;
-      flex-direction: row;
-      align-items: center;
-      justify-content: flex-start;
-      height: 100%;
-      box-sizing: border-box;
-    }
+			// Responsive adjustments
+			@media screen and (max-width: 480px) {
+				font-size: 0.9em;
 
-    &.alternate:nth-of-type(2n+1) {
-      &, &:hover, &:focus, &:active {
-        background-color: rgba(0, 0, 0, 0.75) !important;
-      }
-    }
+				i.material-icons {
+					font-size: 1.4em;
+				}
+			}
+		}
+	}
 
-    &.alternate:nth-of-type(2n) {
-      &, &:hover, &:focus, &:active {
-        background-color: rgba(0, 0, 0, 0.75) !important;
-      }
-    }
+	#homeBtnContainer {
+		flex: 0.7;
+		position: relative;
+		padding: 0;
+		margin-top: -80px;
+		min-height: 0;
 
-    &:hover,
-    &:active {
-      &:not(.hidden) {
-        background: rgba(0, 0, 0, 0.8) !important;
-      }
-    }
+		// Add subtle background pattern
+		&::before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+				radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
+			pointer-events: none;
+		}
+	}
 
-    i.material-icons {
-      font-size: 2.5rem;
-      margin-right: 16px;
-      filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
-      transition: all 0.3s ease;
-      flex-shrink: 0;
-      
-      &:hover {
-        transform: scale(1.1);
-        filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.5));
-      }
-    }
+	#overlay {
+		z-index: 20;
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.1) 100%);
+		transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+	}
 
-    .homeBtnD span {
-      top: -26px;
-      position: relative;
-    }
-  }
+	.homeBtnD {
+		text-align: left;
+		position: relative;
+		padding: 0px 16px;
+		display: flex;
+		align-items: center;
+		height: 100%;
+		width: 100%;
 
-  .weather {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    flex: 1;
-    
-    h2,
-    .weatherMsg {
-      overflow-x: hidden;
-      margin: 0;
-      font-weight: 600;
-      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
-      line-height: 1.4;
-    }
+		> span {
+			font-size: 18px;
+			font-weight: 600;
+			margin-left: 8px;
+			flex: 1;
+		}
+	}
 
-    h2 {
-      font-size: 16px;
-      margin-bottom: 8px;
-      animation: fadeInUp 0.3s ease-out 0.2s both;
-      font-weight: 700;
-    }
+	header {
+		position: relative;
+		height: calc(100vh - 380px);
+		z-index: 10;
+		background-position: center;
+		background-size: cover;
+		background-image: url(../assets/header_bg.jpg);
+		transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-position: center center;
 
-    div.weatherMsg {
-      font-size: 12px;
-      margin-bottom: 6px;
-      animation: fadeInUp 0.3s ease-out 0.3s both;
-      font-weight: 500;
+		// Add a subtle overlay for better text readability
+		&::before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			// background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 100%);
+			z-index: 15;
+		}
 
-      p {
-        margin: 0;
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-      }
-    }
+		* {
+			z-index: 25;
+		}
+	}
 
-    #data {
-      .weatherMsg {
-        animation: fadeInUp 0.3s ease-out 0.4s both;
-        
-        &:nth-child(2) {
-          animation-delay: 0.5s;
-        }
-        
-        &:nth-child(3) {
-          animation-delay: 0.6s;
-        }
-      }
-    }
-  }
+	#ptitle {
+		text-align: center;
+		font-family: "Mikado-Bold", sans-serif !important;
+		margin: 0;
+		font-size: clamp(28px, 8vw, 48px);
+		position: relative;
+		z-index: 20;
+		color: white;
+		line-height: 1.1;
+		transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+		text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+		padding: 0 20px 32px 20px;
 
-  i.material-icons.data {
-    left: -20px !important;
-  }
+		@media screen and (max-height: 680px) {
+			font-size: clamp(24px, 4vw, 36px);
+			br {
+				display: none;
+			}
+		}
+	}
 
-  #ptitle,
-  #ptitle * {
-    overflow: hidden;
-  }
+	#titleContainer {
+		width: 100%;
+		text-align: center;
+		z-index: 20;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 
-  #potentialAdminsNotification {
-    background: $red;
-    width: 24px;
-    height: 24px;
-    line-height: 24px;
-    text-align: center;
-    border-radius: 24px;
-    position: absolute;
-    right: 6px;
-    top: 10px;
-    font-size: 12px;
-    font-weight: bold;
-    box-shadow: 0 2px 8px rgba(238, 2, 2, 0.4);
-    animation: pulse 2s infinite;
-    
-    // Add glow effect
-    &::before {
-      content: '';
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: $red;
-      border-radius: 50%;
-      opacity: 0.3;
-      z-index: -1;
-      animation: pulse 2s infinite;
-    }
-  }
+	.homeInfoCard {
+		transition-duration: 500ms;
+		z-index: 20;
+		color: white !important;
 
-  #wijkChoice {
-    z-index: 20;
-    padding: 24px;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    color: white;
-    background: $blue;
-    opacity: 1;
-    transition-duration: 600ms;
-    
-    // Add backdrop blur effect
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    
-    // Add subtle shadow
-    box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.1);
-    
-    &.green {
-      background: $green;
-    }
-    &.yellow {
-      background: $yellow;
-    }
-    &.red {
-      background: $red;
-    }
-    &.white {
-      background: white;
-    }
+		// Add glassmorphism effect
+		-webkit-backdrop-filter: blur(10px);
+		backdrop-filter: blur(10px);
+		border: none!important;
 
-    &.white, &.yellow {
-      ion-item {
-        color: black;
-      }
-      & {
-        color: black;
-      }
-    }
+		// Make background more transparent to overlay header
+		background: rgba(0, 0, 0, 0.4);
 
-    &.fadedOut {
-      opacity: 0;
-    }
+		// Improve text alignment
+		.homeBtnD {
+			padding: 16px;
+			flex-direction: row;
+			align-items: center;
+			justify-content: flex-start;
+			height: 100%;
+			box-sizing: border-box;
+		}
 
-    h1 {
-      margin-top: 0;
-      text-align: center;
-    }
+		// Ensure all text is white
+		h2,
+		.weatherMsg,
+		p,
+		span,
+		* {
+			color: white !important;
+		}
 
-    p {
-      text-align: center;
-      margin-bottom: 24px;
-    }
+		// Prevent line breaks in all text elements
+		h2,
+		.weatherMsg,
+		p {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
 
-    .wijk-select-container {
-      text-align: center;
-      margin-bottom: 24px;
-    }
+		i.material-icons {
+			font-size: 2.5rem;
+			margin-left: 12px;
+			filter: none;
+			transition: all 0.3s ease;
+			flex-shrink: 0;
 
-    .wijk-select {
-      width: 100%;
-      max-width: 300px;
-      padding: 16px;
-      border: none;
-      border-radius: 12px;
-      background: rgba(0, 0, 0, 0.2);
-      color: white;
-      font-size: 16px;
-      font-weight: 500;
-      transition: all 0.3s ease;
-      border: 2px solid rgba(255, 255, 255, 0.1);
-      
-      &:focus {
-        outline: none;
-        border-color: rgba(255, 255, 255, 0.5);
-        background: rgba(0, 0, 0, 0.3);
-        transform: scale(1.02);
-      }
+			&:hover {
+				transform: scale(1.1);
+				filter: none;
+			}
+		}
 
-      option {
-        background: #333;
-        color: white;
-        padding: 8px;
-      }
-    }
+		.homeBtnD span {
+			top: -26px;
+			position: relative;
+		}
+	}
 
-    .wijk-save-btn {
-      width: 100%;
-      max-width: 300px;
-      margin: 0 auto;
-      display: block;
-      background: rgba(0,0,0,.2);
-      border: none;
-      color: white;
-      padding: 16px;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      border: 2px solid rgba(255, 255, 255, 0.1);
-      text-transform: uppercase;
-      letter-spacing: 1px;
+	.weather {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		flex: 1;
 
-      &:hover {
-        background: rgba(0,0,0,.4);
-        border-color: rgba(255, 255, 255, 0.3);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-      }
-      
-      &:active {
-        transform: translateY(0);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-      }
-    }
-  }
+		h2,
+		.weatherMsg {
+			overflow-x: hidden;
+			margin: 0;
+			margin-bottom: 0!important;
+			font-weight: 600;
+			text-shadow: none;
+			line-height: 1.4;
+			color: white !important;
+			p {
+				padding: 0!important;
+			}
+		}
 
-  * {
-    font-family: 'Montserrat', 'Roboto', 'Arial', 'Helvetica', sans-serif;
-  }
+		h2 {
+			font-size: 16px;
+			margin-bottom: 8px;
+			animation: fadeInUp 0.3s ease-out 0.2s both;
+			font-weight: 700;
+			color: white !important;
+		}
 
-  #ptitle, #ptitle * {
-    font-family: 'Mikado-Bold', 'Roboto', 'Arial', 'Helvetica', sans-serif;
-  }
+		div.weatherMsg {
+			font-size: 12px;
+			margin-bottom: 6px;
+			animation: fadeInUp 0.3s ease-out 0.3s both;
+			font-weight: 500;
+			color: white !important;
+
+			p {
+				margin: 0;
+				text-shadow: none;
+				color: white !important;
+			}
+		}
+
+		#data {
+			.weatherMsg {
+				animation: fadeInUp 0.3s ease-out 0.4s both;
+
+				&:nth-child(2) {
+					animation-delay: 0.5s;
+				}
+
+				&:nth-child(3) {
+					animation-delay: 0.6s;
+				}
+			}
+		}
+	}
+
+	i.material-icons.data {
+		left: -8px !important;
+		position: relative;
+	}
+
+	#ptitle,
+	#ptitle * {
+		overflow: hidden;
+	}
+
+	#potentialAdminsNotification {
+		background: $red;
+		width: 24px;
+		height: 24px;
+		line-height: 24px;
+		text-align: center;
+		border-radius: 24px;
+		position: absolute;
+		right: 6px;
+		top: 10px;
+		font-size: 12px;
+		font-weight: bold;
+		box-shadow: 0 2px 8px rgba(238, 2, 2, 0.4);
+		animation: pulse 2s infinite;
+
+		// Add glow effect
+		&::before {
+			content: "";
+			position: absolute;
+			top: -2px;
+			left: -2px;
+			right: -2px;
+			bottom: -2px;
+			background: $red;
+			border-radius: 50%;
+			opacity: 0.3;
+			z-index: -1;
+			animation: pulse 2s infinite;
+		}
+	}
+
+	#wijkChoice {
+		z-index: 20;
+		padding: 24px;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		color: white;
+		background: $blue;
+		opacity: 1;
+		transition-duration: 600ms;
+
+		// Add backdrop blur effect
+		-webkit-backdrop-filter: blur(20px);
+		backdrop-filter: blur(20px);
+
+		// Add subtle shadow
+		box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.1);
+
+
+		&.white,
+		&.yellow {
+			ion-item {
+				color: black;
+			}
+			& {
+				color: black;
+			}
+		}
+
+		&.fadedOut {
+			opacity: 0;
+		}
+
+		h1 {
+			margin-top: 0;
+			text-align: center;
+		}
+
+		p {
+			text-align: center;
+			margin-bottom: 24px;
+		}
+
+		.wijk-select-container {
+			text-align: center;
+			margin-bottom: 24px;
+		}
+
+		.wijk-select {
+			width: 100%;
+			max-width: 300px;
+			padding: 16px;
+			border: none;
+			border-radius: 12px;
+			background: rgba(0, 0, 0, 0.2);
+			color: white;
+			font-size: 16px;
+			font-weight: 500;
+			transition: all 0.3s ease;
+			border: 2px solid rgba(255, 255, 255, 0.1);
+
+			&:focus {
+				outline: none;
+				border-color: rgba(255, 255, 255, 0.5);
+				background: rgba(0, 0, 0, 0.3);
+				transform: scale(1.02);
+			}
+
+			option {
+				background: #333;
+				color: white;
+				padding: 8px;
+			}
+		}
+
+		.wijk-save-btn {
+			width: 100%;
+			max-width: 300px;
+			margin: 0 auto;
+			display: block;
+			background: rgba(0, 0, 0, 0.2);
+			border: none;
+			color: white;
+			padding: 16px;
+			border-radius: 12px;
+			font-size: 16px;
+			font-weight: 600;
+			cursor: pointer;
+			transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+			border: 2px solid rgba(255, 255, 255, 0.1);
+			text-transform: uppercase;
+			letter-spacing: 1px;
+
+			&:hover {
+				background: rgba(0, 0, 0, 0.4);
+				border-color: rgba(255, 255, 255, 0.3);
+				transform: translateY(-2px);
+				box-shadow: none;
+			}
+
+			&:active {
+				transform: translateY(0);
+				box-shadow: none;
+			}
+		}
+	}
+
+	* {
+		font-family: "Montserrat", "Roboto", "Arial", "Helvetica", sans-serif;
+	}
+
+	#ptitle,
+	#ptitle * {
+		font-family: "Mikado-Bold", "Roboto", "Arial", "Helvetica", sans-serif;
+	}
 }
 
 // Material Icons font
 @font-face {
-  font-family: 'Material Icons';
-  font-style: normal;
-  font-weight: 400;
-  src: url("../assets/fonts/Material-Icons.woff2") format('woff2');
+	font-family: "Material Icons";
+	font-style: normal;
+	font-weight: 400;
+	src: url("../assets/fonts/Material-Icons.woff2") format("woff2");
 }
 
 .material-icons {
-  font-family: 'Material Icons';
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  font-feature-settings: 'liga';
-  -webkit-font-feature-settings: 'liga';
-  -webkit-font-smoothing: antialiased;
+	font-family: "Material Icons";
+	font-weight: normal;
+	font-style: normal;
+	font-size: 24px;
+	line-height: 1;
+	letter-spacing: normal;
+	text-transform: none;
+	display: inline-block;
+	white-space: nowrap;
+	word-wrap: normal;
+	direction: ltr;
+	font-feature-settings: "liga";
+	-webkit-font-feature-settings: "liga";
+	-webkit-font-smoothing: antialiased;
 }
 
 // Keyframe animations
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 @keyframes slideInFromTop {
-  from {
-    opacity: 0;
-    transform: translateY(-15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+	from {
+		opacity: 0;
+		transform: translateY(-15px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 @keyframes pulse {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.05);
-    opacity: 0.7;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
+	0% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	50% {
+		transform: scale(1.05);
+		opacity: 0.7;
+	}
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
 }
 
 // Add subtle entrance animation to the main content
 .homeContent {
-  animation: slideInFromTop 0.4s ease-out;
+	animation: slideInFromTop 0.4s ease-out;
 }
 
 // Add subtle staggered animation to buttons
 #homeButtons button {
-  opacity: 0;
-  animation: fadeInUp 0.4s ease-out forwards;
-  
-  &:nth-child(1) { animation-delay: 0.05s; }
-  &:nth-child(2) { animation-delay: 0.1s; }
-  &:nth-child(3) { animation-delay: 0.15s; }
-  &:nth-child(4) { animation-delay: 0.2s; }
-  &:nth-child(5) { animation-delay: 0.25s; }
-  &:nth-child(6) { animation-delay: 0.3s; }
-  &:nth-child(7) { animation-delay: 0.35s; }
-  &:nth-child(8) { animation-delay: 0.4s; }
-  &:nth-child(9) { animation-delay: 0.45s; }
-  &:nth-child(10) { animation-delay: 0.5s; }
-  &:nth-child(11) { animation-delay: 0.55s; }
-  &:nth-child(12) { animation-delay: 0.6s; }
+	opacity: 0;
+	animation: fadeInUp 0.4s ease-out forwards;
+
+	&:nth-child(1) {
+		animation-delay: 0.05s;
+	}
+	&:nth-child(2) {
+		animation-delay: 0.1s;
+	}
+	&:nth-child(3) {
+		animation-delay: 0.15s;
+	}
+	&:nth-child(4) {
+		animation-delay: 0.2s;
+	}
+	&:nth-child(5) {
+		animation-delay: 0.25s;
+	}
+	&:nth-child(6) {
+		animation-delay: 0.3s;
+	}
+	&:nth-child(7) {
+		animation-delay: 0.35s;
+	}
+	&:nth-child(8) {
+		animation-delay: 0.4s;
+	}
+	&:nth-child(9) {
+		animation-delay: 0.45s;
+	}
+	&:nth-child(10) {
+		animation-delay: 0.5s;
+	}
+	&:nth-child(11) {
+		animation-delay: 0.55s;
+	}
+	&:nth-child(12) {
+		animation-delay: 0.6s;
+	}
 }

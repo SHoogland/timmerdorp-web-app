@@ -63,7 +63,7 @@ function Home() {
 			title: '-',
 			component: "stats",
 			class: 'halfWidth homeInfoCard weather',
-			icon: "query_stats",
+			icon: "insert_chart",
 			data: true
 		},
 		{
@@ -359,7 +359,7 @@ function Home() {
 					{/* Statistiekenblok */}
 					{dataPage && (
 						<button
-							className={`halfWidth homeInfoCard weather alternate ${wijk}`}
+							className={`halfWidth homeInfoCard weather alternate second-weather ${wijk}`}
 							onClick={() => openPage(dataPage)}
 						>
 							<div className="homeBtnD">

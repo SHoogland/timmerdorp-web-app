@@ -1,0 +1,343 @@
+@import "vars";
+
+.attendance-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.attendance-header {
+    text-align: center;
+    margin-bottom: 32px;
+    
+    h2 {
+        margin: 0;
+        color: $mediumBlack;
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+}
+
+.attendance-input-section {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 32px;
+    min-height: 120px;
+    justify-content: center;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    min-height: 80px;
+    justify-content: center;
+    
+    .wristband-number {
+        transition: all 0.2s ease;
+        border: 2px solid transparent;
+        line-height: 1;
+        vertical-align: middle;
+        display: block;
+        box-sizing: border-box;
+        
+        &:focus {
+            border-color: $blue;
+            background: #f8f9fa;
+            transform: scale(1.02);
+            outline: none;
+        }
+        
+        &:hover {
+            background: #f0f0f0;
+        }
+    }
+}
+
+#searchInput {
+	min-width: 100px;
+}
+
+.input-label {
+    font-weight: 600;
+    color: $mediumBlack;
+    font-size: 1.1rem;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+}
+
+.attendance-button {
+    min-width: 200px;
+    transition: all 0.2s ease;
+    
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+    
+    &:not(:disabled):hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(33, 150, 243, 0.3);
+    }
+    
+    &.green {
+        background-color: $green;
+        &:hover {
+            box-shadow: 0 6px 20px rgba(67, 160, 71, 0.3);
+        }
+    }
+}
+
+.loading-section {
+    text-align: center;
+    margin: 32px 0;
+    
+    p {
+        margin: 16px 0 0 0;
+        color: $mediumBlack;
+        font-weight: 500;
+    }
+}
+
+.attendance-card {
+    margin-top: 24px;
+    animation: slideInUp 0.4s ease-out;
+    
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .card-header {
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 16px;
+        margin-bottom: 20px;
+        
+        h3 {
+            margin: 0;
+            color: $blue;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        
+        // Wijk-based header colors
+        &.wijk-yellow h3 {
+            color: $darkTextColor;
+        }
+        
+        &.wijk-red h3 {
+            color: $red;
+        }
+        
+        &.wijk-blue h3 {
+            color: $blue;
+        }
+        
+        &.wijk-green h3 {
+            color: $green;
+        }
+    }
+    
+    .card-content {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 1px solid #f5f5f5;
+    gap: 20px;
+    
+    &:last-child {
+        border-bottom: none;
+    }
+    
+    // Special styling for rows with info icon
+    &:has(.info-icon) {
+        align-items: flex-start;
+        
+        .info-label {
+            flex-shrink: 0;
+        }
+        
+        .info-value {
+            flex: 1;
+            text-align: right;
+            margin-right: 8px;
+        }
+        
+        .info-icon {
+            flex-shrink: 0;
+        }
+    }
+}
+
+.info-label {
+    font-weight: 600;
+    color: $mediumBlack;
+    font-size: 1rem;
+}
+
+.info-value {
+    font-weight: 500;
+    color: $mediumBlack;
+    font-size: 1rem;
+    
+    &.status-present {
+        color: $green;
+        font-weight: 600;
+    }
+    
+    &.status-absent {
+        color: $red;
+        font-weight: 600;
+    }
+    
+    // Wijk-based accent colors
+    &.wijk-accent-yellow {
+        color: $yellow;
+        font-weight: 600;
+    }
+    
+    &.wijk-accent-red {
+        color: $red;
+        font-weight: 600;
+    }
+    
+    &.wijk-accent-blue {
+        color: $blue;
+        font-weight: 600;
+    }
+    
+    &.wijk-accent-green {
+        color: $green;
+        font-weight: 600;
+    }
+    
+    &.wijk-accent-onbekend {
+        color: $mediumBlack;
+        font-weight: 600;
+    }
+}
+
+.info-icon {
+    font-size: 1.2rem;
+    margin-left: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+        transform: scale(1.1);
+    }
+    
+    // Wijk-based accent colors for info icon
+    &.wijk-accent-yellow {
+        color: $yellow;
+    }
+    
+    &.wijk-accent-red {
+        color: $red;
+    }
+    
+    &.wijk-accent-blue {
+        color: $blue;
+    }
+    
+    &.wijk-accent-green {
+        color: $green;
+    }
+    
+    &.wijk-accent-onbekend {
+        color: $mediumBlack;
+    }
+}
+
+.error-card {
+    background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+    border-color: $red;
+    
+    .error-content {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        text-align: center;
+        width: 100%;
+        justify-content: center;
+        
+        .error-icon {
+            font-size: 2rem;
+        }
+        
+        p {
+            margin: 0;
+            color: #d32f2f;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+    }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    .attendance-container {
+        padding: 16px;
+    }
+    
+    .attendance-header h2 {
+        font-size: 1.6rem;
+    }
+    
+    .info-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .attendance-button {
+        min-width: 180px;
+    }
+}
+
+@media (max-width: 480px) {
+    .attendance-container {
+        padding: 12px;
+    }
+    
+    .attendance-header h2 {
+        font-size: 1.4rem;
+    }
+    
+    .attendance-button {
+        min-width: 160px;
+        padding: 20px 24px;
+    }
+}

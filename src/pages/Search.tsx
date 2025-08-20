@@ -1,5 +1,5 @@
 import Layout from '../layouts/layout.tsx';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import apiCall from '../utils/apiCall.ts';
 import '../scss/Search.scss';
@@ -17,6 +17,20 @@ function SearchPage() {
 	const [loading, setLoading] = useState(false);
 	const [errorTitle, setErrorTitle] = useState('');
 	const [errorHelpText, setErrorHelpText] = useState('');
+	const [searchParams, setSearchParams] = useSearchParams();
+	
+	// Function to get wijk color based on hut number
+	const getWijkColor = (hutNr: string): string => {
+		if (!hutNr) return 'onbekend';
+		const firstDigit = hutNr[0];
+		switch (firstDigit) {
+			case '0': return 'yellow';
+			case '1': return 'red';
+			case '2': return 'blue';
+			case '3': return 'green';
+			default: return 'onbekend';
+		}
+	};
 
 	const navigate = useNavigate();
 
@@ -69,6 +83,13 @@ function SearchPage() {
 		setSearchTerm(newSearchTerm);
 		setHasSearched(false);
 		setLastSearchedTerm('');
+		
+		// Update URL query parameters
+		if (newSearchTerm.length >= 3) {
+			setSearchParams({ q: newSearchTerm });
+		} else {
+			setSearchParams({});
+		}
 	};
 
 	useEffect(() => {
@@ -87,10 +108,9 @@ function SearchPage() {
 	}, [searchTerm]);
 
 	useEffect(() => {
-		if (window.location.href.includes('q=')) {
-			let searchQuery = window.location.href.split('q=')[1].split('&')[0];
-			searchQuery = decodeURIComponent(searchQuery);
-			setSearchTerm(searchQuery);
+		const queryParam = searchParams.get('q');
+		if (queryParam) {
+			setSearchTerm(queryParam);
 			if(!hasSearched && !loading) {
 				search();
 			}
@@ -100,20 +120,21 @@ function SearchPage() {
 
 	return (
 		<>
-			<Layout title="Zoek kinderen">
-				<center>
-					<h2>Zoek kinderen op naam, polsband of hutje: </h2>
+					<Layout title="Zoek kinderen">
+			<div className="search-container">
+				<h2>Zoek kinderen op naam, polsband of hutje</h2>
+				<div className="search-input-wrapper">
+					<span className="material-icons search-icon">search</span>
 					<input
 						type="text"
 						title="Zoekterm"
 						onChange={changeSearchTerm}
 						value={searchTerm}
 						placeholder="Zoekterm"
-						className='big'
 					/>
-					<br />
-					<LoadingIcon shown={loading}/>
-				</center>
+				</div>
+				<LoadingIcon shown={loading}/>
+			</div>
 
 				{searchResults.length > 0 && (
 					<div id="results">
@@ -124,12 +145,13 @@ function SearchPage() {
 									key={child.id}
 									onClick={() => navigate('/bekijk-ticket?ticket-id=' + child.id + '&q=' + searchTerm)}
 									style={{ borderBottom: '1px solid #ccc', width: '100%', textAlign: 'left' }}
+									className={`wijk-${getWijkColor(child.hutNr)}`}
 								>
 									<tbody className='ticketListItem'>
 										<tr>
 											<td>
-												<h3>Bandje <span>{child.wristband}</span></h3>
-												<h3>Hutje <span>{child.hutNr}</span></h3>
+												<h3>Bandje <span className={`wijk-accent-${getWijkColor(child.hutNr)}`}>{child.wristband}</span></h3>
+												<h3>Hutje <span className={`wijk-accent-${getWijkColor(child.hutNr)}`}>{child.hutNr}</span></h3>
 											</td>
 											<td>
 												<h2>
@@ -139,7 +161,7 @@ function SearchPage() {
 												</h2>
 											</td>
 											<td>
-												<button>i</button>
+												<button className={`wijk-accent-${getWijkColor(child.hutNr)}`}>i</button>
 											</td>
 										</tr>
 									</tbody>
