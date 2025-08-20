@@ -4,6 +4,7 @@ import apiCall from '../utils/apiCall';
 import { FaShareAlt, FaSearch, FaBirthdayCake } from 'react-icons/fa';
 import Layout from '../layouts/layout';
 import LoadingIcon from '../components/LoadingIcon';
+import '../scss/Birthdays.scss';
 
 const Birthdays: React.FC = () => {
 	const [loading, setLoading] = useState<boolean>(true);
@@ -11,11 +12,16 @@ const Birthdays: React.FC = () => {
 	const [data, setData] = useState<any>(null);
 	const [days] = useState<string[]>(['di', 'wo', 'do', 'vr']);
 	const [dates] = useState<string[]>(['Dinsdag 19 augustus', 'Woensdag 20 augustus', 'Donderdag 21 augustus', 'Vrijdag 22 augustus']);
+	const [currentWijk, setCurrentWijk] = useState<string>('blue');
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
+				// Get current wijk for theming
+				const wijkName = localStorage.getItem('wijkName') || 'blue';
+				setCurrentWijk(wijkName);
+				
 				const result = await apiCall('wijkStats');
 				if (result && result.response === 'success') {
 					setData(result.birthdays);
@@ -37,6 +43,24 @@ const Birthdays: React.FC = () => {
 
 		fetchData();
 	}, []);
+
+	// Function to get wijk color based on hut number
+	const getWijkColor = (hutNr: string): string => {
+		if (!hutNr) return 'onbekend';
+		const firstDigit = hutNr[0];
+		switch (firstDigit) {
+			case '0': return 'yellow';
+			case '1': return 'red';
+			case '2': return 'blue';
+			case '3': return 'green';
+			default: return 'onbekend';
+		}
+	};
+
+	// Function to get CSS class for wijk color
+	const getWijkClass = (hutNr: string): string => {
+		return getWijkColor(hutNr);
+	};
 
 	const shareDate = (d: string) => {
 		const bdays = data[d].kids;
@@ -71,7 +95,7 @@ const Birthdays: React.FC = () => {
 		<>
 			<Layout title="Verjaardagen">
 				{days.map((d, i) => (
-					<div key={d} id={d} className='peopleList'>
+					<div key={d} id={d} className={`peopleList wijk-${currentWijk}`}>
 						<div className='list-header' style={{ paddingLeft: '0px', position: 'relative' }}>
 							{dates[i]} ({data[d].count})
 							{data[d].kids.length > 0 && (
@@ -85,12 +109,15 @@ const Birthdays: React.FC = () => {
 							<div><b>Geen kinderen jarig</b></div>
 						) : (
 							data[d].kids.map((bday: any, idx: number) => (
-								<div key={idx} className={`childItem ${bday.hutNr}`} onClick={() => zoekKind(bday)}>
+								<div key={idx} className={`childItem ${getWijkClass(bday.hutNr)}`} onClick={() => zoekKind(bday)}>
 									<table style={{ width: "100%" }}>
 										<tbody>
 											<tr>
 												<td style={{ width: '48px' }}>
-													<FaBirthdayCake style={{ fontSize: '32px', position: 'relative', left: '2px' }} />
+													<FaBirthdayCake 
+														className={`birthday-cake-${getWijkColor(bday.hutNr)}`}
+														style={{ fontSize: '32px', position: 'relative', left: '2px' }} 
+													/>
 												</td>
 												<td style={{ paddingLeft: '0px' }}>
 													<h2 style={{marginBottom: '0px'}}>

@@ -16,11 +16,11 @@ header {
 
 	img {
 		position: relative;
-		top: 7.5px;
+		top: 12.5px;
 		float: right;
 		width: 75px;
-		height: 65px;
-		margin-right: 6px;
+		height: 56px;
+		margin-right: 12px;
 	}
 
 	#back-btn {
@@ -32,6 +32,13 @@ header {
 		margin-top: calc(80px / 2 - 40px / 2);
 		color: white;
 		cursor: pointer;
+	}
+
+	&.yellow,
+	&.white {
+		h1, #back-btn {
+			color: vars.$darkTextColor;
+		}
 	}
 
 	h1 {
@@ -52,10 +59,10 @@ header {
 		z-index: 2;
 		text-align: center;
 		left: 66px;
+		color: white;
 		&.home-header {
 			left: 0;
 		}
-		color: white;
 		&.no-back-button {
 			left: 12px;
 			width: calc(100% - 66px);
@@ -70,10 +77,6 @@ header {
 			font-size: 24px !important;
 			line-height: 24px;
 			padding-top: 28px;
-		}
-		&.yellow,
-		&.white {
-			color: #333;
 		}
 		.small {
 			font-size: 20px;

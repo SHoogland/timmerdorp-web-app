@@ -1,4 +1,4 @@
-@import "vars";
+@use "vars";
 // BottomBar styles
 
 .bottom-bar {
@@ -14,24 +14,24 @@
 }
 
 .bottom-bar.blue, .bottom-bar-btn.blue {
-	background: $blue;
-	color: $white;
+	background: vars.$blue;
+	color: vars.$white;
 }
 .bottom-bar.green, .bottom-bar-btn.green {
-	background: $green;
-	color: $white;
+	background: vars.$green;
+	color: vars.$white;
 }
 .bottom-bar.yellow, .bottom-bar-btn.yellow {
-	background: $yellow;
-	color: $white;
+	background: vars.$yellow;
+	color: vars.$darkTextColor;
 }
 .bottom-bar.red, .bottom-bar-btn.red {
-	background: $red;
-	color: $white;
+	background: vars.$red;
+	color: vars.$white;
 }
 .bottom-bar.white, .bottom-bar-btn.white {
-	background: $white;
-	color: $blue;
+	background: vars.$white;
+	color: vars.$blue;
 }
 
 .bottom-bar-btn {
@@ -43,7 +43,7 @@
 	align-items: center;
 	justify-content: center;
 	transition: background 0.2s;
-	color: $white;
+	color: vars.$white;
 	background: transparent;
 }
 .bottom-bar-btn:active, .bottom-bar-btn.active {

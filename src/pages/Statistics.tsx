@@ -17,6 +17,7 @@ function Statistics() {
 	const [isLoadingGraphData, setIsLoadingGraphData] = useState(true);
 	const [admins, setAdmins] = useState<any[]>([]);
 	const [wijken, setWijken] = useState<string[]>(['yellow', 'red', 'blue', 'green', 'hutlozen']);
+	const [currentWijk, setCurrentWijk] = useState<string>('blue');
 	const chartRef = useRef(null);
 
 
@@ -45,6 +46,7 @@ function Statistics() {
 		const fetchData = async () => {
 			try {
 				const wijk = await localStorage.getItem('wijkName') || 'yellow';
+				setCurrentWijk(wijk);
 				const sortedWijken = ['yellow', 'red', 'blue', 'green', 'hutlozen'].sort((w) => (wijk === w ? -1 : 1));
 				setWijken(sortedWijken);
 				await updateData();
@@ -261,11 +263,11 @@ function Statistics() {
 	return (
 		<Layout title="Statistieken" noPadding={true}>
 			{(isLoadingStats || isLoadingGraphData) && !isRefreshing && (
-				<div id="spinner">
+				<div id="spinner" className={`wijk-${currentWijk}`}>
 					<LoadingIcon />
 				</div>
 			)}
-			<div className={(isLoadingStats && !isRefreshing) ? 'hidden' : ''}>
+			<div className={`wijk-${currentWijk} ${(isLoadingStats && !isRefreshing) ? 'hidden' : ''}`}>
 				<h2>Aanwezigheid per wijk</h2>
 				<table className="left-column-fixed withHeader">
 					<tbody>
@@ -303,13 +305,13 @@ function Statistics() {
 					</tbody>
 				</table>
 			</div>
-			<div className={((isLoadingGraphData && !isRefreshing) || !showChildCountGraph) ? 'hidden' : ''}>
+			<div className={`wijk-${currentWijk} ${((isLoadingGraphData && !isRefreshing) || !showChildCountGraph) ? 'hidden' : ''}`}>
 				<h2>Aantal kinderen op het terrein</h2>
 				<div id="presencesByTimeChart" ref={chartRef}></div>
 			</div>
 
-			<div className={(isLoadingStats && !isRefreshing) ? 'hidden' : ''}>
-				<h2>Aanwezigheidstrijd</h2>
+			<div className={`wijk-${currentWijk} ${(isLoadingStats && !isRefreshing) ? 'hidden' : ''}`}>
+				<h2>Aanwezigheidsstrijd</h2>
 				<p style={{ padding: "4px 18px", fontWeight: "bold" }}>
 					Hieronder zie je wie er de meeste kinderen aanwezig heeft gemeld.
 				</p>
