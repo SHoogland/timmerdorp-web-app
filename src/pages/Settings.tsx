@@ -150,6 +150,16 @@ function Settings() {
 		}[englishWijkName];
 		setWijkName(wijkNaam || 'Onbekend');
 
+		const wijkCookie = {
+			blue: 'blauw',
+			green: 'groen',
+			red: 'rood',
+			yellow: 'geel',
+			white: 'wit',
+		}[englishWijkName];
+
+		document.cookie = `wijk=${wijkCookie}; path=/; max-age=31536000`;
+
 		setIsInitialized(true);
 
 		if(window.location.href.includes('confirm-admin-email')) {
