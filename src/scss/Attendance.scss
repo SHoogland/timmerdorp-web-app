@@ -32,11 +32,12 @@
 
 .attendance-input-section {
     display: flex;
-    flex-direction: column;
-    gap: 24px;
+    flex-direction: row;
+    gap: 16px;
     margin-bottom: 32px;
     min-height: 120px;
     justify-content: center;
+    align-items: center;
 }
 
 .input-group {
@@ -85,6 +86,10 @@
 .attendance-button {
     min-width: 200px;
     transition: all 0.2s ease;
+
+	top: 16px;
+	position: relative;
+	padding: 14px 32px!important;
     
     &:disabled {
         opacity: 0.6;

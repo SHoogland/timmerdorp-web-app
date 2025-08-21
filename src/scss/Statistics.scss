@@ -91,11 +91,10 @@ table {
 	}
 }
 
-tr.isYou {
+	tr.isYou {
 	td {
 		text-decoration: underline;
 		font-weight: bold;
-		background: rgba(33, 150, 243, 0.1) !important;
 	}
 }
 
@@ -186,7 +185,7 @@ thead td {
 	table {
 		&.left-column-fixed.withHeader,
 		&.cleanTable.withHeader.top-column-fixed {
-			margin: 10px 0;
+			margin: 10px 0px;
 			font-size: 15px;
 			
 			tbody {
