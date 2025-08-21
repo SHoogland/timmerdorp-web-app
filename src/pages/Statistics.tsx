@@ -269,41 +269,43 @@ function Statistics() {
 			)}
 			<div className={`wijk-${currentWijk} ${(isLoadingStats && !isRefreshing) ? 'hidden' : ''}`}>
 				<h2>Aanwezigheid per wijk</h2>
-				<table className="left-column-fixed withHeader">
-					<tbody>
-						<tr>
-							<td></td>
-							<td style={{ textAlign: 'center' }}>Totaal</td>
-							{wijken.map((wijk, index) => (
-								<td key={index} style={{ textAlign: 'center' }}>
-									{toSentenceCase(wijkNameMap[wijk] || wijk)}
-								</td>
+				<div style={{ padding: '0 12px' }}>
+					<table className="left-column-fixed withHeader" style={{ overflowX: 'scroll' }}>
+						<tbody>
+							<tr>
+								<td></td>
+								<td style={{ textAlign: 'center' }}>Totaal</td>
+								{wijken.map((wijk, index) => (
+									<td key={index} style={{ textAlign: 'center' }}>
+										{toSentenceCase(wijkNameMap[wijk] || wijk)}
+									</td>
+								))}
+							</tr>
+							{wijkprops.map((p, index) => (
+								<tr key={index}>
+									<td style={{ minWidth: '150px' }}>{p.title}</td>
+									<td style={{ textAlign: 'center' }}>{statistieken[p.prop] || ' – '}</td>
+									{wijken.map((w) => (
+										<td key={w} style={{ textAlign: 'center' }}>
+											{statistieken?.quarters?.[w]?.[p.prop] || ' – '}
+										</td>
+									))}
+								</tr>
 							))}
-						</tr>
-						{wijkprops.map((p, index) => (
-							<tr key={index}>
-								<td style={{ minWidth: '150px' }}>{p.title}</td>
-								<td style={{ textAlign: 'center' }}>{statistieken[p.prop] || ' – '}</td>
-								{wijken.map((w) => (
-									<td key={w} style={{ textAlign: 'center' }}>
-										{statistieken?.quarters?.[w]?.[p.prop] || ' – '}
-									</td>
-								))}
-							</tr>
-						))}
-						{allprops.map((p, index) => (
-							<tr key={index}>
-								<td style={{ minWidth: '150px' }}>{p.title}</td>
-								<td style={{ textAlign: 'center' }}>{statistieken[p.prop] || ' – '}</td>
-								{wijken.map((w) => (
-									<td key={w} style={{ textAlign: 'center' }}>
-										–
-									</td>
-								))}
-							</tr>
-						))}
-					</tbody>
-				</table>
+							{allprops.map((p, index) => (
+								<tr key={index}>
+									<td style={{ minWidth: '150px' }}>{p.title}</td>
+									<td style={{ textAlign: 'center' }}>{statistieken[p.prop] || ' – '}</td>
+									{wijken.map((w) => (
+										<td key={w} style={{ textAlign: 'center' }}>
+											–
+										</td>
+									))}
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
 			</div>
 			<div className={`wijk-${currentWijk} ${((isLoadingGraphData && !isRefreshing) || !showChildCountGraph) ? 'hidden' : ''}`}>
 				<h2>Aantal kinderen op het terrein</h2>
@@ -315,8 +317,8 @@ function Statistics() {
 				<p style={{ padding: "4px 18px", fontWeight: "bold" }}>
 					Hieronder zie je wie er de meeste kinderen aanwezig heeft gemeld.
 				</p>
-				<div style={{ overflowX: 'scroll' }}>
-					<table className='cleanTable withHeader top-column-fixed'>
+				<div style={{ padding: '0 12px' }}>
+					<table className='cleanTable withHeader top-column-fixed left-column-fixed' style={{ overflowX: 'scroll' }}>
 						<tbody>
 							<tr>
 								<td style={{ minWidth: '150px' }}>

@@ -3,7 +3,6 @@ import Layout from '../layouts/layout';
 import apiCall from '../utils/apiCall';
 import { useNavigate } from 'react-router-dom';
 import LoadingIcon from '../components/LoadingIcon';
-import { FaInfoCircle } from 'react-icons/fa';
 
 interface Ticket {
 	[key: string]: any;
@@ -211,14 +210,6 @@ function Attendance() {
 								<span className={`info-value status-${foundChild['aanwezig_' + weekday] ? 'present' : 'absent'}`}>
 									{foundChild['aanwezig_' + weekday] ? 'Ja' : 'Nee'}
 								</span>
-							</div>
-							
-							<div className="info-row">
-								<span className="info-label">Polsbandnummer:</span>
-								<span className={`info-value wijk-accent-${getWijkColor(foundChild.hutNr)}`}>
-									{wristbandNumber}
-								</span>
-								<FaInfoCircle className={`info-icon wijk-accent-${getWijkColor(foundChild.hutNr)}`} />
 							</div>
 						</div>
 					</div>

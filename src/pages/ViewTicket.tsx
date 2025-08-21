@@ -12,6 +12,7 @@ interface Ticket {
 
 interface TicketProperty {
 	label: string;
+	appLabel?: string;
 }
 
 interface TicketPropertiesMap {
@@ -78,7 +79,7 @@ function ViewTicket() {
 	const tableCategories = [
 		{
 			name: 'Gegevens Kind',
-			props: ['birthdate', 'wristband', 'hutNr', 'opmerkingen']
+			props: ['birthdate', 'wristband', 'hutNr', 'opmerkingen', 'hasSole']
 		},
 		{
 			name: 'Gegevens huisarts',
@@ -124,7 +125,10 @@ function ViewTicket() {
 
 	const getPropTr = (prop: string) => {
 		let valueTd = <td>{ticket[prop]}</td>
-		if (!ticket[prop]) {
+		// if it's a boolean, show ja or nee
+		if (typeof ticket[prop] === 'boolean') {
+			valueTd = <td>{ticket[prop] ? 'Ja' : 'Nee'}</td>
+		} else if (!ticket[prop]) {
 			valueTd = <td style={{ color: '#999', fontStyle: 'italic' }}>–</td>
 		} else {
 			if (prop.startsWith('tel')) {
@@ -138,7 +142,7 @@ function ViewTicket() {
 
 		return (
 			<tr key={prop} style={{ borderBottom: '1px solid #eee' }}>
-				<td style={{ fontWeight: '500', padding: '12px 16px 12px 0', color: '#555' }}>{(ticketPropertiesMap[prop] || {}).label}</td>
+				<td style={{ fontWeight: '500', padding: '12px 16px 12px 0', color: '#555' }}>{(ticketPropertiesMap[prop] || {}).appLabel || (ticketPropertiesMap[prop] || {}).label}</td>
 				{valueTd}
 			</tr>
 		)
