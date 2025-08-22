@@ -34,6 +34,7 @@ function Statistics() {
 		{ title: "Aanwezig di", prop: "aanwezig_di" },
 		{ title: "Aanwezig wo", prop: "aanwezig_wo" },
 		{ title: "Aanwezig do", prop: "aanwezig_do" },
+		...(statistieken?.aanwezig_vr !== undefined ? [{ title: "Aanwezig vr", prop: "aanwezig_vr" }] : []),
 	];
 
 	const allprops = [
@@ -333,6 +334,11 @@ function Statistics() {
 								<td>
 									Donderdag
 								</td>
+								{admins.some(admin => admin.vr !== undefined) && (
+									<td>
+										Vrijdag
+									</td>
+								)}
 								<td>
 									Totaal
 								</td>
@@ -343,6 +349,9 @@ function Statistics() {
 									<td>{admin.di || 0} </td>
 									<td>{admin.wo || 0} </td>
 									<td>{admin.do || 0} </td>
+									{admins.some(admin => admin.vr !== undefined) && (
+										<td>{admin.vr || 0}</td>
+									)}
 									<td>{admin.total || 0} </td>
 								</tr>
 							))}
