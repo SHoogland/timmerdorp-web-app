@@ -28,7 +28,8 @@
           - name: Start mongodb
             run: |
               docker compose up -d mongodb
-              docker compose up -d redis
+              sleep 5
+              docker compose up -d valkey
 
           - name: restore dump
             run: docker compose exec mongodb mongorestore --uri "mongodb://localhost:27017/dev" --nsExclude "admin.system.*" /dump

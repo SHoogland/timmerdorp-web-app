@@ -1,9 +1,15 @@
 services:
   mongodb:
     image: mongo:7.0
-    command: ["--bind_ip_all"]
+    command: ["--replSet", "rs0", "--bind_ip_all"]
     ports:
       - 27017:27017
+    healthcheck:
+      test: echo "try { rs.status() } catch (err) { rs.initiate() }" | mongosh --port 27017 --quiet
+      interval: 5s
+      timeout: 30s
+      start_period: 0s
+      retries: 30
     volumes:
       - ./dump:/dump
 
@@ -15,13 +21,14 @@ services:
       - DATABASE_URI=mongodb://mongodb:27017/dev
       - APP_ID=myAppId
       - JS_KEY=jsKey
+      - REDIS_URI_CUSTOM=redis://valkey:6379/2
+      - REDIS_URI_PARSE=redis://valkey:6379/5
+      - ENVIRONMENT=production
+    depends_on:
+      - mongodb
+      - valkey
 
-  redis:
-    image: "redis:alpine"
+  valkey:
+    image: "valkey/valkey:8.1.1-alpine"
     ports:
       - 6379:6379
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      start_period: 5s
-      retries: 10
