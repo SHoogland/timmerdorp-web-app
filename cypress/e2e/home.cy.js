@@ -2,7 +2,12 @@
 
 context('Viewport', () => {
 	beforeEach(() => {
-	  cy.visit('http://localhost:8080')
+	  // Method 2: Capture console logs from the start
+	  cy.visit('http://localhost:8080', {
+		onBeforeLoad(win) {
+		  cy.stub(win.console, 'log').as('consoleLog')
+		}
+	  })
 	})
   
 	it('cy.viewport() - set the viewport size and dimension', () => {
@@ -18,6 +23,16 @@ context('Viewport', () => {
 
     // we should be redirected to /
     cy.url().should('include', '/')
+
+    // Perform actions that should trigger the console log
+    // Then check if the message was logged
+    cy.get('@consoleLog').should('have.been.calledWith', 'Processing weather data')
+    
+    // Method 3: Check if console log contains partial text
+    cy.get('@consoleLog').should('have.been.calledWithMatch', /weather/i)
+    
+    // Method 4: Check multiple console calls
+    cy.get('@consoleLog').should('have.been.called')
 
 	//   // the navbar should have collapse since our screen is smaller
 	//   cy.get('#navbar').should('not.be.visible')
