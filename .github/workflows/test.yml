@@ -28,7 +28,6 @@
           - name: Start mongodb
             run: |
               docker compose up -d mongodb
-              sleep 5
               docker compose up -d valkey
 
           - name: restore dump
@@ -46,7 +45,9 @@
               docker run -d -p 8080:80 ghcr.io/shoogland/timmerdorp-web-app:$GITHUB_SHA
     
           - name: wait for docker image to start
-            run: sleep 10
+            run: |
+              sleep 10
+              docker compose logs
     
           - name: test docker image
             run: curl localhost:8080
