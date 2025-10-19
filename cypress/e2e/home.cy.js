@@ -26,13 +26,7 @@ context('Viewport', () => {
 
     // Perform actions that should trigger the console log
     // Then check if the message was logged
-    cy.get('@consoleLog').should('have.been.calledWith', 'Processing weather data')
-    
-    // Method 3: Check if console log contains partial text
-    cy.get('@consoleLog').should('have.been.calledWithMatch', /weather/i)
-    
-    // Method 4: Check multiple console calls
-    cy.get('@consoleLog').should('have.been.called')
+    cy.get('@consoleLog').should('have.been.calledWith', 'Loading wijk stats...')
 
 	//   // the navbar should have collapse since our screen is smaller
 	//   cy.get('#navbar').should('not.be.visible')

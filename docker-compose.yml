@@ -24,6 +24,9 @@ services:
       - REDIS_URI_CUSTOM=redis://valkey:6379/2
       - REDIS_URI_PARSE=redis://valkey:6379/5
       - ENVIRONMENT=production
+    depends_on:
+      - mongodb
+      - valkey
 
   valkey:
     image: "valkey/valkey:8.1.1-alpine"
