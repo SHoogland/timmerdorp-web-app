@@ -15,7 +15,7 @@
     "@amcharts/amcharts4": "^4.10.39",
     "@sentry/react": "^10.5.0",
     "@sentry/vite-plugin": "^4.1.1",
-    "bootstrap": "^5.3.7",
+    "bootstrap": "^5.3.8",
     "events": "^3.3.0",
     "html-react-parser": "^5.2.6",
     "html5-qrcode": "^2.3.8",
