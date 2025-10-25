@@ -22,7 +22,7 @@ context('Viewport', () => {
     cy.get('input[name=password]').type(`p_n7!-e8{enter}`)
 
     // we should be redirected to /
-    cy.url().should('include', '/')
+    cy.url().should('include', '/is-geen-beheerder')
 
     // Perform actions that should trigger the console log
     // Then check if the message was logged
