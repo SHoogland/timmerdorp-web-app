@@ -24,14 +24,13 @@ function Login() {
 		setLoading(true);
 		setErrorTitle('');
 		setErrorText('');
-		console.log('Logging in with');
 		await Parse.User.logIn(email, password)
-			// .catch(error => {
-			// 	setErrorTitle('Inloggen mislukt');
-			// 	setErrorText('Controleer je e-mailadres en wachtwoord en probeer het opnieuw.');
-			// 	console.log(error);
-			// 	setLoading(false);
-			// })
+			.catch(error => {
+				setErrorTitle('Inloggen mislukt');
+				setErrorText('Controleer je e-mailadres en wachtwoord en probeer het opnieuw.');
+				console.log(error);
+				setLoading(false);
+			})
 			.then(function (user) {
 				if (user) {
 					if(location.href.includes('redirect-to')) {
