@@ -25,3 +25,6 @@ dist-ssr
 
 # Sentry Config File
 .env.sentry-build-plugin
+
+cypress/videos
+cypress/screenshots
