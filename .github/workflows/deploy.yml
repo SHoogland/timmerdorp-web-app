@@ -30,6 +30,7 @@
           - name: vite build
             env:
               SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+              SENTRY_ENABLED: "true"
             run: |
               npm run build
 
