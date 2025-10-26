@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaExclamationTriangle } from 'react-icons/fa';
 import Card from '../components/Card';
 import LoadingIcon from '../components/LoadingIcon.tsx';
+import * as Sentry from "@sentry/react";
 
 function Login() {
 	const [email, setEmail] = useState('')
@@ -33,6 +34,7 @@ function Login() {
 			})
 			.then(function (user) {
 				if (user) {
+					Sentry.setTag("user", user.get("objectId"));
 					if(location.href.includes('redirect-to')) {
 						const redirect = location.href.split('redirect-to=')[1].split('&')[0];
 						navigate(decodeURIComponent(redirect));

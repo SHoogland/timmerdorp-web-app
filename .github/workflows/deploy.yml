@@ -26,8 +26,13 @@
           - name: npm ci
             run: |
               npm ci
-              npm run build
     
+          - name: vite build
+            env:
+              SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+            run: |
+              npm run build
+
           - name: Log in to ghcr.io with docker
             run: echo ${{ secrets.PAT }} | docker login ghcr.io -u shoogland --password-stdin
     

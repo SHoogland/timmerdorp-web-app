@@ -8,7 +8,9 @@ export default defineConfig({
     react(), 
     sentryVitePlugin({
       org: "timmerdorp",
-      project: "timmerdorp-web-app"
+      project: "timmerdorp-web-app",
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      telemetry: process.env.SENTRY_TELEMETRY === "true",
     })
   ],
 
