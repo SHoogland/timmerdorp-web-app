@@ -6,12 +6,11 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [
     react(), 
-    sentryVitePlugin({
+    ...(process.env.VITE_SENTRY_ENABLED === "true" ? [sentryVitePlugin({
       org: "timmerdorp",
       project: "timmerdorp-web-app",
       authToken: process.env.SENTRY_AUTH_TOKEN,
-      telemetry: process.env.SENTRY_TELEMETRY === "true",
-    })
+    })] : [])
   ],
 
   build: {

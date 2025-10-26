@@ -29,10 +29,15 @@ import EditTicket from './pages/EditTicket.tsx';
 import ViewTicket from './pages/ViewTicket.tsx';
 import * as Sentry from "@sentry/react";
 
-Sentry.init({
-  dsn: "https://de8fe7740ac1c8855a7ee7e3bbbde861@o4509875464175616.ingest.de.sentry.io/4509875485671504",
-  sendDefaultPii: true
-});
+if (import.meta.env.VITE_SENTRY_ENABLED === 'true') {
+  Sentry.init({
+    dsn: "https://de8fe7740ac1c8855a7ee7e3bbbde861@o4509875464175616.ingest.de.sentry.io/4509875485671504",
+    tunnel: "/tdorp-sentry-tunnel",
+    sendDefaultPii: true,
+    integrations: [Sentry.browserTracingIntegration()],
+    tracesSampleRate: 1.0, // consider reducing this value in production
+  });
+}
 
 initParse();
 

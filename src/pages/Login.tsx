@@ -34,8 +34,13 @@ function Login() {
 			})
 			.then(function (user) {
 				if (user) {
-					Sentry.setTag("user", user.get("objectId"));
-					if(location.href.includes('redirect-to')) {
+					if (import.meta.env.VITE_SENTRY_ENABLED === 'true') {
+						Sentry.setUser({
+							id: user.id,
+							email: user.get("email"),
+						});
+					}
+					if (location.href.includes('redirect-to')) {
 						const redirect = location.href.split('redirect-to=')[1].split('&')[0];
 						navigate(decodeURIComponent(redirect));
 					} else {
@@ -72,7 +77,7 @@ function Login() {
 				/>
 				<button className='big' onClick={() => login()}>Inloggen</button>
 
-				<LoadingIcon color="white" shown={loading}/>
+				<LoadingIcon color="white" shown={loading} />
 
 				{errorText && <Card
 					icon={FaExclamationTriangle}

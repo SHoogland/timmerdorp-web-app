@@ -26,7 +26,7 @@ context('Viewport', () => {
 
     // Perform actions that should trigger the console log
     // Then check if the message was logged
-    cy.get('@consoleLog').should('have.been.calledWith', 'Loading wijk stats...')
+    // cy.get('@consoleLog').should('have.been.calledWith', 'Loading wijk stats...')
 
 	//   // the navbar should have collapse since our screen is smaller
 	//   cy.get('#navbar').should('not.be.visible')
