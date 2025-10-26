@@ -1,6 +1,7 @@
 import Parse from 'parse';
 import handleParseException from './handleParseException';
 import redirectToLogin from './redirectToLogin.ts';
+import * as Sentry from "@sentry/react";
 
 const initParse = async () => {
 	Parse.initialize(
@@ -12,6 +13,12 @@ const initParse = async () => {
 	const currentUser = Parse.User.current();
 	if (currentUser) {
 		currentUser.fetch().catch(handleParseException)
+		if (import.meta.env.VITE_SENTRY_ENABLED === 'true') {
+			Sentry.setUser({
+				id: currentUser.id,
+				email: currentUser.get("email"),
+			});
+		}
 	} else {
 		redirectToLogin();
 	}
