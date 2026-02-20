@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import BottomBar from '../components/BottomBar';
+import HomeHeader from '../components/HomeHeader';
 import { useNavigate } from 'react-router-dom';
 import apiCall from '../utils/apiCall';
 import logOut from '../utils/logOut';
@@ -32,7 +33,6 @@ function Home() {
 	const [finishedWijkChoice, setFinishedWijkChoice] = useState(false);
 	const navigate = useNavigate();
 
-	const currentYear = new Date().getFullYear();
 	const [wijk, setWijk] = useState(getCurrentWijk());
 
 	// Update wijkkleur als localStorage wijzigt (bijvoorbeeld na wijkkeuze)
@@ -329,15 +329,7 @@ function Home() {
 
 	return (
 		<div className={`${wijk} homeContent`}>
-			<header className="home-header">
-				<div id="overlay">
-					<div id="titleContainer">
-						<h1 id="ptitle" className="home-header">
-							Timmerdorp <br />{currentYear}
-						</h1>
-					</div>
-				</div>
-			</header>
+			<HomeHeader />
 
 			<div id="homeBtnContainer">
 				<div id="homeButtons">
