@@ -12,36 +12,38 @@
     "preview": "vite preview",
     "dashboard": "parse-dashboard --config ./parse-dashboard-config.json"
   },
+  "engines": {
+    "node": "24"
+  },
   "dependencies": {
     "@amcharts/amcharts4": "^4.10.39",
-    "@sentry/react": "^10.22.0",
+    "@sentry/react": "^10.39.0",
     "@sentry/vite-plugin": "^4.6.0",
     "bootstrap": "^5.3.8",
     "events": "^3.3.0",
-    "html-react-parser": "^5.2.7",
+    "html-react-parser": "^5.2.17",
     "html5-qrcode": "^2.3.8",
-    "parse": "^7.0.2",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
+    "parse": "^8.2.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "react-icons": "^5.3.0",
     "react-router-dom": "^7.9.5"
   },
   "devDependencies": {
     "@types/events": "^3.0.3",
-    "@types/node": "^24.9.2",
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2",
+    "@types/node": "^25.3.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "@types/react-router-dom": "^5.3.3",
     "@typescript-eslint/eslint-plugin": "^8.46.2",
     "@typescript-eslint/parser": "^8.46.2",
-    "@vitejs/plugin-react": "^5.1.0",
-    "cypress": "^15.5.0",
-    "eslint": "^9.38.0",
+    "@vitejs/plugin-react": "^5.1.4",
+    "eslint": "^9.39.3",
     "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-react-refresh": "^0.4.24",
-    "parse-dashboard": "^7.5.0",
-    "sass": "^1.93.3",
+    "eslint-plugin-react-refresh": "^0.5.0",
+    "parse-dashboard": "^9.0.0",
+    "sass": "^1.97.3",
     "typescript": "^5.9.3",
-    "vite": "^7.1.12"
+    "vite": "^7.3.1"
   }
 }
