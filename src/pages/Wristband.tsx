@@ -9,7 +9,6 @@ interface Ticket {
 	[key: string]: any;
 }
 
-
 function Wristband() {
 	const [loading, setLoading] = useState(false);
 	const [isSaving, setIsSaving] = useState(false);
@@ -21,6 +20,17 @@ function Wristband() {
 	const [ticket, setTicket] = useState<Ticket>({});
 	const navigate = useNavigate();
 	const isMountedRef = useIsMounted();
+
+	const formatWristbandNr = (num: number | string) => {
+		num = '' + num;
+		if (num.length == 3) {
+			return num
+		} else if (num.length == 2) {
+			return '0' + num;
+		} else {
+			return '00' + num;
+		}
+	}
 
 	useEffect(() => {
 		if (window.location.href.includes('ticket-id=')) {
@@ -81,18 +91,6 @@ function Wristband() {
 			navigate('/');
 		}
 	}, []);
-
-
-	const formatWristbandNr = (num: number | string) => {
-		num = '' + num;
-		if (num.length == 3) {
-			return num
-		} else if (num.length == 2) {
-			return '0' + num;
-		} else {
-			return '00' + num;
-		}
-	}
 
 	const saveWristband = (wristbandNumberParam?: string) => {
 		// Prevent multiple simultaneous calls
