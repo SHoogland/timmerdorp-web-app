@@ -186,7 +186,6 @@
 					justify-content: center;
 
 					.info-icon {
-						font-family: 'Material Icons' !important; // Override the #results * rule
 						font-size: 24px;
 						color: vars.$blue;
 						cursor: pointer;
@@ -241,7 +240,6 @@
 						margin-left: auto; // Push to the right
 
 						.info-icon {
-							font-family: 'Material Icons' !important; // Override the #results * rule
 							font-size: 20px;
 						}
 					}
@@ -287,7 +285,6 @@
 						margin-left: auto; // Push to the right
 
 						.info-icon {
-							font-family: 'Material Icons' !important; // Override the #results * rule
 							font-size: 18px;
 						}
 					}
