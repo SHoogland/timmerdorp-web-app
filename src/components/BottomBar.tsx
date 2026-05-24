@@ -1,4 +1,5 @@
 import React from 'react';
+import Icon from './Icon';
 import '../scss/BottomBar.scss';
 
 interface BottomBarButton {
@@ -21,7 +22,7 @@ const BottomBar: React.FC<BottomBarProps> = ({ buttons, wijk }) => {
 				       className={`bottom-bar-btn ${wijk || ''}${btn.active ? ' active' : ''}`}
 				       onClick={btn.onClick}
 			       >
-				       <i className="material-icons">{btn.icon}</i>
+				       <Icon name={btn.icon} />
 			       </button>
 		       ))}
 	       </nav>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import BottomBar from '../components/BottomBar';
+import Icon from '../components/Icon';
 import { useNavigate } from 'react-router-dom';
 import apiCall from '../utils/apiCall';
 import logOut from '../utils/logOut';
@@ -348,7 +349,7 @@ function Home() {
 							onClick={() => openPage(weatherPage)}
 						>
 							<div className="homeBtnD">
-								<i className="material-icons">{weather && weather.icon ? weather.icon : weatherPage.icon}</i>
+								<Icon name={weather && weather.icon ? weather.icon : weatherPage.icon} />
 								{weather && (
 									<>
 										<h2>Het is {weather.temp}°C</h2>
@@ -367,7 +368,7 @@ function Home() {
 							onClick={() => openPage(dataPage)}
 						>
 							<div className="homeBtnD">
-								<i className="material-icons data">{dataPage.icon}</i>
+								<Icon name={dataPage.icon} className="data" />
 								<div id="data">
 									<div className="weatherMsg" style={{ top: '3px', fontSize: '80%' }}>
 										<p>{childrenCount} kind{childrenCount !== 1 ? "eren" : ""} hier</p>
@@ -390,7 +391,7 @@ function Home() {
 							className={`homeBtn alternate ${wijk}`}
 						>
 							<div className="homeBtnD">
-								<i className={`material-icons`}>{page.icon}</i>
+								<Icon name={page.icon} />
 								<span>{page.title}</span>
 							</div>
 						</button>

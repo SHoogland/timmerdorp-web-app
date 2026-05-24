@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import apiCall from '../utils/apiCall.ts';
 import '../scss/Search.scss';
 import LoadingIcon from '../components/LoadingIcon.tsx';
+import Icon from '../components/Icon.tsx';
 
 interface Ticket {
 	[key: string]: any;
@@ -124,7 +125,7 @@ function SearchPage() {
 				<div className="search-container">
 					<h2>Zoek kinderen op naam, polsband of hutje</h2>
 					<div className="search-input-wrapper">
-						<i className="material-icons search-icon">search</i>
+						<Icon name="search" className="search-icon" />
 						<input
 							type="text"
 							title="Zoekterm"
@@ -159,7 +160,7 @@ function SearchPage() {
 											</h2>
 										</div>
 										<div className="info-button-cell">
-											<i className="material-icons info-icon">info</i>
+											<Icon name="info" className="info-icon" />
 										</div>
 									</div>
 								</div>
