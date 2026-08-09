@@ -1,51 +1,78 @@
 @use "vars";
-// BottomBar styles
+
+// =============================================================
+//  Tab bar
+//  A frosted neutral surface rather than a slab of wijk colour:
+//  it keeps the accent meaningful (only the active tab wears it)
+//  and stops the bar competing with page content.
+// =============================================================
 
 .bottom-bar {
 	position: fixed;
 	left: 0;
+	right: 0;
 	bottom: 0;
-	width: 100vw;
-	height: 60px;
+	z-index: 60;
 	display: flex;
-	justify-content: space-around;
-	align-items: center;
-	z-index: 100;
-}
-
-.bottom-bar.blue, .bottom-bar-btn.blue {
-	background: vars.$blue;
-	color: vars.$white;
-}
-.bottom-bar.green, .bottom-bar-btn.green {
-	background: vars.$green;
-	color: vars.$white;
-}
-.bottom-bar.yellow, .bottom-bar-btn.yellow {
-	background: vars.$yellow;
-	color: vars.$darkTextColor;
-}
-.bottom-bar.red, .bottom-bar-btn.red {
-	background: vars.$red;
-	color: vars.$white;
-}
-.bottom-bar.white, .bottom-bar-btn.white {
-	background: vars.$white;
-	color: vars.$blue;
+	align-items: stretch;
+	height: var(--tabbar-total);
+	padding-bottom: var(--safe-bottom);
+	background: color-mix(in srgb, var(--c-surface) 82%, transparent);
+	backdrop-filter: saturate(180%) blur(20px);
+	-webkit-backdrop-filter: saturate(180%) blur(20px);
+	border-top: 1px solid var(--c-border);
 }
 
 .bottom-bar-btn {
-	border: none;
-	font-size: 2rem;
 	flex: 1;
-	height: 100%;
+	min-width: 0;
+	min-height: 0;
 	display: flex;
+	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	transition: background 0.2s;
-	color: vars.$white;
+	gap: 3px;
+	padding: 0 var(--s-1);
 	background: transparent;
+	border-radius: 0;
+	color: var(--c-text-3);
+	transition: color var(--d-2) var(--ease);
+
+	.material-icons {
+		font-size: 22px;
+		transition: transform var(--d-2) var(--ease-spring);
+	}
+
+	.bottom-bar-label {
+		font-size: 0.625rem;
+		font-weight: 650;
+		letter-spacing: 0.01em;
+		line-height: 1;
+		max-width: 100%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	&:active {
+		transform: none;
+
+		.material-icons {
+			transform: scale(0.86);
+		}
+	}
+
+	&.active {
+		color: var(--wijk);
+	}
+
+	&:focus-visible {
+		outline: none;
+		background: var(--wijk-soft);
+	}
 }
-.bottom-bar-btn:active, .bottom-bar-btn.active {
-	background: rgba(255,255,255,0.1);
+
+// White/EHBO has no usable accent of its own — fall back to ink.
+.theme-white .bottom-bar-btn.active {
+	color: var(--c-text);
 }

@@ -46,7 +46,7 @@ function Register() {
 			email,
 			firstName,
 			lastName,
-			domain: location.origin + (location.port ? ':' + location.port : ''),
+			domain: location.origin,
 		}, true).catch((e) => {
 			setErrorTitle('Registreren mislukt!')
 			if (e.message === 'Account already exists for this username.') {
@@ -65,49 +65,20 @@ function Register() {
 	}
 
 	return (
-		<Layout title='Registreren <<(stap 1/3)>>' disableBackButton={true} disableLogo={true} backgroundColor='blue'>
-			<div className="form">
-				<input
-					name="firstName"
-					value={firstName}
-					onChange={(e) => setfirstName(e.target.value)}
-					onKeyUp={(e) => e.key == 'Enter' ? register() : null}
-					type="text"
-					id="firstName"
-					placeholder="Voornaam"
-					autoComplete="given-name"
-				/>
-				<input
-					name="lastName"
-					value={lastName}
-					onChange={(e) => setlastName(e.target.value)}
-					onKeyUp={(e) => e.key == 'Enter' ? register() : null}
-					type="text"
-					id="lastName"
-					placeholder="Achternaam"
-					autoComplete="family-name"
-				/>
-				<input
-					name="email"
-					value={email}
-					onChange={(e) => setEmail(e.target.value)}
-					onKeyUp={(e) => e.key == 'Enter' ? register() : null}
-					type="email"
-					placeholder="E-mailadres"
-					autoComplete="email"
-				/>
-				<input
-					name="password"
-					value={password}
-					onChange={(e) => setPassword(e.target.value)}
-					onKeyUp={(e) => e.key == 'Enter' ? register() : null}
-					type="password"
-					placeholder="Wachtwoord"
-					autoComplete="new-password"
-				/>
-				<button className='big' onClick={() => register()}>Registreren</button>
-
-				<LoadingIcon color="white" shown={loading} />
+		<Layout noHeader={true} backgroundColor='blue'>
+			<div className="auth-page">
+				<div className="auth-head">
+					<div className="auth-brand">Timmerdorp App</div>
+					<h1 className="auth-title">Registreren</h1>
+					<div className="funnel-step">
+						<div className="funnel-progress" role="img" aria-label="Stap 1 van 3">
+							<span className="dot is-active" />
+							<span className="dot" />
+							<span className="dot" />
+						</div>
+						<span>Registreren, stap 1 van 3</span>
+					</div>
+				</div>
 
 				{errorText && <Card
 					icon={FaExclamationTriangle}
@@ -117,22 +88,64 @@ function Register() {
 					<p>{errorText}</p>
 				</Card>}
 
+				<div className="form">
+					<div className="name-row">
+						<input
+							name="firstName"
+							value={firstName}
+							onChange={(e) => setfirstName(e.target.value)}
+							onKeyUp={(e) => e.key == 'Enter' ? register() : null}
+							type="text"
+							placeholder="Voornaam"
+							autoComplete="given-name"
+						/>
+						<input
+							name="lastName"
+							value={lastName}
+							onChange={(e) => setlastName(e.target.value)}
+							onKeyUp={(e) => e.key == 'Enter' ? register() : null}
+							type="text"
+							placeholder="Achternaam"
+							autoComplete="family-name"
+						/>
+					</div>
+					<input
+						name="email"
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
+						onKeyUp={(e) => e.key == 'Enter' ? register() : null}
+						type="email"
+						placeholder="E-mailadres"
+						autoComplete="email"
+					/>
+					<input
+						name="password"
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+						onKeyUp={(e) => e.key == 'Enter' ? register() : null}
+						type="password"
+						placeholder="Wachtwoord"
+						autoComplete="new-password"
+					/>
+					<button className='big' onClick={() => register()}>Registreren</button>
 
-				<Card
-					icon={FaExclamationTriangle}
-					header="Let op!"
-				>
+					<LoadingIcon color="white" shown={loading} />
+				</div>
+
+
+				{/* Mirrors Login: one line for the alternate path, help folded away. */}
+				<p className="auth-alt">
+					Al een account? <a onClick={() => navigate('/login')}>Inloggen</a>
+				</p>
+
+				<details className="auth-note">
+					<summary>Heb je misschien al een account?</summary>
 					<ul>
-						<li>Accounts van vorig jaar werken ook nog steeds!</li>
-						<li>Heb je al een account gemaakt in de Timmerdorp-webshop, bijvoorbeeld om kaartjes te kopen voor je kinderen? Log dan in met dat webshop-account.</li>
+						<li>Accounts van vorig jaar werken ook nog steeds.</li>
+						<li>Heb je al een account in de Timmerdorp-webshop, bijvoorbeeld om kaartjes te kopen voor je kinderen? Log dan in met dat webshop-account.</li>
 					</ul>
-				</Card>
+				</details>
 			</div>
-			<footer className="one-button-footer">
-				<button onClick={() => navigate('/login')}>
-					Inloggen
-				</button>
-			</footer>
 		</Layout>
 	)
 }

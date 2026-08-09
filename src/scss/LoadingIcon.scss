@@ -2,14 +2,15 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	position: relative;
-	top: -8px;
 	width: 100%;
+	padding: var(--s-2) 0;
 
 	img {
-		width: 100px;
-		height: 80px;
+		width: 84px;
+		height: 68px;
+		object-fit: contain;
 	}
+
 	&:not(.shown) {
 		display: none;
 	}

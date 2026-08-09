@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { FaTimes } from 'react-icons/fa';
 import QrCode from '../components/QrCode.tsx';
+import '../scss/Settings.scss';
 
 function ScanTicket() {
 	const [scanning, setScanning] = useState(true);
@@ -19,28 +21,16 @@ function ScanTicket() {
 		<>
 			{scanning ?
 				<>
-					<span onClick={() => { setScanning(false); navigate('/') }} style={{
-						position: 'fixed',
-						top: 12,
-						left: 18,
-						fontSize: 36,
-						cursor: 'pointer',
-						zIndex: 3,
-						color: 'white',
-					}}>x</span>
-					<div style={{
-						position: 'fixed',
-						top: 0,
-						left: 0,
-						width: '100%',
-						height: '100%',
-						background: 'black',
-						display: 'flex',
-						justifyContent: 'center',
-						alignItems: 'center',
-						zIndex: 2,
-					}}>
-						<div style={{ width: '100%' }}>
+					<button
+						type="button"
+						className="scanner-close"
+						aria-label="Sluiten"
+						onClick={() => { setScanning(false); navigate('/') }}
+					>
+						<FaTimes />
+					</button>
+					<div className="scanner-page">
+						<div className="scanner-stage">
 							<QrCode
 								fps={2}
 								qrbox={{ width: 250, height: 250 }}

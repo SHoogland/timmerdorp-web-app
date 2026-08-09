@@ -1,305 +1,210 @@
 @use "vars";
 
-.ticketListItem {
-	* {
-		font-size: 16px;
-		font-weight: normal;
+// =============================================================
+//  Zoek kinderen
+//  The search field is the page: it sticks under the app bar and
+//  the results scroll underneath it.
+// =============================================================
+
+.search-page {
+	// Per-hut colour dot. One of the few views that shows all four
+	// wijk colours at once, so the raw palette is allowed here.
+	.wijk-yellow {
+		--hut: var(--yellow);
+		--hut-soft: var(--yellow-soft);
+		--hut-ink: var(--yellow-ink);
 	}
-}
-
-// Enhanced search bar styling
-.search-container {
-	text-align: center;
-	margin: 20px 0 30px 0;
-
-	h2 {
-		margin-bottom: 20px;
-		color: vars.$mediumBlack;
-		font-size: 1.4em;
+	.wijk-red {
+		--hut: var(--red);
+		--hut-soft: var(--red-soft);
+		--hut-ink: var(--red-ink);
+	}
+	.wijk-blue {
+		--hut: var(--blue);
+		--hut-soft: var(--blue-soft);
+		--hut-ink: var(--blue-ink);
+	}
+	.wijk-green {
+		--hut: var(--green);
+		--hut-soft: var(--green-soft);
+		--hut-ink: var(--green-ink);
+	}
+	.wijk-onbekend {
+		--hut: var(--c-border-strong);
+		--hut-soft: var(--c-surface-sunken);
+		--hut-ink: var(--c-text-2);
 	}
 
-	.search-input-wrapper {
+	// ---- Sticky search bar -------------------------------------
+	.search-bar {
+		position: sticky;
+		// Sits directly under the app bar, which is itself sticky.
+		top: calc(var(--appbar-h) + var(--safe-top));
+		z-index: 30;
+		// Full-bleed so results do not peek out beside the bar.
+		margin: calc(var(--s-5) * -1) calc(var(--gutter) * -1) var(--s-5);
+		padding: var(--s-3) var(--gutter);
+		background: var(--c-bg);
+		border-bottom: 1px solid var(--c-border);
+	}
+
+	.search-field {
 		position: relative;
-		display: inline-block;
-		max-width: 400px;
-		width: 100%;
 
-		input[type="text"] {
-			width: 100%;
-			height: 56px;
-			padding: 0 20px;
-			font-size: 18px;
-			border: 2px solid #e0e0e0;
-			border-radius: 28px;
-			background: white;
-			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-			transition: all 0.3s ease;
-			font-family: Roboto, Arial, Helvetica, sans-serif;
-			box-sizing: border-box;
-			font-weight: bold;
+		.search-field-icon {
+			position: absolute;
+			left: var(--s-4);
+			top: 50%;
+			transform: translateY(-50%);
+			display: flex;
+			font-size: 22px;
+			color: var(--c-text-3);
+			pointer-events: none;
+			transition: color var(--d-2) var(--ease);
+		}
 
-			&:hover {
-				border-color: #ccc;
-				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-			}
+		input[type="search"] {
+			-webkit-appearance: none;
+			appearance: none;
+			min-height: 56px;
+			padding-left: var(--s-12);
+			padding-right: var(--s-4);
+			border-radius: var(--r-full);
+			font-size: 1.0625rem;
+			font-weight: 600;
+			box-shadow: var(--e-1);
 
-			&:focus {
-				outline: none;
-				border-color: vars.$blue;
-				box-shadow: 0 4px 16px rgba(33, 150, 243, 0.2);
-				transform: translateY(-1px);
+			&::-webkit-search-cancel-button,
+			&::-webkit-search-decoration {
+				-webkit-appearance: none;
 			}
 
 			&::placeholder {
-				color: #999;
-				font-style: italic;
+				font-weight: 500;
 			}
 		}
 
-		.search-icon {
-			position: absolute;
-			left: 20px;
-			top: 50%;
-			transform: translateY(-50%);
-			z-index: 1;
-			pointer-events: none;
-			color: #666;
-		}
-
-		input[type="text"] {
-			padding-left: 50px;
+		&:focus-within .search-field-icon {
+			color: var(--wijk);
 		}
 	}
-}
 
-// Enhanced search results styling
-#results {
-	margin: 20px 0;
-	* {
-		font-family: Roboto, Arial, Helvetica, sans-serif !important;
+	// ---- Results -----------------------------------------------
+	.result-list {
+		display: flex;
+		flex-direction: column;
+		gap: var(--s-2);
 	}
 
-	// Wijk-based accent colors
-	.wijk-accent-yellow {
-		color: vars.$yellow!important;
-		font-weight: 600;
-	}
+	.result-card {
+		display: flex;
+		align-items: center;
+		gap: var(--s-3);
+		width: 100%;
+		min-height: 72px;
+		padding: var(--s-3) var(--s-4);
+		text-align: left;
+		background: var(--c-surface);
+		color: var(--c-text);
+		border-radius: var(--r-lg);
+		border-left: 4px solid var(--hut, var(--c-border-strong));
+		box-shadow: var(--e-1);
+		font-weight: 400;
 
-	.wijk-accent-red {
-		color: vars.$red!important;
-		font-weight: 600;
-	}
+		&:hover {
+			background: var(--c-surface-2);
+			box-shadow: var(--e-2);
+		}
 
-	.wijk-accent-blue {
-		color: vars.$blue!important;
-		font-weight: 600;
-	}
-	.wijk-accent-green {
-		color: vars.$green!important;
-		font-weight: 600;
-	}
-	.wijk-accent-onbekend {
-		color: vars.$mediumBlack;
-		font-weight: 600;
-	}
+		.result-main {
+			flex: 1;
+			min-width: 0;
+			display: flex;
+			flex-direction: column;
+			gap: var(--s-2);
+		}
 
-	h3 {
-		color: vars.$mediumBlack;
-		font-size: 1.8em;
-		margin-top: 48px;
-		margin-bottom: 24px;
-		text-align: center;
-		font-weight: 600;
-	}
+		.result-name {
+			font-size: var(--t-h3);
+			font-weight: 700;
+			line-height: 1.2;
+			letter-spacing: -0.01em;
+			color: var(--c-text);
+			// Long double names wrap rather than overflow the card.
+			overflow-wrap: anywhere;
+		}
 
-	.peopleList {
-		list-style: none;
-		padding: 0;
-		margin: 0;
+		.result-meta {
+			display: flex;
+			flex-wrap: wrap;
+			gap: var(--s-2);
+		}
 
-		.search-result-card {
-			border: none !important;
-			border-radius: 12px;
-			margin-bottom: 12px;
-			background: white;
-			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-			transition: all 0.2s ease;
-			cursor: pointer;
-			overflow: hidden;
+		.chip {
+			display: inline-flex;
+			align-items: baseline;
+			gap: var(--s-1);
+			padding: 2px var(--s-2);
+			border-radius: var(--r-full);
+			background: var(--c-surface-sunken);
+			font-size: var(--t-micro);
+			line-height: 1.5;
+			color: var(--c-text-2);
 
-			&:hover {
-				box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-				transform: translateY(-1px);
+			.chip-value {
+				font-weight: 700;
+				color: var(--c-text);
 			}
 
-			&:active {
-				transform: translateY(0);
-			}
+			// The hut chip carries the wijk colour, so the dot on the
+			// left edge is repeated where the number actually is.
+			&:last-child {
+				background: var(--hut-soft, var(--c-surface-sunken));
+				color: var(--hut-ink, var(--c-text-2));
 
-			.result-content {
-				display: flex;
-				align-items: center;
-				padding: 16px;
-				gap: 16px;
-
-				.result-info {
-					flex-shrink: 0;
-					min-width: 80px;
-
-					h3 {
-						margin: 0 0 8px 0;
-						font-size: 1.1em;
-						color: #666;
-						font-weight: 500;
-
-						span {
-							font-weight: 600;
-							color: vars.$blue;
-							display: block;
-							margin-top: 2px;
-						}
-					}
-				}
-
-				.result-name {
-					flex: 1;
-					min-width: 0;
-
-					h2 {
-						margin: 0;
-						font-size: 1.4em;
-						top: -4px;
-						position: relative;
-						color: vars.$mediumBlack;
-						font-weight: 600;
-						line-height: 1.3;
-					}
-				}
-
-				.info-button-cell {
-					flex-shrink: 0;
-					flex-basis: 48px;
-					width: 48px;
-					height: 48px;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-
-					.info-icon {
-						font-size: 24px;
-						color: vars.$blue;
-						cursor: pointer;
-						transition: all 0.2s ease;
-						-webkit-user-select: none;
-						user-select: none;
-
-						&:hover {
-							color: vars.$mediumBlack;
-							transform: scale(1.1);
-						}
-					}
+				.chip-value {
+					color: var(--hut-ink, var(--c-text));
 				}
 			}
 		}
-	}
-}
 
-// Mobile responsiveness
-@media (max-width: 768px) {
-	#results {
-		.peopleList {
-			.search-result-card {
-				.result-content {
-					padding: 12px;
-					gap: 12px;
+		// A chevron, not an info badge: tapping the row navigates, so the
+		// affordance should say "goes somewhere", quietly.
+		.result-icon {
+			display: flex;
+			flex: 0 0 auto;
+			width: 14px;
+			height: 14px;
+			color: var(--c-border-strong);
+			transition: transform var(--d-2) var(--ease);
+		}
 
-					.result-info {
-						min-width: 70px;
+		&:active .result-icon {
+			transform: translateX(2px);
+		}
 
-						h3 {
-							font-size: 0.8em;
-
-							span {
-								font-size: 0.9em;
-							}
-						}
-					}
-
-					.result-name {
-						h2 {
-							font-size: 1.2em;
-							font-weight: bold;
-							top: -4px;
-							position: relative;
-						}
-					}
-
-					.info-button-cell {
-						width: 40px;
-						height: 40px;
-						margin-left: auto; // Push to the right
-
-						.info-icon {
-							font-size: 20px;
-						}
-					}
-				}
-			}
+		// Shown when a child has neither a wristband nor a hut yet.
+		.chip.chip-empty {
+			background: transparent;
+			padding-left: 0;
+			color: var(--c-text-3);
+			font-weight: 550;
+			font-style: italic;
 		}
 	}
-}
 
-@media (max-width: 480px) {
-	#results {
-		.peopleList {
-			.search-result-card {
-				.result-content {
-					padding: 10px;
-					gap: 8px;
+	// ---- Error --------------------------------------------------
+	.search-error {
+		padding: var(--s-4);
+		border-radius: var(--r-lg);
+		background: var(--red-soft);
+		color: var(--red-ink);
+		font-size: var(--t-small);
 
-					.result-info {
-						min-width: 60px;
-
-						h3 {
-							font-size: 0.75em;
-							margin-bottom: 6px;
-
-							span {
-								font-size: 0.85em;
-							}
-						}
-					}
-
-					.result-name {
-						h2 {
-							font-size: 1.1em;
-							font-weight: bold;
-							top: -4px;
-							position: relative;
-						}
-					}
-
-					.info-button-cell {
-						width: 36px;
-						height: 36px;
-						margin-left: auto; // Push to the right
-
-						.info-icon {
-							font-size: 18px;
-						}
-					}
-				}
-			}
+		b {
+			display: block;
+			margin-bottom: var(--s-1);
+			font-size: var(--t-body);
 		}
 	}
-}
-
-#modal {
-	position: absolute;
-	z-index: 3;
-	top: 0;
-	left: 0;
-	width: 100vw;
-	height: 100vh;
-	background: white;
 }

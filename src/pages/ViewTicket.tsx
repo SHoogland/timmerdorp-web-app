@@ -19,52 +19,21 @@ interface TicketPropertiesMap {
 	[key: string]: TicketProperty;
 }
 
-// Theme configuration based on hutNr/wijk
-const getThemeColors = (hutNr: string) => {
-	if (!hutNr) return { primary: '#007bff', secondary: '#6c757d', accent: '#3498db' };
-	
-	const firstDigit = hutNr.charAt(0);
-	switch (firstDigit) {
-		case '0': // Yellow theme
-			return {
-				primary: '#f5e31d', // Standard yellow wijk color
-				secondary: '#6c757d',
-				accent: '#f5e31d',
-				primaryText: '#333', // Dark text for yellow
-				accentText: '#333'
-			};
-		case '1': // Red theme
-			return {
-				primary: '#ee0202', // Standard red wijk color
-				secondary: '#6c757d',
-				accent: '#ee0202',
-				primaryText: '#fff',
-				accentText: '#fff'
-			};
-		case '2': // Blue theme
-			return {
-				primary: '#2196f3', // Standard blue wijk color
-				secondary: '#6c757d',
-				accent: '#2196f3',
-				primaryText: '#fff',
-				accentText: '#fff'
-			};
-		case '3': // Green theme
-			return {
-				primary: '#43a047', // Standard green wijk color
-				secondary: '#6c757d',
-				accent: '#43a047',
-				primaryText: '#fff',
-				accentText: '#fff'
-			};
-		default: // Default blue theme
-			return {
-				primary: '#2196f3', // Standard blue wijk color
-				secondary: '#6c757d',
-				accent: '#2196f3',
-				primaryText: '#fff',
-				accentText: '#fff'
-			};
+// The detail page wears the wijk of the child's own hut. Theming is done by
+// re-pointing the --wijk-* tokens with the shared theme class, never by
+// hardcoding colours here.
+const getWijkThemeClass = (hutNr: string) => {
+	switch (('' + (hutNr || '')).charAt(0)) {
+		case '0':
+			return 'theme-yellow';
+		case '1':
+			return 'theme-red';
+		case '2':
+			return 'theme-blue';
+		case '3':
+			return 'theme-green';
+		default:
+			return '';
 	}
 };
 
@@ -73,13 +42,12 @@ function ViewTicket() {
 	const [ticket, setTicket] = useState<Ticket>({});
 	const [ticketPropertiesMap, setTicketPropertiesMap] = useState<TicketPropertiesMap>({});
 	const [canEditTickets, setCanEditTickets] = useState(false);
-	const [themeColors, setThemeColors] = useState(getThemeColors(''));
 	const navigate = useNavigate();
 
 	const tableCategories = [
 		{
 			name: 'Gegevens Kind',
-			props: ['birthdate', 'wristband', 'hutNr', 'opmerkingen', 'hasSole']
+			props: ['birthdate', 'opmerkingen', 'hasSole']
 		},
 		{
 			name: 'Gegevens huisarts',
@@ -116,9 +84,6 @@ function ViewTicket() {
 				setTicket(result.ticket);
 				setTicketPropertiesMap(result.ticketPropertiesMap);
 				setCanEditTickets(result.canEditTickets);
-				
-				// Set theme colors based on hutNr
-				setThemeColors(getThemeColors(result.ticket.hutNr || ''));
 			});
 		}
 	}, []);
@@ -129,20 +94,20 @@ function ViewTicket() {
 		if (typeof ticket[prop] === 'boolean') {
 			valueTd = <td>{ticket[prop] ? 'Ja' : 'Nee'}</td>
 		} else if (!ticket[prop]) {
-			valueTd = <td style={{ color: '#999', fontStyle: 'italic' }}>–</td>
+			valueTd = <td className="is-empty">–</td>
 		} else {
 			if (prop.startsWith('tel')) {
-				valueTd = <td><a href={'tel:' + ticket[prop]} style={{ color: themeColors.accent, textDecoration: 'none' }}>{ticket[prop]}</a></td>
+				valueTd = <td><a href={'tel:' + ticket[prop]}>{ticket[prop]}</a></td>
 			}
 			if (prop.endsWith('email')) {
-				valueTd = <td><a href={'mailto:' + ticket[prop]} style={{ color: themeColors.accent, textDecoration: 'none' }}>{ticket[prop]}</a></td>
+				valueTd = <td><a href={'mailto:' + ticket[prop]}>{ticket[prop]}</a></td>
 			}
 		}
 
 
 		return (
-			<tr key={prop} style={{ borderBottom: '1px solid #eee' }}>
-				<td style={{ fontWeight: '500', padding: '12px 16px 12px 0', color: '#555' }}>{(ticketPropertiesMap[prop] || {}).appLabel || (ticketPropertiesMap[prop] || {}).label}</td>
+			<tr key={prop}>
+				<td>{(ticketPropertiesMap[prop] || {}).appLabel || (ticketPropertiesMap[prop] || {}).label}</td>
 				{valueTd}
 			</tr>
 		)
@@ -153,252 +118,87 @@ function ViewTicket() {
 		window.history.back();
 	}
 
+	const history = ticket.history || [];
+
 	return (
-		<Layout noHeader={true} noPadding={true}>
+		<Layout title="" noPadding={true} onBack={goBack} theme={getWijkThemeClass(ticket.hutNr).replace('theme-', '')}>
 			<LoadingIcon shown={loading} />
 			{!loading &&
-				<div className="ticketCard" style={{ 
-					maxWidth: '800px', 
-					margin: '0 auto', 
-					backgroundColor: '#fff',
-					borderRadius: '12px',
-					boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-					position: 'relative',
-					minHeight: '100vh'
-				}}>
-					{/* Close button in top right corner */}
-					<button 
-						onClick={goBack}
-						style={{
-							position: 'absolute',
-							top: '20px',
-							right: '20px',
-							background: 'none',
-							border: 'none',
-							fontSize: '24px',
-							cursor: 'pointer',
-							color: '#666',
-							width: '44px',
-							height: '44px',
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'center',
-							borderRadius: '50%',
-							transition: 'all 0.2s ease',
-							zIndex: 10
-						}}
-						onMouseEnter={(e) => {
-							e.currentTarget.style.background = '#f0f0f0';
-							e.currentTarget.style.color = '#333';
-						}}
-						onMouseLeave={(e) => {
-							e.currentTarget.style.background = 'none';
-							e.currentTarget.style.color = '#666';
-						}}
-					>
-						✕
-					</button>
-					<div style={{ padding: "40px 32px 32px 32px" }}>
-						<h1 style={{ 
-							margin: '0 0 24px 0', 
-							color: '#2c3e50', 
-							fontSize: '28px',
-							fontWeight: '600',
-							borderBottom: `2px solid ${themeColors.primary}`,
-							paddingBottom: '12px'
-						}}>
-							{ticket.firstName} {ticket.lastName}
-						</h1>
-						
-						{tableCategories.map((cat, index) => (
-							<div key={cat.name} style={{ marginBottom: index < tableCategories.length - 1 ? '32px' : '24px' }}>
-								<h3 style={{ 
-									color: '#34495e', 
-									margin: '0 0 16px 0',
-									fontSize: '18px',
-									fontWeight: '600'
-								}}>
-									{cat.name}
-								</h3>
-								<table style={{ 
-									width: '100%', 
-									borderCollapse: 'collapse',
-									backgroundColor: '#f8f9fa',
-									borderRadius: '8px',
-									overflow: 'hidden'
-								}}>
-									<tbody>
-										{cat.props.map((prop) => getPropTr(prop))}
-									</tbody>
-								</table>
-							</div>
-						))}
-						
-						<h3 style={{ 
-							color: '#34495e', 
-							margin: '32px 0 16px 0',
-							fontSize: '18px',
-							fontWeight: '600'
-						}}>
-							Gebeurtenissen
-						</h3>
-						<ul style={{ 
-							margin: '0 0 24px 0', 
-							paddingLeft: '20px',
-							backgroundColor: '#f8f9fa',
-							padding: '8px 32px',
-							borderRadius: '8px'
-						}}>
-							{ticket.history && ticket.history.map((h: Parse.Object, index: number) => (
-								<li key={index} style={{ 
-									marginBottom: '8px',
-									color: '#555',
-									lineHeight: '1.5'
-								}}>
-									{h.get('desc')}
-								</li>
-							))}
-						</ul>
+				<div className={'ticketCard ' + getWijkThemeClass(ticket.hutNr)}>
+					<h1 className="ticket-name">
+						{ticket.firstName} {ticket.lastName}
+					</h1>
+
+					<div className="ticket-subline">
+						{ticket.wristband
+							? <span className="ticket-chip">Bandje {ticket.wristband}</span>
+							: <span className="ticket-chip neutral">Nog geen bandje</span>}
+						{ticket.hutNr
+							? <span className="ticket-chip">Hutje {ticket.hutNr}</span>
+							: <span className="ticket-chip neutral">Nog geen hutje</span>}
 					</div>
-					
-					<div style={{ 
-						padding: '0 32px 32px 32px',
-						display: 'flex',
-						flexWrap: 'wrap',
-						gap: '12px',
-						justifyContent: 'center'
-					}}>
-						<button 
-							onClick={goBack}
-							style={{
-								padding: '12px 24px',
-								backgroundColor: themeColors.secondary,
-								color: 'white',
-								border: 'none',
-								borderRadius: '6px',
-								cursor: 'pointer',
-								fontSize: '14px',
-								fontWeight: '500',
-								transition: 'all 0.2s ease'
-							}}
-							onMouseEnter={(e) => {
-								e.currentTarget.style.backgroundColor = '#5a6268';
-							}}
-							onMouseLeave={(e) => {
-								e.currentTarget.style.backgroundColor = themeColors.secondary;
-							}}
-						>
-							Sluiten
-						</button>
+
+					{tableCategories.map((cat) => (
+						<div className="ticket-group" key={cat.name}>
+							<h3>{cat.name}</h3>
+							<table className="ticket-table">
+								<tbody>
+									{cat.props.map((prop) => getPropTr(prop))}
+								</tbody>
+							</table>
+						</div>
+					))}
+
+					<div className="ticket-group">
+						<h3>Gebeurtenissen</h3>
+						{history.length > 0
+							? (
+								<ul className="ticket-events">
+									{history.map((h: Parse.Object, index: number) => (
+										<li key={index}>{h.get('desc')}</li>
+									))}
+								</ul>
+							)
+							: (
+								<div className="panel">
+									<div className="empty-state">
+										<p>nog geen gebeurtenissen over dit kind gevonden</p>
+									</div>
+								</div>
+							)}
+					</div>
+
+					<div className="ticket-actions">
 						{canEditTickets && (
-							<button 
+							<button
+								className="span-2"
 								onClick={() => navigate('/bewerk-ticket?ticket-id=' + ticket.id)}
-								style={{
-									padding: '12px 24px',
-									backgroundColor: themeColors.accent,
-									color: themeColors.accentText,
-									border: 'none',
-									borderRadius: '6px',
-									cursor: 'pointer',
-									fontSize: '14px',
-									fontWeight: '500',
-									transition: 'all 0.2s ease'
-								}}
-								onMouseEnter={(e) => {
-									e.currentTarget.style.backgroundColor = themeColors.primary;
-								}}
-								onMouseLeave={(e) => {
-									e.currentTarget.style.backgroundColor = themeColors.accent;
-								}}
 							>
 								Bewerken
 							</button>
 						)}
-						<button 
-							onClick={() => navigate('/polsbandje?ticket-id=' + ticket.id + '&origin=search')}
-							style={{
-								padding: '12px 24px',
-								backgroundColor: themeColors.primary,
-								color: themeColors.primaryText,
-								border: 'none',
-								borderRadius: '6px',
-								cursor: 'pointer',
-								fontSize: '14px',
-								fontWeight: '500',
-								transition: 'all 0.2s ease'
-							}}
-							onMouseEnter={(e) => {
-								e.currentTarget.style.backgroundColor = themeColors.accent;
-							}}
-							onMouseLeave={(e) => {
-								e.currentTarget.style.backgroundColor = themeColors.primary;
-							}}
+						<button
+							className="btn-secondary"
+							onClick={() => navigate('/polsbandje?ticket-id=' + ticket.id + '&origin=ticket')}
 						>
 							Polsbandje wijzigen
 						</button>
-						<button 
-							onClick={() => navigate('/hutje?ticket-id=' + ticket.id)}
-							style={{
-								padding: '12px 24px',
-								backgroundColor: themeColors.primary,
-								color: themeColors.primaryText,
-								border: 'none',
-								borderRadius: '6px',
-								cursor: 'pointer',
-								fontSize: '14px',
-								fontWeight: '500',
-								transition: 'all 0.2s ease'
-							}}
-							onMouseEnter={(e) => {
-								e.currentTarget.style.backgroundColor = themeColors.accent;
-							}}
-							onMouseLeave={(e) => {
-								e.currentTarget.style.backgroundColor = themeColors.primary;
-							}}
+						<button
+							className="btn-secondary"
+							disabled={!ticket.hutNr}
+							onClick={() => navigate('/hutjes?hutNr=' + ticket.hutNr)}
 						>
 							Naar hutje
 						</button>
-						<button 
+						<button
+							className="btn-secondary"
 							onClick={() => navigate('/aanwezigheid?bandje=' + ticket.wristband)}
-							style={{
-								padding: '12px 24px',
-								backgroundColor: themeColors.primary,
-								color: themeColors.primaryText,
-								border: 'none',
-								borderRadius: '6px',
-								cursor: 'pointer',
-								fontSize: '14px',
-								fontWeight: '500',
-								transition: 'all 0.2s ease'
-							}}
-							onMouseEnter={(e) => {
-								e.currentTarget.style.backgroundColor = themeColors.accent;
-							}}
-							onMouseLeave={(e) => {
-								e.currentTarget.style.backgroundColor = themeColors.primary;
-							}}
 						>
 							Naar aanwezigheid
 						</button>
-						<button 
+						<button
+							className="btn-neutral"
 							onClick={() => navigate('/')}
-							style={{
-								padding: '12px 24px',
-								backgroundColor: themeColors.primary,
-								color: themeColors.primaryText,
-								border: 'none',
-								borderRadius: '6px',
-								cursor: 'pointer',
-								fontSize: '14px',
-								fontWeight: '500',
-								transition: 'all 0.2s ease'
-							}}
-							onMouseEnter={(e) => {
-								e.currentTarget.style.backgroundColor = themeColors.accent;
-							}}
-							onMouseLeave={(e) => {
-								e.currentTarget.style.backgroundColor = themeColors.primary;
-							}}
 						>
 							Terug naar homepagina
 						</button>

@@ -1,347 +1,325 @@
-@use "vars";
+// =============================================================
+//  Aanwezigheid
+//  The highest-frequency screen of the event: type three digits,
+//  read one name, hit one big button. Everything here is sized for
+//  a thumb, in sunlight, while standing up.
+// =============================================================
 
-.attendance-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    animation: fadeIn 0.5s ease-out;
-}
+.attendance-page {
+	display: flex;
+	flex-direction: column;
+	gap: var(--s-5);
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+	// Fill the viewport so the action rail always lands at the bottom
+	// of the screen, even when only the input is on the page.
+	min-height: calc(100dvh - var(--appbar-h) - var(--safe-top) - var(--s-5));
+	// Cancel the shell's bottom padding so the rail sits flush.
+	margin-bottom: calc(-1 * (var(--s-8) + var(--safe-bottom)));
 
-.attendance-header {
-    text-align: center;
-    margin-bottom: 32px;
-    
-    h2 {
-        margin: 0;
-        color: vars.$mediumBlack;
-        font-size: 1.8rem;
-        font-weight: 600;
-    }
-}
+	.attendance-day {
+		margin: 0;
+		font-size: var(--t-h2);
+		color: var(--c-text);
+	}
 
-.attendance-input-section {
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
-    margin-bottom: 32px;
-    min-height: 120px;
-    justify-content: center;
-    align-items: center;
-}
+	// ---- Number entry -----------------------------------------
 
-.input-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    min-height: 80px;
-    justify-content: center;
-    
-    .wristband-number {
-        transition: all 0.2s ease;
-        border: 2px solid transparent;
-        line-height: 1;
-        display: block;
-        box-sizing: border-box;
-        
-        &:focus {
-            border-color: vars.$blue;
-            background: #f8f9fa;
-            transform: scale(1.02);
-            outline: none;
-        }
-        
-        &:hover {
-            background: #f0f0f0;
-        }
-    }
-}
+	.attendance-entry {
+		label {
+			text-align: center;
+			margin-bottom: var(--s-2);
+		}
+	}
 
-#searchInput {
-	min-width: 100px;
-}
+	.attendance-input {
+		width: 100%;
+		height: 78px;
+		min-height: 78px;
+		padding: 0;
+		text-align: center;
+		font-size: 2.5rem;
+		font-weight: 700;
+		line-height: 1;
+		// Wide tracking keeps the three digits legible at a glance.
+		letter-spacing: 0.2em;
+		// Half the tracking back, so the trailing gap does not pull the
+		// digits off-centre.
+		text-indent: 0.1em;
+		font-variant-numeric: tabular-nums;
+		border-radius: var(--r-lg);
+		box-shadow: var(--e-1);
+		caret-color: var(--wijk);
 
-.input-label {
-    font-weight: 600;
-    color: vars.$mediumBlack;
-    font-size: 1.1rem;
-}
+		&::placeholder {
+			color: var(--n-300);
+			font-weight: 700;
+		}
+	}
 
-.button-group {
-    display: flex;
-    justify-content: center;
-}
+	// ---- Result slot ------------------------------------------
+	// Collapses entirely when nothing has been searched yet, so the
+	// flex gap does not leave a hole above the action rail.
+	.attendance-slot:empty {
+		display: none;
+	}
 
-.attendance-button {
-    min-width: 200px;
-    transition: all 0.2s ease;
+	.attendance-loading {
+		display: flex;
+		align-items: center;
+		gap: var(--s-2);
+		padding: var(--s-3) var(--s-4);
+		background: var(--c-surface);
+		border: 1px solid var(--c-border);
+		border-radius: var(--r-lg);
+		box-shadow: var(--e-1);
 
-	top: 16px;
-	position: relative;
-	padding: 14px 32px!important;
-    
-    &:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-        transform: none;
-    }
-    
-    &:not(:disabled):hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(33, 150, 243, 0.3);
-    }
-    
-    &.green {
-        background-color: vars.$green;
-        &:hover {
-            box-shadow: 0 6px 20px rgba(67, 160, 71, 0.3);
-        }
-    }
-}
+		.loading-icon {
+			width: auto;
+			flex: 0 0 auto;
+			padding: 0;
 
-.loading-section {
-    text-align: center;
-    margin: 32px 0;
-    
-    p {
-        margin: 16px 0 0 0;
-        color: vars.$mediumBlack;
-        font-weight: 500;
-    }
-}
+			img {
+				width: 52px;
+				height: 42px;
+			}
+		}
 
-.attendance-card {
-    margin-top: 24px;
-    animation: slideInUp 0.4s ease-out;
-    
-    @keyframes slideInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .card-header {
-        border-bottom: 2px solid #f0f0f0;
-        padding-bottom: 16px;
-        margin-bottom: 20px;
-        
-        h3 {
-            margin: 0;
-            color: vars.$blue;
-            font-size: 1.4rem;
-            font-weight: 600;
-        }
-        
-        // Wijk-based header colors
-        &.wijk-yellow h3 {
-            color: vars.$darkTextColor;
-        }
-        
-        &.wijk-red h3 {
-            color: vars.$red;
-        }
-        
-        &.wijk-blue h3 {
-            color: vars.$blue;
-        }
-        
-        &.wijk-green h3 {
-            color: vars.$green;
-        }
-    }
-    
-    .card-content {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-    }
-}
+		p {
+			margin: 0;
+			font-weight: 600;
+			color: var(--c-text-2);
+		}
+	}
 
-.info-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 20px;
-    border-bottom: 1px solid #f5f5f5;
-    gap: 20px;
-    
-    &:last-child {
-        border-bottom: none;
-    }
-    
-    // Special styling for rows with info icon
-    &:has(.info-icon) {
-        align-items: flex-start;
-        
-        .info-label {
-            flex-shrink: 0;
-        }
-        
-        .info-value {
-            flex: 1;
-            text-align: right;
-            margin-right: 8px;
-        }
-        
-        .info-icon {
-            flex-shrink: 0;
-        }
-    }
-}
+	.attendance-result {
+		padding: var(--s-5);
+		background: var(--c-surface);
+		border: 1px solid var(--c-border);
+		border-radius: var(--r-lg);
+		box-shadow: var(--e-2);
+		animation: fadeUp var(--d-2) var(--ease) both;
+	}
 
-.info-label {
-    font-weight: 600;
-    color: vars.$mediumBlack;
-    font-size: 1rem;
-}
+	// The name is the thing the volunteer is actually checking.
+	.attendance-name {
+		margin: 0 0 var(--s-4);
+		font-size: clamp(1.75rem, 8vw, 2.25rem);
+		color: var(--c-text);
+		overflow-wrap: anywhere;
+	}
 
-.info-value {
-    font-weight: 500;
-    color: vars.$mediumBlack;
-    font-size: 1rem;
-    
-    &.status-present {
-        color: vars.$green;
-        font-weight: 600;
-    }
-    
-    &.status-absent {
-        color: vars.$red;
-        font-weight: 600;
-    }
-    
-    // Wijk-based accent colors
-    &.wijk-accent-yellow {
-        color: vars.$yellow;
-        font-weight: 600;
-    }
-    
-    &.wijk-accent-red {
-        color: vars.$red;
-        font-weight: 600;
-    }
-    
-    &.wijk-accent-blue {
-        color: vars.$blue;
-        font-weight: 600;
-    }
-    
-    &.wijk-accent-green {
-        color: vars.$green;
-        font-weight: 600;
-    }
-    
-    &.wijk-accent-onbekend {
-        color: vars.$mediumBlack;
-        font-weight: 600;
-    }
-}
+	.attendance-facts {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--s-2);
+		margin-bottom: var(--s-4);
+	}
 
-.info-icon {
-    font-size: 1.2rem;
-    margin-left: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    
-    &:hover {
-        transform: scale(1.1);
-    }
-    
-    // Wijk-based accent colors for info icon
-    &.wijk-accent-yellow {
-        color: vars.$yellow;
-    }
-    
-    &.wijk-accent-red {
-        color: vars.$red;
-    }
-    
-    &.wijk-accent-blue {
-        color: vars.$blue;
-    }
-    
-    &.wijk-accent-green {
-        color: vars.$green;
-    }
-    
-    &.wijk-accent-onbekend {
-        color: vars.$mediumBlack;
-    }
-}
+	.attendance-fact {
+		flex: 1 1 140px;
+		min-width: 0;
+		padding: var(--s-3);
+		background: var(--c-surface-2);
+		border: 1px solid var(--c-border);
+		border-radius: var(--r-md);
 
-.error-card {
-    background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
-    border-color: vars.$red;
-    
-    .error-content {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        text-align: center;
-        width: 100%;
-        justify-content: center;
-        
-        .error-icon {
-            font-size: 2rem;
-        }
-        
-        p {
-            margin: 0;
-            color: #d32f2f;
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-    }
-}
+		// One of the few places all four wijk colours can appear at once, so
+		// the raw hue tokens are used directly rather than --wijk.
+		&.is-wijk {
+			background: var(--hut-soft);
+			border-color: color-mix(in srgb, var(--hut) 35%, transparent);
 
-// Responsive design
-@media (max-width: 768px) {
-    .attendance-container {
-        padding: 16px;
-    }
-    
-    .attendance-header h2 {
-        font-size: 1.6rem;
-    }
-    
-    .info-row {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-    
-    .attendance-button {
-        min-width: 180px;
-    }
-}
+			.fact-label {
+				color: var(--hut-ink);
+				opacity: 0.75;
+			}
 
-@media (max-width: 480px) {
-    .attendance-container {
-        padding: 12px;
-    }
-    
-    .attendance-header h2 {
-        font-size: 1.4rem;
-    }
-    
-    .attendance-button {
-        min-width: 160px;
-        padding: 20px 24px;
-    }
+			.fact-value {
+				color: var(--hut-ink);
+			}
+		}
+
+		&.hut-yellow {
+			--hut: var(--yellow);
+			--hut-soft: var(--yellow-soft);
+			--hut-ink: var(--yellow-ink);
+		}
+		&.hut-red {
+			--hut: var(--red);
+			--hut-soft: var(--red-soft);
+			--hut-ink: var(--red-ink);
+		}
+		&.hut-blue {
+			--hut: var(--blue);
+			--hut-soft: var(--blue-soft);
+			--hut-ink: var(--blue-ink);
+		}
+		&.hut-green {
+			--hut: var(--green);
+			--hut-soft: var(--green-soft);
+			--hut-ink: var(--green-ink);
+		}
+		&.hut-onbekend {
+			--hut: var(--n-400);
+			--hut-soft: var(--c-surface-sunken);
+			--hut-ink: var(--c-text-2);
+		}
+	}
+
+	.fact-label {
+		display: block;
+		font-size: var(--t-small);
+		font-weight: 600;
+		color: var(--c-text-2);
+		margin-bottom: var(--s-1);
+	}
+
+	.fact-value {
+		display: flex;
+		align-items: center;
+		gap: var(--s-2);
+		font-size: 1.375rem;
+		font-weight: 700;
+		line-height: 1.2;
+		color: var(--c-text);
+		font-variant-numeric: tabular-nums;
+
+		&.is-empty {
+			font-size: var(--t-body);
+			font-weight: 600;
+			color: var(--c-text-3);
+		}
+	}
+
+	// A hut number encodes its wijk in the first digit, so this is the
+	// one place all four wijk colours legitimately appear at once.
+	.hut-dot {
+		flex: 0 0 auto;
+		width: 12px;
+		height: 12px;
+		border-radius: var(--r-full);
+		box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c-text) 16%, transparent);
+
+		&.hut-yellow {
+			background: var(--yellow);
+		}
+		&.hut-red {
+			background: var(--red);
+		}
+		&.hut-blue {
+			background: var(--blue);
+		}
+		&.hut-green {
+			background: var(--green);
+		}
+		&.hut-onbekend {
+			background: var(--n-300);
+		}
+	}
+
+	// ---- Presence state ----------------------------------------
+	// Icon + word + colour, so it still reads in glare or without
+	// colour vision.
+	.attendance-presence {
+		display: flex;
+		align-items: center;
+		gap: var(--s-3);
+		min-height: var(--tap);
+		padding: var(--s-3) var(--s-4);
+		border-radius: var(--r-md);
+
+		svg {
+			flex: 0 0 auto;
+			width: 28px;
+			height: 28px;
+		}
+
+		.presence-copy {
+			min-width: 0;
+		}
+
+		.presence-label {
+			display: block;
+			font-size: var(--t-small);
+			font-weight: 600;
+		}
+
+		.presence-value {
+			display: block;
+			font-size: 1.25rem;
+			font-weight: 700;
+			line-height: 1.2;
+		}
+
+		&.is-present {
+			background: var(--green-soft);
+			color: var(--green-ink);
+		}
+
+		&.is-absent {
+			background: var(--c-surface-sunken);
+			color: var(--c-text-2);
+
+			.presence-value {
+				color: var(--c-text);
+			}
+		}
+	}
+
+	// ---- Not found ---------------------------------------------
+
+	.attendance-error {
+		margin: 0;
+		max-width: none;
+		animation: fadeUp var(--d-2) var(--ease) both;
+
+		.card-header {
+			margin: 0;
+		}
+	}
+
+	// ---- Action rail -------------------------------------------
+	// Sticks to the bottom of the screen so the primary action is
+	// always under a thumb, however long the page gets.
+	.attendance-actionbar {
+		position: sticky;
+		bottom: 0;
+		margin-top: auto;
+		// Bleed past the page gutter so the frosted panel spans the shell.
+		margin-left: calc(-1 * var(--gutter));
+		margin-right: calc(-1 * var(--gutter));
+		padding: var(--s-4) var(--gutter) calc(var(--s-4) + var(--safe-bottom));
+		background: color-mix(in srgb, var(--c-bg) 86%, transparent);
+		backdrop-filter: saturate(180%) blur(16px);
+		-webkit-backdrop-filter: saturate(180%) blur(16px);
+		border-top: 1px solid var(--c-border);
+	}
+
+	.attendance-action {
+		width: 100%;
+		min-height: 58px;
+		font-size: 1.125rem;
+		border-radius: var(--r-lg);
+		box-shadow: var(--e-2);
+
+		&:disabled {
+			box-shadow: none;
+		}
+	}
+
+	// Shown when the page is opened outside Tuesday-Friday. Calm and
+	// explanatory: the old behaviour was an alert() plus a redirect home.
+	.attendance-closed {
+		margin-bottom: var(--s-5);
+		padding: var(--s-4);
+		border-radius: var(--r-lg);
+		background: var(--c-surface-sunken);
+		border-left: 4px solid var(--c-border-strong);
+
+		p {
+			margin: 0;
+			font-size: var(--t-small);
+			color: var(--c-text-2);
+		}
+	}
 }

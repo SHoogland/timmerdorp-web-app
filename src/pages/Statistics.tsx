@@ -39,8 +39,8 @@ function Statistics() {
 
 	const allprops = [
 		{ title: "Totaal aantal kinderen", prop: "count" },
-		{ title: "Aantal kinderen met hutnummer", prop: "haveHutnr" },
-		{ title: "Aantal kinderen met armbandje", prop: "haveWristband" }
+		{ title: "Kinderen met hutnummer", prop: "haveHutnr" },
+		{ title: "Kinderen met armbandje", prop: "haveWristband" }
 	];
 
 	useEffect(() => {
@@ -224,12 +224,17 @@ function Statistics() {
 		valueAxis.title.text = "Aantal kinderen";
 	};
 
+	// Series colours are read off the stylesheet at draw time so the chart
+	// can never drift from the design tokens.
+	const cssVar = (name: string) =>
+		getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
 	const createSeries = (chart: any) => {
 		const seriesList = [
-			{ name: 'Geel', key: 'y', color: '#fce700' },
-			{ name: 'Rood', key: 'r', color: '#ee0202' },
-			{ name: 'Blauw', key: 'b', color: '#2196f3' },
-			{ name: 'Groen', key: 'g', color: '#43a047' }
+			{ name: 'Geel', key: 'y', color: cssVar('--yellow') },
+			{ name: 'Rood', key: 'r', color: cssVar('--red') },
+			{ name: 'Blauw', key: 'b', color: cssVar('--blue') },
+			{ name: 'Groen', key: 'g', color: cssVar('--green') }
 		];
 
 		seriesList.forEach(seriesData => {
@@ -248,7 +253,7 @@ function Statistics() {
 
 		const totalSeries = chart.series.push(new am4charts.LineSeries());
 		totalSeries.dataFields.valueY = "v";
-		totalSeries.stroke = am4core.color('#000');
+		totalSeries.stroke = am4core.color(cssVar('--c-text'));
 		totalSeries.dataFields.categoryX = "t";
 		totalSeries.name = "Totaal aantal kinderen";
 		totalSeries.strokeWidth = 3;
@@ -261,108 +266,123 @@ function Statistics() {
 		updateData();
 	};
 
+	const showVrijdag = admins.some((admin) => admin.vr !== undefined);
+	// The attendance battle is meaningless until someone has actually checked
+	// a child in, so it stays hidden until the first presence is recorded.
+	// Data-driven on purpose: duplicating the event dates from the API here
+	// would create a second source of truth that can drift.
+	const hasAnyPresence = admins.some((admin) =>
+		['di', 'wo', 'do', 'vr'].some((d) => Number(admin[d]) > 0)
+	);
+
 	return (
 		<Layout title="Statistieken" noPadding={true}>
-			{(isLoadingStats || isLoadingGraphData) && !isRefreshing && (
-				<div id="spinner" className={`wijk-${currentWijk}`}>
-					<LoadingIcon />
-				</div>
-			)}
-			<div className={`wijk-${currentWijk} ${(isLoadingStats && !isRefreshing) ? 'hidden' : ''}`}>
-				<h2>Aanwezigheid per wijk</h2>
-				<div style={{ padding: '0 12px' }}>
-					<table className="left-column-fixed withHeader" style={{ overflowX: 'scroll' }}>
-						<tbody>
-							<tr>
-								<td></td>
-								<td style={{ textAlign: 'center' }}>Totaal</td>
-								{wijken.map((wijk, index) => (
-									<td key={index} style={{ textAlign: 'center' }}>
-										{toSentenceCase(wijkNameMap[wijk] || wijk)}
-									</td>
+			<div className={`stats-page has-fab wijk-${currentWijk}`}>
+				{(isLoadingStats || isLoadingGraphData) && !isRefreshing && (
+					<div id="spinner">
+						<LoadingIcon shown={true} />
+					</div>
+				)}
+
+				<section className={`section ${(isLoadingStats && !isRefreshing) ? 'hidden' : ''}`}>
+					<h2 className="section-title">Aanwezigheid per wijk</h2>
+					<div className="table-wrap">
+						<table className="stats-table left-column-fixed withHeader">
+							<tbody>
+								<tr>
+									<td></td>
+									<td>Totaal</td>
+									{wijken.map((wijk, index) => (
+										<td key={index}>
+											{toSentenceCase(wijkNameMap[wijk] || wijk)}
+										</td>
+									))}
+								</tr>
+								{wijkprops.map((p, index) => (
+									<tr key={index}>
+										<td>{p.title}</td>
+										<td>{statistieken[p.prop] || ' – '}</td>
+										{wijken.map((w) => (
+											<td key={w}>
+												{statistieken?.quarters?.[w]?.[p.prop] || ' – '}
+											</td>
+										))}
+									</tr>
 								))}
-							</tr>
-							{wijkprops.map((p, index) => (
-								<tr key={index}>
-									<td style={{ minWidth: '150px' }}>{p.title}</td>
-									<td style={{ textAlign: 'center' }}>{statistieken[p.prop] || ' – '}</td>
-									{wijken.map((w) => (
-										<td key={w} style={{ textAlign: 'center' }}>
-											{statistieken?.quarters?.[w]?.[p.prop] || ' – '}
-										</td>
-									))}
-								</tr>
-							))}
-							{allprops.map((p, index) => (
-								<tr key={index}>
-									<td style={{ minWidth: '150px' }}>{p.title}</td>
-									<td style={{ textAlign: 'center' }}>{statistieken[p.prop] || ' – '}</td>
-									{wijken.map((w) => (
-										<td key={w} style={{ textAlign: 'center' }}>
-											–
-										</td>
-									))}
-								</tr>
-							))}
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<div className={`wijk-${currentWijk} ${((isLoadingGraphData && !isRefreshing) || !showChildCountGraph) ? 'hidden' : ''}`}>
-				<h2>Aantal kinderen op het terrein</h2>
-				<div id="presencesByTimeChart" ref={chartRef}></div>
-			</div>
+								{allprops.map((p, index) => (
+									<tr key={index}>
+										<td>{p.title}</td>
+										<td>{statistieken[p.prop] || ' – '}</td>
+										{wijken.map((w) => (
+											<td key={w}>
+												–
+											</td>
+										))}
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
+				</section>
 
-			<div className={`wijk-${currentWijk} ${(isLoadingStats && !isRefreshing) ? 'hidden' : ''}`}>
-				<h2>Aanwezigheidsstrijd</h2>
-				<p style={{ padding: "4px 18px", fontWeight: "bold" }}>
-					Hieronder zie je wie er de meeste kinderen aanwezig heeft gemeld.
-				</p>
-				<div style={{ padding: '0 12px' }}>
-					<table className='cleanTable withHeader top-column-fixed left-column-fixed' style={{ overflowX: 'scroll' }}>
-						<tbody>
-							<tr>
-								<td style={{ minWidth: '150px' }}>
-									Naam
-								</td>
-								<td>
-									Dinsdag
-								</td>
-								<td>
-									Woensdag
-								</td>
-								<td>
-									Donderdag
-								</td>
-								{admins.some(admin => admin.vr !== undefined) && (
+				<section className={`section ${((isLoadingGraphData && !isRefreshing) || !showChildCountGraph) ? 'hidden' : ''}`}>
+					<h2 className="section-title">Aantal kinderen op het terrein</h2>
+					<div className="chart-card">
+						<div id="presencesByTimeChart" ref={chartRef}></div>
+					</div>
+				</section>
+
+				<section className={`section ${((isLoadingStats && !isRefreshing) || !hasAnyPresence) ? 'hidden' : ''}`}>
+					<h2 className="section-title">Aanwezigheidsstrijd</h2>
+					<p className="section-intro">
+						Hieronder zie je wie er de meeste kinderen aanwezig heeft gemeld.
+					</p>
+					<div className="table-wrap">
+						<table className="stats-table leaderboard withHeader top-column-fixed left-column-fixed">
+							<tbody>
+								<tr>
 									<td>
-										Vrijdag
+										Naam
 									</td>
-								)}
-								<td>
-									Totaal
-								</td>
-							</tr>
-							{admins.map((admin, index) => (
-								<tr key={index} className={admin.isYou ? 'isYou' : ''}>
-									<td className={admin.wijk}>{admin.naam}</td>
-									<td>{admin.di || 0} </td>
-									<td>{admin.wo || 0} </td>
-									<td>{admin.do || 0} </td>
-									{admins.some(admin => admin.vr !== undefined) && (
-										<td>{admin.vr || 0}</td>
+									<td>
+										Dinsdag
+									</td>
+									<td>
+										Woensdag
+									</td>
+									<td>
+										Donderdag
+									</td>
+									{showVrijdag && (
+										<td>
+											Vrijdag
+										</td>
 									)}
-									<td>{admin.total || 0} </td>
+									<td>
+										Totaal
+									</td>
 								</tr>
-							))}
-						</tbody>
-					</table>
-				</div>
-			</div>
+								{admins.map((admin, index) => (
+									<tr key={index} className={admin.isYou ? 'isYou' : ''}>
+										<td className={admin.wijk}>{admin.naam}</td>
+										<td>{admin.di || 0}</td>
+										<td>{admin.wo || 0}</td>
+										<td>{admin.do || 0}</td>
+										{showVrijdag && (
+											<td>{admin.vr || 0}</td>
+										)}
+										<td>{admin.total || 0}</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
+				</section>
 
-			<button type="button" title="verversen" className="fab sticky bottom-right" onClick={refreshData}>
-				<FaSyncAlt className={isRefreshing ? 'isRotating' : ''} />
-			</button>
+				<button type="button" title="verversen" className="fab sticky bottom-right" onClick={refreshData}>
+					<FaSyncAlt className={isRefreshing ? 'isRotating' : ''} />
+				</button>
+			</div>
 		</Layout>
 	);
 }

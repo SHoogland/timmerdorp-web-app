@@ -1,210 +1,169 @@
-@use "vars";
+// =============================================================
+//  Statistics page
+//  Everything lives under .stats-page — this partial is @use'd from
+//  styles.scss, so a bare `table {}` / `h2 {}` here would repaint the
+//  whole app.
+// =============================================================
 
-#main {
-	text-align: center;
-	button {
-		span span {
-			font-weight: normal;
-			font-size: 20px;
+.stats-page {
+	padding: 0 var(--gutter);
+
+	// ---- Sections ---------------------------------------------
+
+	.section:last-of-type {
+		// Leave room for the floating refresh button.
+		margin-bottom: calc(var(--s-12) + var(--safe-bottom));
+	}
+
+	.section-intro {
+		margin: 0 0 var(--s-4);
+		color: var(--c-text-2);
+		font-size: var(--t-small);
+		line-height: 1.45;
+	}
+
+	#spinner {
+		padding: var(--s-10) 0;
+	}
+
+	// ---- Data tables --------------------------------------------
+	// The wrapper owns the rounding and the horizontal scroll, so the
+	// table itself must not clip (an overflow on the table would become
+	// the sticky scrollport and kill the frozen first column).
+
+	.table-wrap {
+		box-shadow: var(--e-2);
+	}
+
+	.stats-table {
+		width: auto;
+		min-width: 100%;
+		border-radius: 0;
+		overflow: visible;
+		white-space: nowrap;
+		font-variant-numeric: tabular-nums;
+
+		td {
+			padding: var(--s-3) var(--s-4);
+			border-bottom: 1px solid var(--c-border);
+		}
+
+		// Numbers read as a column, labels stay left aligned.
+		td:not(:first-of-type) {
+			text-align: center;
+			color: var(--c-text);
+		}
+
+		tr:last-child td {
+			border-bottom: none;
+		}
+
+		// Header row. Needs an opaque fill: it is sticky and data
+		// scrolls underneath it.
+		tr:first-of-type td {
+			background: var(--wijk-soft);
+			color: var(--wijk-ink);
+			font-weight: 700;
+			border-bottom: 1px solid var(--c-border-strong);
+		}
+
+		// Frozen label column. Also opaque, for the same reason.
+		td:first-of-type {
+			min-width: 168px;
+			font-weight: 600;
+			color: var(--c-text);
+			background: var(--c-surface);
+			// Hairline instead of a border so it does not shift the layout.
+			box-shadow: 1px 0 0 var(--c-border);
+		}
+
+		// The corner cell belongs to the header, not to the label column.
+		tr:first-of-type td:first-of-type {
+			background: var(--wijk-soft);
+			box-shadow: 1px 0 0 var(--c-border-strong);
 		}
 	}
-}
 
-#allStatsTable {
-	margin-bottom: 18px;
-}
+	// ---- Aanwezigheidsstrijd leaderboard -------------------------
 
-// Enhanced table styling
-table {
-	&.left-column-fixed.withHeader,
-	&.cleanTable.withHeader.top-column-fixed {
-		border-radius: 12px;
+	.leaderboard {
+		// A dot carries the wijk instead of tinted text: four hues as
+		// body copy on white cannot all clear contrast in sunlight.
+		// The admin's name is set in their own wijk colour. The -deep tokens
+		// rather than the raw hues, so yellow and green still clear contrast
+		// as body text on white.
+		td.blue {
+			color: var(--blue-deep);
+		}
+		td.red {
+			color: var(--red-deep);
+		}
+		td.green {
+			color: var(--green-deep);
+		}
+		td.yellow {
+			color: var(--yellow-deep);
+		}
+		td.white {
+			color: var(--c-text);
+		}
+
+		td.blue,
+		td.red,
+		td.green,
+		td.yellow,
+		td.white {
+			font-weight: 700;
+		}
+
+		tr.isYou td {
+			background: var(--wijk-soft);
+			font-weight: 700;
+		}
+
+		tr.isYou td:first-of-type {
+			background: var(--wijk-soft);
+			box-shadow:
+				inset 3px 0 0 var(--wijk),
+				1px 0 0 var(--c-border);
+		}
+	}
+
+	// ---- Chart ---------------------------------------------------
+
+	.chart-card {
+		background: var(--c-surface);
+		border-radius: var(--r-lg);
+		box-shadow: var(--e-2);
+		padding: var(--s-2);
+		// amcharts reserves a wide right margin; clip it rather than let
+		// it push the page sideways on a phone.
 		overflow: hidden;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-		margin: 20px 12px;
-		
-		tbody {
-			tr {
-				&:first-child {
-					background: vars.$blue !important;
-					color: white !important;
-					font-weight: 600 !important;
-					
-					td {
-						padding: 16px 18px !important;
-						border-bottom: 2px solid rgba(255, 255, 255, 0.2) !important;
-						background: vars.$blue !important;
-						color: white !important;
-					}
-				}
-				
-				// Wijk-based table header colors
-				.wijk-yellow &:first-child {
-					background: vars.$yellow !important;
-					color: vars.$darkTextColor !important;
-					
-					td {
-						background: vars.$yellow !important;
-						color: vars.$darkTextColor !important;
-					}
-				}
-				
-				.wijk-red &:first-child {
-					background: vars.$red !important;
-					color: white !important;
-					
-					td {
-						background: vars.$red !important;
-						color: white !important;
-					}
-				}
-				
-				.wijk-blue &:first-child {
-					background: vars.$blue !important;
-					color: white !important;
-					
-					td {
-						background: vars.$blue !important;
-						color: white !important;
-					}
-				}
-				
-				.wijk-green &:first-child {
-					background: vars.$green !important;
-					color: white !important;
-					
-					td {
-						background: vars.$green !important;
-						color: white !important;
-					}
-				}
-				
-				&:not(:first-child) {
-					transition: background-color 0.2s ease;
-					
-					&:hover {
-						background: #f8f9fa !important;
-					}
-				}
+	}
+
+	#presencesByTimeChart {
+		width: 100%;
+		height: clamp(280px, 52vh, 420px);
+	}
+
+	// Hide the amcharts attribution watermark.
+	g[aria-label="Chart"] + g {
+		display: none;
+	}
+
+	// ---- Narrow phones -------------------------------------------
+
+	@media (max-width: 420px) {
+		padding: 0 var(--s-3);
+
+		.stats-table {
+			td {
+				padding: var(--s-3);
+			}
+
+			td:first-of-type {
+				min-width: 144px;
 			}
 		}
-	}
-}
-
-	tr.isYou {
-	td {
-		text-decoration: underline;
-		font-weight: bold;
-	}
-}
-
-g[aria-label="Chart"] + g {
-	display: none; // hide advertisement for chart framework
-}
-
-#presencesByTimeChart {
-	width: 100%;
-	height: 375px;
-	margin: 20px 0;
-	border-radius: 12px;
-	overflow: hidden;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-// Enhanced section styling
-h2 {
-	padding: 20px 20px 10px 20px;
-	margin: 0;
-	color: vars.$mediumBlack;
-	font-size: 1.4em;
-	font-weight: 600;
-}
-
-p {
-	padding: 8px 20px;
-	margin: 0;
-	color: #666;
-	line-height: 1.4;
-}
-
-// Wijk color styling
-td.white {
-	color: gray;
-}
-td.blue {
-	color: vars.$blue;
-	font-weight: 600;
-}
-td.yellow {
-	color: vars.$yellow;
-	font-weight: 600;
-}
-td.red {
-	color: vars.$red;
-	font-weight: 600;
-}
-td.green {
-	color: vars.$green;
-	font-weight: 600;
-}
-
-thead td {
-	font-weight: bold;
-}
-
-// Mobile responsiveness
-@media (max-width: 768px) {
-	table {
-		&.left-column-fixed.withHeader,
-		&.cleanTable.withHeader.top-column-fixed {
-			margin: 15px 10px;
-			font-size: 16px;
-			
-			tbody {
-				tr {
-					td {
-						padding: 12px 14px !important;
-					}
-				}
-			}
-		}
-	}
-	
-	h2 {
-		padding: 15px 15px 8px 15px;
-		font-size: 1.3em;
-	}
-	
-	p {
-		padding: 6px 15px;
-		font-size: 15px;
-	}
-}
-
-@media (max-width: 480px) {
-	table {
-		&.left-column-fixed.withHeader,
-		&.cleanTable.withHeader.top-column-fixed {
-			margin: 10px 0px;
-			font-size: 15px;
-			
-			tbody {
-				tr {
-					td {
-						padding: 10px 12px !important;
-					}
-				}
-			}
-		}
-	}
-	
-	h2 {
-		padding: 12px 12px 6px 12px;
-		font-size: 1.2em;
-	}
-	
-	p {
-		padding: 5px 12px;
-		font-size: 14px;
 	}
 }

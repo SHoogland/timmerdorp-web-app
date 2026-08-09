@@ -54,15 +54,19 @@ function Wristband() {
 				}
 
 				setTicket(result.ticket);
+				// Only worth confirming when you landed here by scanning a ticket.
+				// Arriving via "Polsbandje wijzigen" IS the confirmation, so
+				// asking again is just an extra tap.
+				const cameFromExplicitAction = new URLSearchParams(window.location.search).has('origin');
 				if (result.ticket.wristband) {
-					if (!confirm('Dit kind heeft al een polsbandje. Wil je een nieuw polsbandje toewijzen?')) {
+					if (!cameFromExplicitAction && !confirm('Dit kind heeft al een polsbandje. Wil je een nieuw polsbandje toewijzen?')) {
 						navigate('/');
 					}
 					// Prefill de textbox met het bestaande polsbandnummer
 					setWristbandNumber(result.ticket.wristband);
 				}
 				// add kid to search history, as long as user didn't come from search page
-				if (!window.location.href.includes('&origin=search')) {
+				if (!cameFromExplicitAction) {
 					// todo: add kid to search history
 				}
 
@@ -164,10 +168,10 @@ function Wristband() {
 
 	return (
 		<Layout title="Polsbandje toewijzen">
-			<center>
+			<div className="wristband-page">
 				<LoadingIcon shown={loading} />
 
-				{errorTitle && <p><b>{errorTitle}</b><br />{errorHelp}</p>}
+				{errorTitle && <p className="wristband-error"><b>{errorTitle}</b><br />{errorHelp}</p>}
 				{!loading && ticket.id && (
 					<table className="ticketTable">
 						<tbody>
@@ -196,15 +200,18 @@ function Wristband() {
 							{ticket.hasSole && (
 								<tr>
 									<td><b>Zooltjes opgehaald:</b></td>
-									<td>
-										<input
-											type="checkbox"
-											checked={ticket.collectedSole}
-											onClick={() => !ticket.collectedSole ? collectSole() : ''}
-											disabled={ticket.collectedSole}
-										/>
-										<LoadingIcon shown={loadingSole} />
-										{!loadingSole && (ticket.collectedSole ? "Ja" : "Nee")}
+									<td className="sole-cell">
+										<label className="sole-toggle" htmlFor="collectedSole">
+											<input
+												id="collectedSole"
+												type="checkbox"
+												checked={ticket.collectedSole}
+												onClick={() => !ticket.collectedSole ? collectSole() : ''}
+												disabled={ticket.collectedSole}
+											/>
+											<LoadingIcon shown={loadingSole} />
+											{!loadingSole && (ticket.collectedSole ? "Ja" : "Nee")}
+										</label>
 									</td>
 								</tr>
 							)}
@@ -212,30 +219,29 @@ function Wristband() {
 					</table>
 				)}
 
-				<br />
-				{wristbandSuggestions[0] != '' && <p><b>Wil je soms <a onClick={() => saveWristband(wristbandSuggestions[0])}>bandje {wristbandSuggestions[0]}</a> of <a onClick={() => saveWristband(wristbandSuggestions[1])}>bandje {wristbandSuggestions[1]}</a> toewijzen?</b></p>}
-				<input
-					type="number"
-					maxLength={3}
-					title="Polsbandnummer"
-					id="wristbandInput"
-					value={wristbandNumber}
-					onChange={(e) => setWristbandNumber(e.target.value)}
-					onKeyUp={(e) => e.key == 'Enter' ? saveWristband() : null}
-					placeholder="000"
-					style={{ "display": "inline-block", "right": "24px" }}
-					className="wristband-number"
-				/>
-				<button
-					onClick={() => saveWristband()}
-					style={{ "display": "inline-block" }}
-					className="big"
-				>
-					Opslaan
-				</button>
+				{wristbandSuggestions[0] != '' && <p className="wristband-suggestions"><b>Wil je soms <a onClick={() => saveWristband(wristbandSuggestions[0])}>bandje {wristbandSuggestions[0]}</a> of <a onClick={() => saveWristband(wristbandSuggestions[1])}>bandje {wristbandSuggestions[1]}</a> toewijzen?</b></p>}
+				<div className="wristband-entry">
+					<input
+						type="number"
+						maxLength={3}
+						title="Polsbandnummer"
+						id="wristbandInput"
+						value={wristbandNumber}
+						onChange={(e) => setWristbandNumber(e.target.value)}
+						onKeyUp={(e) => e.key == 'Enter' ? saveWristband() : null}
+						placeholder="000"
+						className="wristband-number"
+					/>
+					<button
+						onClick={() => saveWristband()}
+						className="big"
+					>
+						Opslaan
+					</button>
+				</div>
 
-				{isSaving && <p>Opslaan...</p>}
-			</center>
+				{isSaving && <p className="wristband-saving">Opslaan...</p>}
+			</div>
 		</Layout>
 	);
 }

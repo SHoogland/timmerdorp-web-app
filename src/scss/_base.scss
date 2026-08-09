@@ -1,0 +1,538 @@
+@use "vars";
+
+// =============================================================
+//  Reset + base element styling
+// =============================================================
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	// Stops iOS bumping font sizes when the phone is rotated.
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+}
+
+html,
+body,
+#root {
+	margin: 0;
+	padding: 0;
+	min-height: 100%;
+}
+
+body {
+	background: var(--c-bg);
+	color: var(--c-text);
+	font-family: var(--font-ui);
+	font-size: var(--t-body);
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	// Grey flash on tap makes a web app feel like a web page.
+	-webkit-tap-highlight-color: transparent;
+	overscroll-behavior-y: none;
+}
+
+// This is a tool used one-handed outdoors — accidental text selection
+// while scrolling is noise. Real text inputs opt back in below.
+body {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	-webkit-touch-callout: none;
+}
+
+input,
+textarea,
+select,
+[contenteditable],
+.selectable {
+	-webkit-user-select: text;
+	-moz-user-select: text;
+	user-select: text;
+}
+
+@font-face {
+	font-family: "Mikado-Bold";
+	src: url("../assets/fonts/Mikado-Bold.woff") format("woff");
+	font-weight: 700;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Montserrat";
+	src: url("../assets/fonts/Montserrat.woff") format("woff");
+	font-display: swap;
+}
+
+// ---- Typography ---------------------------------------------
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin: 0 0 var(--s-3);
+	font-weight: 700;
+	line-height: 1.25;
+	letter-spacing: -0.011em;
+	color: var(--c-text);
+}
+
+h1 {
+	font-size: var(--t-h1);
+	letter-spacing: -0.02em;
+}
+h2 {
+	font-size: var(--t-h2);
+}
+h3 {
+	font-size: var(--t-h3);
+}
+
+p {
+	margin: 0 0 var(--s-3);
+	color: var(--c-text-2);
+}
+
+// Display type is the one place the brand face appears.
+.display {
+	font-family: var(--font-display);
+	font-weight: 700;
+	letter-spacing: 0.01em;
+	line-height: 1.05;
+}
+
+a {
+	color: var(--wijk);
+	font-weight: 600;
+	text-decoration: none;
+	cursor: pointer;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+hr {
+	border: 0;
+	border-top: 1px solid var(--c-border);
+	margin: var(--s-6) 0;
+}
+
+// ---- Buttons -------------------------------------------------
+// A bare <button> is the primary action. Modifier classes cover
+// the rest so pages rarely need their own button CSS.
+
+button {
+	appearance: none;
+	border: none;
+	margin: 0;
+	font-family: inherit;
+	font-size: var(--t-body);
+	font-weight: 650;
+	line-height: 1.2;
+	letter-spacing: 0.005em;
+	color: var(--on-wijk);
+	background: var(--wijk);
+	border-radius: var(--r-md);
+	padding: 0 var(--s-5);
+	min-height: var(--tap);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--s-2);
+	cursor: pointer;
+	transition:
+		transform var(--d-1) var(--ease),
+		box-shadow var(--d-2) var(--ease),
+		background-color var(--d-2) var(--ease),
+		opacity var(--d-2) var(--ease);
+	-webkit-tap-highlight-color: transparent;
+
+	&:active {
+		// A small, fast squish reads as physical without feeling laggy.
+		transform: scale(0.972);
+	}
+
+	&:focus-visible {
+		outline: 3px solid color-mix(in srgb, var(--wijk) 45%, transparent);
+		outline-offset: 2px;
+	}
+
+	&:disabled {
+		opacity: 0.45;
+		cursor: not-allowed;
+		transform: none;
+	}
+
+	// --- variants
+	&.btn-secondary {
+		background: var(--wijk-soft);
+		color: var(--wijk-ink);
+	}
+
+	&.btn-ghost {
+		background: transparent;
+		color: var(--wijk);
+
+		&:hover {
+			background: var(--wijk-soft);
+		}
+	}
+
+	&.btn-neutral {
+		background: var(--c-surface);
+		color: var(--c-text);
+		box-shadow: inset 0 0 0 1px var(--c-border);
+
+		&:hover {
+			background: var(--c-surface-2);
+		}
+	}
+
+	&.btn-quiet {
+		background: var(--c-surface-sunken);
+		color: var(--c-text-2);
+	}
+
+	&.green {
+		background: var(--green);
+		color: #fff;
+	}
+	&.red,
+	&.btn-danger {
+		background: var(--red);
+		color: #fff;
+	}
+	&.yellow {
+		background: var(--yellow);
+		color: var(--yellow-ink);
+	}
+	&.blue {
+		background: var(--blue);
+		color: #fff;
+	}
+
+	// --- sizes
+	&.big {
+		min-height: 54px;
+		padding: 0 var(--s-6);
+		font-size: 1.0625rem;
+		border-radius: var(--r-lg);
+		width: 100%;
+	}
+
+	&.btn-sm {
+		min-height: 36px;
+		padding: 0 var(--s-4);
+		font-size: var(--t-small);
+		border-radius: var(--r-sm);
+	}
+
+	&.block {
+		display: flex;
+		width: 100%;
+	}
+
+	&.with-loading-icon {
+		position: relative;
+
+		.loading-icon {
+			position: absolute;
+			inset: 0;
+			img {
+				width: 44px;
+				height: 36px;
+			}
+		}
+	}
+}
+
+// Circular icon button.
+button.fab {
+	padding: 0;
+	width: var(--tap);
+	height: var(--tap);
+	min-height: var(--tap);
+	border-radius: var(--r-full);
+	background: var(--wijk-soft);
+	color: var(--wijk-ink);
+	flex-shrink: 0;
+
+	svg {
+		width: 20px;
+		height: 20px;
+	}
+
+	&.sticky {
+		position: fixed;
+		width: 56px;
+		height: 56px;
+		background: var(--wijk);
+		color: var(--on-wijk);
+		box-shadow: var(--e-3);
+		z-index: 40;
+
+		// Only Home has a tab bar and Home has no FAB, so the FAB sits on the
+		// gutter itself. Pages using it must reserve room via .has-fab so the
+		// last row of content can always scroll clear of the button.
+		&.bottom-right {
+			right: var(--gutter);
+			bottom: calc(var(--gutter) + var(--safe-bottom));
+		}
+	}
+}
+
+// ---- Form controls -------------------------------------------
+
+input,
+select,
+textarea {
+	font-family: inherit;
+	font-size: var(--t-body);
+	color: var(--c-text);
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+textarea,
+select {
+	width: 100%;
+	min-height: 52px;
+	padding: 0 var(--s-4);
+	background: var(--c-surface);
+	border: 1.5px solid var(--c-border);
+	border-radius: var(--r-md);
+	transition:
+		border-color var(--d-2) var(--ease),
+		box-shadow var(--d-2) var(--ease),
+		background-color var(--d-2) var(--ease);
+
+	&::placeholder {
+		color: var(--c-text-3);
+	}
+
+	&:focus {
+		outline: none;
+		border-color: var(--wijk);
+		box-shadow: 0 0 0 4px color-mix(in srgb, var(--wijk) 16%, transparent);
+	}
+}
+
+textarea {
+	padding: var(--s-3) var(--s-4);
+	min-height: 100px;
+	resize: vertical;
+	line-height: 1.5;
+}
+
+select {
+	appearance: none;
+	// Chevron drawn inline so there is no extra network request.
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%238a8377' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right var(--s-4) center;
+	padding-right: var(--s-10);
+	cursor: pointer;
+}
+
+// Strip the number spinners — these fields are codes, not quantities.
+input[type="number"] {
+	-moz-appearance: textfield;
+	appearance: textfield;
+
+	&::-webkit-outer-spin-button,
+	&::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+}
+
+label {
+	display: block;
+	font-size: var(--t-small);
+	font-weight: 600;
+	color: var(--c-text-2);
+	margin-bottom: var(--s-2);
+}
+
+.form {
+	width: 100%;
+	max-width: 420px;
+	margin: 0 auto;
+
+	input[type="text"],
+	input[type="password"],
+	input[type="email"],
+	input[type="number"] {
+		margin-bottom: var(--s-4);
+	}
+
+	button {
+		width: 100%;
+		min-height: 52px;
+		margin-top: var(--s-2);
+	}
+}
+
+input.wristband-number {
+	width: 72px;
+	min-width: 72px;
+	padding: 0;
+	text-align: center;
+	font-size: 1.25rem;
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+}
+
+// ---- Tables ---------------------------------------------------
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: var(--t-small);
+	background: var(--c-surface);
+	border-radius: var(--r-lg);
+	overflow: hidden;
+
+	td,
+	th {
+		padding: var(--s-3) var(--s-4);
+		text-align: left;
+		border-bottom: 1px solid var(--c-border);
+	}
+
+	tr:last-child td {
+		border-bottom: none;
+	}
+
+	&.withHeader tr:first-of-type td {
+		font-weight: 700;
+		color: var(--c-text);
+		background: var(--c-surface-sunken);
+	}
+
+	// Wide data tables scroll inside their own wrapper.
+	&.scroll-x {
+		display: block;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	&.left-column-fixed tr td:first-of-type {
+		position: sticky;
+		left: 0;
+		z-index: 1;
+		background: var(--c-surface);
+	}
+
+	&.top-column-fixed tr:first-of-type {
+		position: sticky;
+		top: 0;
+		z-index: 2;
+	}
+}
+
+.table-wrap {
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+	border-radius: var(--r-lg);
+	box-shadow: var(--e-1);
+	background: var(--c-surface);
+}
+
+// ---- Helpers ---------------------------------------------------
+
+p.helper-link,
+.helper-link {
+	text-align: center;
+	font-size: var(--t-small);
+	font-weight: 600;
+	margin-top: var(--s-5);
+	color: var(--c-text-2);
+}
+
+p.link,
+.link {
+	color: var(--wijk);
+	font-weight: 600;
+	cursor: pointer;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+.hidden {
+	display: none !important;
+}
+
+// Reserves scroll room for a floating action button so it never sits on
+// top of the last row of content.
+.has-fab {
+	padding-bottom: calc(56px + var(--s-10) + var(--safe-bottom));
+}
+
+.stack > * + * {
+	margin-top: var(--s-4);
+}
+
+.muted {
+	color: var(--c-text-3);
+}
+
+.nums {
+	font-variant-numeric: tabular-nums;
+}
+
+.isRotating {
+	animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+// Transform-free, so elements using it can still host position:fixed children.
+@keyframes contentIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes fadeUp {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+// Respect the OS setting — motion sickness is not a style choice.
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.001ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.001ms !important;
+	}
+}

@@ -5,6 +5,7 @@ import apiCall from '../utils/apiCall.ts';
 import '../scss/Search.scss';
 import LoadingIcon from '../components/LoadingIcon.tsx';
 import Icon from '../components/Icon.tsx';
+import { FaChevronRight } from 'react-icons/fa';
 
 interface Ticket {
 	[key: string]: any;
@@ -19,7 +20,7 @@ function SearchPage() {
 	const [errorTitle, setErrorTitle] = useState('');
 	const [errorHelpText, setErrorHelpText] = useState('');
 		const [searchParams, setSearchParams] = useSearchParams();
-	
+
 	// Function to get wijk color based on hut number
 	const getWijkColor = (hutNr: string): string => {
 		if (!hutNr) return 'onbekend';
@@ -122,68 +123,94 @@ function SearchPage() {
 	return (
 		<>
 			<Layout title="Zoek kinderen">
-				<div className="search-container">
-					<h2>Zoek kinderen op naam, polsband of hutje</h2>
-					<div className="search-input-wrapper">
-						<Icon name="search" className="search-icon" />
-						<input
-							type="text"
-							title="Zoekterm"
-							onChange={changeSearchTerm}
-							value={searchTerm}
-							placeholder="Zoekterm"
-						/>
+				<div className="search-page">
+					<div className="search-bar">
+						<div className="search-field">
+							<Icon name="search" className="search-field-icon" />
+							<input
+								type="search"
+								inputMode="search"
+								enterKeyHint="search"
+								autoFocus
+								autoComplete="off"
+								autoCorrect="off"
+								spellCheck={false}
+								title="Zoekterm"
+								aria-label="Zoek kinderen op naam, polsband of hutje"
+								onChange={changeSearchTerm}
+								value={searchTerm}
+								placeholder="Naam, polsband of hutje"
+							/>
+						</div>
 					</div>
+
 					<LoadingIcon shown={loading} />
+
+					{searchResults.length > 0 && (
+						<div id="results" className="section">
+							<h2 className="section-title">Zoekresultaten ({searchResults.length})</h2>
+							<div className="result-list">
+								{searchResults.map((child) => (
+									<button
+										type="button"
+										key={child.id}
+										onClick={() => navigate('/bekijk-ticket?ticket-id=' + child.id + '&q=' + searchTerm)}
+										className={`result-card wijk-${getWijkColor(child.hutNr)}`}
+									>
+										<span className="result-main">
+											<span className="result-name">
+												{child.firstName} {child.lastName}
+											</span>
+											<span className="result-meta">
+												{/* A chip with no number is noise; say so once instead of rendering
+												    two empty labels. */}
+												{!child.wristband && !child.hutNr ? (
+													<span className="chip chip-empty">Nog geen bandje of hutje</span>
+												) : (
+													<>
+														{child.wristband && (
+															<span className="chip">
+																<span className="chip-label">Bandje</span>
+																<span className="chip-value nums">{child.wristband}</span>
+															</span>
+														)}
+														{child.hutNr && (
+															<span className="chip">
+																<span className="chip-label">Hutje</span>
+																<span className="chip-value nums">{child.hutNr}</span>
+															</span>
+														)}
+													</>
+												)}
+											</span>
+										</span>
+										<FaChevronRight className="result-icon" />
+									</button>
+								))}
+							</div>
+						</div>
+					)}
+
+					{searchResults.length === 0 && !loading && !errorTitle && !hasSearched && (
+						<div className="empty-state">
+							<p>Zoek kinderen op naam, polsband of hutje.</p>
+						</div>
+					)}
+
+					{searchResults.length === 0 && hasSearched && !errorTitle && (
+						<div className="empty-state">
+							<p>Geen zoekresultaten! Je kunt zoeken op polsbandje-nummer, hutnummer of op voor- of achternaam.</p>
+						</div>
+					)}
+
+					{errorTitle && (
+						<div className="search-error" role="alert">
+							<b>{errorTitle}</b>
+							<br />
+							{errorHelpText}
+						</div>
+					)}
 				</div>
-
-				{searchResults.length > 0 && (
-					<div id="results">
-						<h3>Zoekresultaten ({searchResults.length})</h3>
-						<ul className="peopleList">
-							{searchResults.map((child) => (
-								<div
-									key={child.id}
-									onClick={() => navigate('/bekijk-ticket?ticket-id=' + child.id + '&q=' + searchTerm)}
-									className={`search-result-card wijk-${getWijkColor(child.hutNr)}`}
-								>
-									<div className="result-content">
-										<div className="result-info">
-											<h3>Bandje <span className={`wijk-accent-${getWijkColor(child.hutNr)}`}>{child.wristband}</span></h3>
-											<h3>Hutje <span className={`wijk-accent-${getWijkColor(child.hutNr)}`}>{child.hutNr}</span></h3>
-										</div>
-										<div className="result-name">
-											<h2>
-												{child.firstName}
-												<br />
-												{child.lastName}
-											</h2>
-										</div>
-										<div className="info-button-cell">
-											<Icon name="info" className="info-icon" />
-										</div>
-									</div>
-								</div>
-							))}
-						</ul>
-					</div>
-				)}
-
-				{searchResults.length === 0 && hasSearched && !errorTitle && (
-					<div>
-						<b>Geen zoekresultaten! Je kunt zoeken op polsbandje-nummer, hutnummer of op voor- of achternaam.</b>
-					</div>
-				)}
-
-				{errorTitle && (
-					<div>
-						<b>{errorTitle}</b>
-						<br />
-						{errorHelpText}
-					</div>
-				)}
-
-				<br />
 			</Layout>
 		</>
 	);

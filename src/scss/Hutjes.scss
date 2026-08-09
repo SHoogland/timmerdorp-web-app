@@ -1,0 +1,411 @@
+@use "vars";
+
+// =============================================================
+//  Hutjes beheren
+//  Replaces the page's inline `styles` object.
+//  Everything is scoped under .hutjes-page so these fairly generic
+//  names (.modal-overlay, .result-item, …) cannot leak into, or be
+//  overwritten by, another page partial.
+// =============================================================
+
+.hutjes-page {
+	padding-bottom: var(--s-10);
+
+	.hut-search {
+		margin-bottom: var(--s-6);
+
+		label {
+			margin-bottom: var(--s-2);
+		}
+
+		// Wraps input + loading hammer so the hammer can sit inside the
+		// field instead of shoving the results down while it spins.
+		.hut-input-wrap {
+			position: relative;
+		}
+
+		.hut-input {
+			width: 100%;
+			height: 76px;
+			text-align: center;
+			font-size: 2rem;
+			font-weight: 750;
+			letter-spacing: 0.18em;
+			// A hut number is three digits — tabular figures stop the field
+			// jittering as the volunteer types.
+			font-variant-numeric: tabular-nums;
+			text-indent: 0.18em;
+		}
+
+		.loading-icon {
+			position: absolute;
+			top: 0;
+			right: var(--s-2);
+			bottom: 0;
+			width: auto;
+			padding: 0;
+			pointer-events: none;
+
+			img {
+				width: 52px;
+				height: 42px;
+			}
+		}
+	}
+
+	// ---- Error callout ------------------------------------------
+
+	.hut-error {
+		margin-bottom: var(--s-6);
+		padding: var(--s-4);
+		background: var(--red-soft);
+		border-left: 4px solid var(--red);
+		border-radius: var(--r-md);
+
+		h4 {
+			margin: 0 0 var(--s-1);
+			font-size: var(--t-h3);
+			color: var(--red-ink);
+		}
+
+		p {
+			margin: 0;
+			font-size: var(--t-small);
+			color: var(--red-ink);
+		}
+	}
+
+	// ---- Hut summary --------------------------------------------
+
+	.hut-summary {
+		display: flex;
+		align-items: center;
+		gap: var(--s-3);
+		margin-bottom: var(--s-4);
+
+		.hut-badge {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			flex: 0 0 auto;
+			min-width: 60px;
+			height: 60px;
+			padding: 0 var(--s-3);
+			border-radius: var(--r-md);
+			background: var(--wijk);
+			color: var(--on-wijk);
+			font-size: 1.375rem;
+			font-weight: 750;
+			font-variant-numeric: tabular-nums;
+		}
+
+		.hut-summary-text {
+			min-width: 0;
+
+			h2 {
+				margin: 0;
+				font-size: var(--t-h2);
+			}
+
+			p {
+				margin: 0;
+				font-size: var(--t-small);
+				color: var(--c-text-3);
+			}
+		}
+	}
+
+	// ---- Children in the hut ------------------------------------
+
+	.kid-list {
+		display: flex;
+		flex-direction: column;
+		gap: var(--s-2);
+		margin-bottom: var(--s-4);
+	}
+
+	.kid-item {
+		display: flex;
+		align-items: center;
+		gap: var(--s-3);
+		padding: var(--s-2) var(--s-2) var(--s-2) var(--s-4);
+		background: var(--c-surface);
+		border-radius: var(--r-md);
+		box-shadow: var(--e-1);
+		cursor: pointer;
+		animation: fadeUp var(--d-2) var(--ease) both;
+		transition: box-shadow var(--d-2) var(--ease);
+
+		&:active {
+			box-shadow: var(--e-2);
+		}
+
+		.kid-name {
+			flex: 1;
+			min-width: 0;
+			font-weight: 600;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.kid-meta {
+			flex: 0 0 auto;
+			font-size: var(--t-small);
+			color: var(--c-text-3);
+			font-variant-numeric: tabular-nums;
+		}
+
+		.kid-remove {
+			flex: 0 0 auto;
+			width: var(--tap);
+			height: var(--tap);
+			min-height: var(--tap);
+			padding: 0;
+			border-radius: var(--r-full);
+			background: transparent;
+			color: var(--c-text-3);
+			font-size: 1.5rem;
+			font-weight: 400;
+			line-height: 1;
+
+			&:hover {
+				background: var(--red-soft);
+				color: var(--red);
+			}
+		}
+	}
+
+	.add-child-btn {
+		.add-child-plus {
+			font-size: 1.35em;
+			font-weight: 700;
+			line-height: 1;
+		}
+	}
+
+	.empty-state {
+		margin-bottom: var(--s-4);
+		padding: var(--s-8) var(--s-5);
+		background: var(--c-surface);
+		border-radius: var(--r-lg);
+		box-shadow: var(--e-1);
+	}
+
+	// ---- History -------------------------------------------------
+
+	.hut-history {
+		margin-top: var(--s-8);
+
+		.empty-state {
+			margin-bottom: 0;
+		}
+	}
+
+	.history-list {
+		display: flex;
+		flex-direction: column;
+		gap: 1px;
+		background: var(--c-border);
+		border-radius: var(--r-md);
+		overflow: hidden;
+	}
+
+	.history-item {
+		padding: var(--s-3) var(--s-4);
+		background: var(--c-surface);
+		font-size: var(--t-small);
+		color: var(--c-text-2);
+		line-height: 1.45;
+
+		u {
+			text-decoration-color: var(--wijk);
+			text-underline-offset: 2px;
+		}
+	}
+
+	// ---- Add-child modal ------------------------------------------
+
+	.modal-overlay {
+		position: fixed;
+		inset: 0;
+		z-index: 300;
+		display: flex;
+		align-items: flex-end;
+		justify-content: center;
+		background: rgba(24, 20, 14, 0.5);
+		backdrop-filter: blur(3px);
+		-webkit-backdrop-filter: blur(3px);
+		animation: hutjesFadeIn var(--d-2) var(--ease) both;
+	}
+
+	// A bottom sheet, not a centred dialog — thumbs live at the bottom
+	// of the phone and the keyboard opens from there too.
+	.modal-sheet {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		max-width: 560px;
+		max-height: 88dvh;
+		background: var(--c-surface);
+		border-radius: var(--r-xl) var(--r-xl) 0 0;
+		box-shadow: var(--e-pop);
+		animation: hutjesSheetUp var(--d-3) var(--ease) both;
+		overflow: hidden;
+
+		@media (min-width: 600px) {
+			margin-bottom: var(--s-8);
+			border-radius: var(--r-xl);
+		}
+	}
+
+	.modal-header {
+		display: flex;
+		align-items: center;
+		gap: var(--s-2);
+		flex: 0 0 auto;
+		padding: var(--s-3) var(--s-3) var(--s-3) var(--s-5);
+		border-bottom: 1px solid var(--c-border);
+
+		h2 {
+			flex: 1;
+			min-width: 0;
+			margin: 0;
+			font-size: var(--t-h2);
+		}
+
+		.modal-close {
+			flex: 0 0 auto;
+			width: var(--tap);
+			height: var(--tap);
+			min-height: var(--tap);
+			padding: 0;
+			border-radius: var(--r-full);
+			background: var(--c-surface-sunken);
+			color: var(--c-text-2);
+			font-size: 1.5rem;
+			font-weight: 400;
+			line-height: 1;
+		}
+	}
+
+	.modal-body {
+		flex: 1;
+		min-height: 0;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		-webkit-overflow-scrolling: touch;
+		padding: var(--s-5);
+		// Clear the home indicator when the sheet is flush with the
+		// bottom of the screen.
+		padding-bottom: calc(var(--s-5) + var(--safe-bottom));
+
+		> .loading-icon {
+			padding: var(--s-2) 0 0;
+
+			img {
+				width: 52px;
+				height: 42px;
+			}
+		}
+	}
+
+	.child-search-input {
+		// The field turns wijk-coloured once the term is long enough to
+		// actually be searched, so the volunteer sees the cutoff.
+		&.is-active {
+			border-color: var(--wijk);
+		}
+	}
+
+	.result-section {
+		margin-top: var(--s-5);
+
+		h3 {
+			margin: 0;
+			font-size: var(--t-h3);
+		}
+	}
+
+	.result-list {
+		display: flex;
+		flex-direction: column;
+		gap: var(--s-2);
+		margin-top: var(--s-4);
+	}
+
+	.result-item {
+		display: flex;
+		align-items: center;
+		gap: var(--s-3);
+		padding: var(--s-3);
+		background: var(--c-surface-2);
+		border: 1px solid var(--c-border);
+		border-radius: var(--r-md);
+
+		.result-info {
+			flex: 1;
+			min-width: 0;
+		}
+
+		.result-name {
+			display: block;
+			font-weight: 600;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+
+			// The matched substring arrives wrapped in <mark>.
+			mark {
+				background: color-mix(in srgb, var(--yellow) 45%, transparent);
+				color: inherit;
+				border-radius: 3px;
+				padding: 0 2px;
+			}
+		}
+
+		.result-meta {
+			display: block;
+			font-size: var(--t-small);
+			color: var(--c-text-3);
+			font-variant-numeric: tabular-nums;
+		}
+
+		.result-add {
+			flex: 0 0 auto;
+			min-height: var(--tap);
+			min-width: 104px;
+			border-radius: var(--r-md);
+
+			// Keep the spinning hammer inside the button footprint.
+			.loading-icon {
+				padding: 0;
+
+				img {
+					width: 40px;
+					height: 32px;
+				}
+			}
+		}
+	}
+}
+
+@keyframes hutjesSheetUp {
+	from {
+		transform: translateY(24px);
+		opacity: 0;
+	}
+	to {
+		transform: none;
+		opacity: 1;
+	}
+}
+
+@keyframes hutjesFadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
