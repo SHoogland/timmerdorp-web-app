@@ -24,12 +24,14 @@
 	--green-soft: #e6f6ed;
 	--green-ink: #0c4a29;
 
-	// Brighter and less amber than the other three; --yellow-deep stays
-	// dark because it is the text tone on light surfaces.
-	--yellow: #ffc61a;
-	--yellow-deep: #cf8f0d;
-	--yellow-soft: #fff7e0;
-	--yellow-ink: #6d4a05;
+	// Brighter and less amber than the other three: the hue sits around
+	// 50deg so it reads as yellow rather than gold. --yellow-deep stays
+	// dark because it is the text tone on light surfaces, and it cannot
+	// follow the hue all the way up without turning olive.
+	--yellow: #ffd60a;
+	--yellow-deep: #bd8f00;
+	--yellow-soft: #fffade;
+	--yellow-ink: #6a4d00;
 
 	// ---- Warm neutrals ----------------------------------------
 	// Slightly warm so the app reads like paper and timber rather

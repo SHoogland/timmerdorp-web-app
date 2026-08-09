@@ -1,7 +1,7 @@
 const getWijkHexColor = (wijkName: string): string => {
 	switch (wijkName) {
 		case 'yellow':
-			return '#f5e31d';
+			return '#ffd60a'; // keep in sync with --yellow in _tokens.scss
 		case 'red':
 			return '#ee0202';
 		case 'blue':
