@@ -11,7 +11,7 @@ const Birthdays: React.FC = () => {
 	const [error, setError] = useState<boolean>(false);
 	const [data, setData] = useState<any>(null);
 	const [days] = useState<string[]>(['di', 'wo', 'do', 'vr']);
-	const [dates] = useState<string[]>(['Dinsdag 19 augustus', 'Woensdag 20 augustus', 'Donderdag 21 augustus', 'Vrijdag 22 augustus']);
+	const [dates] = useState<string[]>(['Dinsdag 11 augustus', 'Woensdag 12 augustus', 'Donderdag 13 augustus', 'Vrijdag 14 augustus']);
 	const [currentWijk, setCurrentWijk] = useState<string>('blue');
 	const navigate = useNavigate();
 
