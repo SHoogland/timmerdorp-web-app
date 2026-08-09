@@ -54,15 +54,19 @@ function Wristband() {
 				}
 
 				setTicket(result.ticket);
+				// Only worth confirming when you landed here by scanning a ticket.
+				// Arriving via "Polsbandje wijzigen" IS the confirmation, so
+				// asking again is just an extra tap.
+				const cameFromExplicitAction = new URLSearchParams(window.location.search).has('origin');
 				if (result.ticket.wristband) {
-					if (!confirm('Dit kind heeft al een polsbandje. Wil je een nieuw polsbandje toewijzen?')) {
+					if (!cameFromExplicitAction && !confirm('Dit kind heeft al een polsbandje. Wil je een nieuw polsbandje toewijzen?')) {
 						navigate('/');
 					}
 					// Prefill de textbox met het bestaande polsbandnummer
 					setWristbandNumber(result.ticket.wristband);
 				}
 				// add kid to search history, as long as user didn't come from search page
-				if (!window.location.href.includes('&origin=search')) {
+				if (!cameFromExplicitAction) {
 					// todo: add kid to search history
 				}
 

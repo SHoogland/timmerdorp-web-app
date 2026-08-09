@@ -179,7 +179,7 @@ function ViewTicket() {
 						)}
 						<button
 							className="btn-secondary"
-							onClick={() => navigate('/polsbandje?ticket-id=' + ticket.id + '&origin=search')}
+							onClick={() => navigate('/polsbandje?ticket-id=' + ticket.id + '&origin=ticket')}
 						>
 							Polsbandje wijzigen
 						</button>

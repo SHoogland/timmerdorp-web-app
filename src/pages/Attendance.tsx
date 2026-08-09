@@ -31,10 +31,7 @@ function Attendance() {
 		// than an alert that boots you back to the homepage, the page opens in
 		// a clearly disabled state and says why.
 		if (today < 2 || today > 5) {
-			// TEMP(testing): the notice + disabled controls are switched off so
-			// the page can be exercised outside the event week. Restore by
-			// setting this to true before merging.
-			setOutsideEventDays(false);
+			setOutsideEventDays(true);
 			weekday = 'Dinsdag';
 		}
 		setWeekdayDisplayname(weekday);
