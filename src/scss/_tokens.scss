@@ -24,9 +24,11 @@
 	--green-soft: #e6f6ed;
 	--green-ink: #0c4a29;
 
-	--yellow: #f7b32b;
+	// Brighter and less amber than the other three; --yellow-deep stays
+	// dark because it is the text tone on light surfaces.
+	--yellow: #ffc61a;
 	--yellow-deep: #cf8f0d;
-	--yellow-soft: #fef5e3;
+	--yellow-soft: #fff7e0;
 	--yellow-ink: #6d4a05;
 
 	// ---- Warm neutrals ----------------------------------------

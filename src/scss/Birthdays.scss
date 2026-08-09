@@ -169,6 +169,31 @@
 		}
 	}
 
+	// ---- Placeholder while the API is still out --------------------
+	// Same box as a real card so nothing shifts when the data lands.
+	.birthday-card.is-skeleton {
+		height: 76px;
+		border-left-color: var(--c-border);
+		background: var(--c-surface);
+		animation: birthday-skeleton-pulse 1.4s ease-in-out infinite;
+
+		&:nth-child(2) {
+			animation-delay: 0.18s;
+			opacity: 0.6;
+		}
+	}
+
+	@keyframes birthday-skeleton-pulse {
+		0%, 100% { opacity: 0.75; }
+		50% { opacity: 0.4; }
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.birthday-card.is-skeleton {
+			animation: none;
+		}
+	}
+
 	.empty-state {
 		padding: var(--s-6) var(--s-5);
 		background: var(--c-surface);
