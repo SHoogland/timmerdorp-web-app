@@ -38,7 +38,9 @@ const getWijkThemeClass = (hutNr: string) => {
 };
 
 function ViewTicket() {
-	const [loading, setLoading] = useState(false);
+	// Starts true: the effect always either fetches or navigates away, and
+	// false here paints an empty card for a frame first.
+	const [loading, setLoading] = useState(true);
 	const [ticket, setTicket] = useState<Ticket>({});
 	const [ticketPropertiesMap, setTicketPropertiesMap] = useState<TicketPropertiesMap>({});
 	const [canEditTickets, setCanEditTickets] = useState(false);
@@ -66,7 +68,6 @@ function ViewTicket() {
 		if (!ticketId) {
 			navigate('/zoek');
 		} else {
-			setLoading(true);
 			apiCall('findChildById', { id: ticketId }).then((result) => {
 				setLoading(false);
 

@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import apiCall from '../utils/apiCall';
 import { FaShareAlt, FaSearch, FaBirthdayCake } from 'react-icons/fa';
 import Layout from '../layouts/layout';
-import LoadingIcon from '../components/LoadingIcon';
 import '../scss/Birthdays.scss';
 
 const Birthdays: React.FC = () => {
@@ -12,16 +11,14 @@ const Birthdays: React.FC = () => {
 	const [data, setData] = useState<any>(null);
 	const [days] = useState<string[]>(['di', 'wo', 'do', 'vr']);
 	const [dates] = useState<string[]>(['Dinsdag 11 augustus', 'Woensdag 12 augustus', 'Donderdag 13 augustus', 'Vrijdag 14 augustus']);
-	const [currentWijk, setCurrentWijk] = useState<string>('blue');
+	// Read straight from storage on the first render: resolving this in the
+	// effect would paint one frame in the wrong wijk colour.
+	const [currentWijk] = useState<string>(() => localStorage.getItem('wijkName') || 'blue');
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				// Get current wijk for theming
-				const wijkName = localStorage.getItem('wijkName') || 'blue';
-				setCurrentWijk(wijkName);
-
 				const result = await apiCall('wijkStats');
 				if (result && result.response === 'success') {
 					setData(result.birthdays);
@@ -83,24 +80,26 @@ const Birthdays: React.FC = () => {
 		navigate(`/zoek?q=${kind.name}`);
 	};
 
-	if (loading) {
-		return <LoadingIcon color="white" />;
-	}
-
-	if (error) {
-		return <div>Er is iets fout gegaan...</div>;
-	}
-
 	return (
-		<>
-			<Layout title="Verjaardagen">
-				<div className={`birthdays-page wijk-${currentWijk}`}>
-					{days.map((d, i) => (
+		<Layout title="Verjaardagen">
+			<div className={`birthdays-page wijk-${currentWijk}`}>
+				{error && (
+					<div className="empty-state">
+						<p>Er is iets fout gegaan...</p>
+					</div>
+				)}
+
+				{/* The four days are fixed, so their headings paint immediately and
+				    only the lists wait on the API. */}
+				{!error && days.map((d, i) => {
+					const day = loading ? null : data?.[d];
+
+					return (
 						<section key={d} id={d} className="section birthday-day">
 							<div className="day-header">
 								<h2 className="section-title">{dates[i]}</h2>
-								<span className="day-count nums">{data[d].count}</span>
-								{data[d].kids.length > 0 && (
+								{day && <span className="day-count nums">{day.count}</span>}
+								{day && day.kids.length > 0 && (
 									<button
 										type="button"
 										className="fab day-share"
@@ -113,13 +112,18 @@ const Birthdays: React.FC = () => {
 								)}
 							</div>
 
-							{data[d].kids.length === 0 ? (
+							{!day ? (
+								<div className="birthday-list" aria-hidden="true">
+									<div className="birthday-card is-skeleton" />
+									<div className="birthday-card is-skeleton" />
+								</div>
+							) : day.kids.length === 0 ? (
 								<div className="empty-state">
 									<p>Geen kinderen jarig</p>
 								</div>
 							) : (
 								<div className="birthday-list">
-									{data[d].kids.map((bday: any, idx: number) => (
+									{day.kids.map((bday: any, idx: number) => (
 										<button
 											type="button"
 											key={idx}
@@ -142,10 +146,10 @@ const Birthdays: React.FC = () => {
 								</div>
 							)}
 						</section>
-					))}
-				</div>
-			</Layout>
-		</>
+					);
+				})}
+			</div>
+		</Layout>
 	);
 };
 

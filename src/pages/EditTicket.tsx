@@ -11,6 +11,7 @@ interface Ticket {
 
 interface TicketProperty {
 	label: string;
+	appLabel?: string;
 }
 
 interface TicketPropertiesMap {
@@ -33,12 +34,22 @@ const getWijkThemeClass = (hutNr: string) => {
 	}
 };
 
-function ViewTicket() {
-	const [loading, setLoading] = useState(false);
+// Phone and email fields get the matching keyboard and the same semantics the
+// view page gives them when it renders tel:/mailto: links.
+const getInputType = (prop: string) => {
+	if (prop.startsWith('tel')) return 'tel';
+	if (prop.endsWith('email')) return 'email';
+	return 'text';
+};
+
+function EditTicket() {
+	const [loading, setLoading] = useState(true);
 	const [ticket, setTicket] = useState<Ticket>({});
 	const [ticketPropertiesMap, setTicketPropertiesMap] = useState<TicketPropertiesMap>({});
 	const navigate = useNavigate();
 
+	// Mirrors the view page's groups, so the same fields sit under the same
+	// headings in both directions.
 	const tableCategories = [
 		{
 			name: 'Gegevens Kind',
@@ -61,7 +72,6 @@ function ViewTicket() {
 		if (!ticketId) {
 			navigate('/zoek');
 		} else {
-			setLoading(true);
 			apiCall('findChildById', { id: ticketId }).then((result) => {
 				setLoading(false);
 
@@ -88,20 +98,27 @@ function ViewTicket() {
 
 	const cancel = () => navigate('/bekijk-ticket?ticket-id=' + ticket.id, { replace: true });
 
+	const getLabel = (prop: string) =>
+		(ticketPropertiesMap[prop] || {}).appLabel || (ticketPropertiesMap[prop] || {}).label || prop;
+
 	const displayName = [ticket.firstName, ticket.lastName].filter(Boolean).join(' ');
 
 	return (
-		<Layout noHeader={true} noPadding={true}>
+		<Layout title="" noPadding={true} onBack={cancel} theme={getWijkThemeClass(ticket.hutNr).replace('theme-', '')}>
 			<LoadingIcon shown={loading} />
 			{!loading &&
 				<div className={'ticketCard ticket-edit ' + getWijkThemeClass(ticket.hutNr)}>
-					<div className="ticket-topbar">
-						<button className="ticket-close" onClick={cancel} title="Annuleren" aria-label="Annuleren">
-							✕
-						</button>
-					</div>
-
 					<h1 className="ticket-name">{displayName || 'Ticket bewerken'}</h1>
+
+					{/* Same identity chips as the view page; they track what you type. */}
+					<div className="ticket-subline">
+						{ticket.wristband
+							? <span className="ticket-chip">Bandje {ticket.wristband}</span>
+							: <span className="ticket-chip neutral">Nog geen bandje</span>}
+						{ticket.hutNr
+							? <span className="ticket-chip">Hutje {ticket.hutNr}</span>
+							: <span className="ticket-chip neutral">Nog geen hutje</span>}
+					</div>
 
 					<div className="ticket-group">
 						<h3>Naam</h3>
@@ -137,17 +154,26 @@ function ViewTicket() {
 							<div className="ticket-fields">
 								{cat.props.map((prop) =>
 									<div className="ticket-field" key={prop}>
-										<label htmlFor={'field-' + prop}>
-											{(ticketPropertiesMap[prop] || {}).label}
-										</label>
-										<input
-											id={'field-' + prop}
-											type="text"
-											title={(ticketPropertiesMap[prop] || {}).label}
-											onChange={(e) => setTicket({ ...ticket, [prop]: e.target.value })}
-											value={ticket[prop]}
-											placeholder={(ticketPropertiesMap[prop] || {}).label}
-										/>
+										<label htmlFor={'field-' + prop}>{getLabel(prop)}</label>
+										{prop === 'opmerkingen' ? (
+											<textarea
+												id={'field-' + prop}
+												rows={3}
+												title={getLabel(prop)}
+												onChange={(e) => setTicket({ ...ticket, [prop]: e.target.value })}
+												value={ticket[prop] || ''}
+												placeholder={getLabel(prop)}
+											/>
+										) : (
+											<input
+												id={'field-' + prop}
+												type={getInputType(prop)}
+												title={getLabel(prop)}
+												onChange={(e) => setTicket({ ...ticket, [prop]: e.target.value })}
+												value={ticket[prop] || ''}
+												placeholder={getLabel(prop)}
+											/>
+										)}
 									</div>
 								)}
 							</div>
@@ -163,4 +189,4 @@ function ViewTicket() {
 	);
 }
 
-export default ViewTicket;
+export default EditTicket;
