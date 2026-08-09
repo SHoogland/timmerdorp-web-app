@@ -15,35 +15,6 @@
 	padding: 0 var(--gutter) calc(var(--s-10) + var(--safe-bottom));
 }
 
-.ticket-topbar {
-	position: sticky;
-	top: 0;
-	z-index: 20;
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-	height: calc(var(--appbar-h) + var(--safe-top));
-	padding-top: var(--safe-top);
-	margin: 0 calc(var(--gutter) * -1);
-	padding-right: var(--s-3);
-	background: color-mix(in srgb, var(--c-bg) 88%, transparent);
-	backdrop-filter: blur(12px);
-	-webkit-backdrop-filter: blur(12px);
-
-	.ticket-close {
-		width: var(--tap);
-		height: var(--tap);
-		min-height: var(--tap);
-		padding: 0;
-		border-radius: var(--r-full);
-		background: var(--c-surface);
-		color: var(--c-text-2);
-		box-shadow: var(--e-1);
-		font-size: 1.125rem;
-		line-height: 1;
-	}
-}
-
 .ticket-name {
 	margin: var(--s-2) 0 var(--s-1);
 	font-family: var(--font-display);
@@ -136,18 +107,14 @@
 		color: var(--wijk);
 		font-weight: 650;
 	}
-
-	// Edit mode: inputs sit flush inside the value cell.
-	input[type="text"] {
-		min-height: 40px;
-		padding: 0 var(--s-3);
-		font-size: var(--t-small);
-	}
 }
 
 // ---- Edit form ------------------------------------------------
-// Label above input, stacked: on a 390px phone a two-column table
-// leaves the input too narrow to read what you typed.
+// The same card, dividers and row rhythm as .ticket-table on the view
+// page, so the two read as one screen in two modes. The one deliberate
+// difference: label above input rather than beside it, because on a
+// 390px phone a two-column row leaves the input too narrow to read
+// what you typed.
 
 .ticket-fields {
 	background: var(--c-surface);
@@ -164,23 +131,39 @@
 		border-bottom: none;
 	}
 
+	// Matches the view table's label column exactly.
 	label {
+		display: block;
 		margin-bottom: var(--s-1);
 		font-size: var(--t-micro);
 		font-weight: 600;
 		color: var(--c-text-3);
 	}
 
-	input[type="text"] {
-		min-height: var(--tap);
-		padding: 0 var(--s-3);
+	input,
+	textarea {
+		width: 100%;
 		background: var(--c-surface-sunken);
 		border-color: transparent;
+		font-size: var(--t-small);
+		font-weight: 550;
 
 		&:focus {
 			background: var(--c-surface);
 			border-color: var(--wijk);
 		}
+	}
+
+	input {
+		min-height: var(--tap);
+		padding: 0 var(--s-3);
+	}
+
+	textarea {
+		min-height: 84px;
+		padding: var(--s-2) var(--s-3);
+		line-height: 1.45;
+		resize: vertical;
 	}
 }
 
@@ -206,9 +189,11 @@
 	backdrop-filter: blur(12px);
 	-webkit-backdrop-filter: blur(12px);
 
+	// Same button metrics as .ticket-actions on the view page.
 	button {
 		flex: 1 1 auto;
 		min-height: 50px;
+		font-size: var(--t-small);
 	}
 
 	// Cancel is the smaller escape hatch; save owns the width.
