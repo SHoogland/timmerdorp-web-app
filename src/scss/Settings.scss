@@ -1,28 +1,235 @@
-@use "sass:color";
 @use "vars";
 
+// =============================================================
+//  Instellingen / Account info
+// =============================================================
 
-.categoryButton {
-	background-color: #f5f5f5!important;
-	border: 1px solid #e7e7e7;
-	border-radius: 12px;
-	color: #333;
-	cursor: pointer;
-	display: inline-block;
-	font-size: 14px;
-	margin: 5px;
-	padding: 5px 10px;
-	text-align: center;
-	text-decoration: none;
-	transition: all 0.3s;
+.settings-page {
+	// ---- Definition rows (label left, value right) -------------
+	.def-list {
+		.def-row {
+			display: flex;
+			align-items: baseline;
+			justify-content: space-between;
+			gap: var(--s-4);
+			padding: var(--s-3) var(--s-4);
+			border-bottom: 1px solid var(--c-border);
+			min-height: var(--tap);
 
-	&.selected {
-		background-color: vars.$blue!important;
-		border-color: color.adjust(vars.$blue, $lightness: -10%);
-		color: white;
+			&:last-child {
+				border-bottom: none;
+			}
+		}
+
+		.def-label {
+			flex: 0 0 auto;
+			font-size: var(--t-small);
+			font-weight: 600;
+			color: var(--c-text-2);
+		}
+
+		.def-value {
+			flex: 1 1 auto;
+			min-width: 0;
+			text-align: right;
+			font-weight: 600;
+			color: var(--c-text);
+			// Long e-mail addresses must not push the row sideways.
+			overflow-wrap: anywhere;
+
+			a {
+				font-weight: 600;
+				white-space: nowrap;
+			}
+		}
+	}
+
+	// ---- Admin / verzoek rows ----------------------------------
+	.people-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+
+		li {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: space-between;
+			gap: var(--s-2) var(--s-3);
+			padding: var(--s-3) var(--s-4);
+			border-bottom: 1px solid var(--c-border);
+
+			&:last-child {
+				border-bottom: none;
+			}
+		}
+
+		// Shares the row with the actions. The address truncates rather than
+		// wrapping to its own line, which was making every row two-storey.
+		.person {
+			display: flex;
+			flex-direction: column;
+			min-width: 0;
+			flex: 1 1 auto;
+		}
+
+		.person-name {
+			font-weight: 650;
+			color: var(--c-text);
+			line-height: 1.3;
+		}
+
+		.person-email {
+			font-size: var(--t-small);
+			color: var(--c-text-3);
+			line-height: 1.35;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.person-actions {
+			display: flex;
+			flex: 0 0 auto;
+			gap: var(--s-2);
+			margin-left: auto;
+		}
+	}
+
+	.add-admin {
+		margin-top: var(--s-3);
+		padding-left: 0;
+		padding-right: 0;
+		justify-content: flex-start;
+	}
+
+	// ---- Event category filter ---------------------------------
+	// Scrolls inside itself; the page never moves sideways.
+	.chip-row {
+		display: flex;
+		gap: var(--s-2);
+		overflow-x: auto;
+		overscroll-behavior-x: contain;
+		-webkit-overflow-scrolling: touch;
+		scrollbar-width: none;
+		padding-bottom: var(--s-2);
+		margin-bottom: var(--s-3);
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
+	}
+
+	.chip {
+		flex: 0 0 auto;
+		min-height: 36px;
+		padding: 0 var(--s-4);
+		border-radius: var(--r-full);
+		font-size: var(--t-small);
+		font-weight: 600;
+		white-space: nowrap;
+		background: var(--c-surface);
+		color: var(--c-text-2);
+		box-shadow: inset 0 0 0 1px var(--c-border);
+
+		&.is-selected {
+			background: var(--wijk);
+			color: var(--on-wijk);
+			box-shadow: none;
+		}
+	}
+
+	// ---- Event history timeline --------------------------------
+	.event-timeline {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+
+		li {
+			position: relative;
+			padding: var(--s-3) var(--s-4) var(--s-3) var(--s-8);
+			border-bottom: 1px solid var(--c-border);
+			font-size: var(--t-small);
+			color: var(--c-text-2);
+			line-height: 1.45;
+
+			&:last-child {
+				border-bottom: none;
+			}
+
+			// Timeline dot.
+			&::before {
+				content: "";
+				position: absolute;
+				left: var(--s-4);
+				top: 1.15em;
+				width: 7px;
+				height: 7px;
+				border-radius: var(--r-full);
+				background: var(--c-border-strong);
+			}
+		}
+	}
+
+	.load-more {
+		margin-top: var(--s-3);
+		text-align: center;
+	}
+
+	// ---- Destructive action ------------------------------------
+	// Kept well away from anything benign so it cannot be hit by mistake.
+	.danger-zone {
+		margin-top: var(--s-12);
+		padding-top: var(--s-6);
+		border-top: 1px solid var(--c-border);
 	}
 }
 
-ul#eventHistory li {
-	margin-bottom: 6px;
+// =============================================================
+//  QR scanner overlay (ScanTicket)
+//  Lives here rather than in its own partial because styles.scss
+//  only @use's the existing page partials.
+// =============================================================
+
+.scanner-page {
+	position: fixed;
+	inset: 0;
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	// The camera feed needs a true black surround, not a themed surface.
+	background: #000;
+	color: #fff;
+
+	.scanner-stage {
+		width: 100%;
+		text-align: center;
+	}
+
+	#qrscanner {
+		width: 100%;
+	}
+}
+
+.scanner-close {
+	position: fixed;
+	top: calc(var(--safe-top) + var(--s-3));
+	left: var(--s-3);
+	z-index: 3;
+	width: var(--tap);
+	height: var(--tap);
+	min-height: var(--tap);
+	padding: 0;
+	border-radius: var(--r-full);
+	background: rgba(255, 255, 255, 0.18);
+	color: #fff;
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+
+	svg {
+		width: 20px;
+		height: 20px;
+	}
 }

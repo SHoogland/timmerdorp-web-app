@@ -1,0 +1,174 @@
+// =============================================================
+//  Timmerdorp design tokens
+//  Everything visual resolves to a custom property defined here.
+//  Wijk theming works by re-pointing --wijk-* on a theme class,
+//  so components never need to know which wijk they are in.
+// =============================================================
+
+:root {
+	// ---- Wijk palette -----------------------------------------
+	// Retuned from the old material defaults: warmer, deeper, and
+	// balanced so no single wijk shouts louder than the others.
+	--blue: #2f6fed;
+	--blue-deep: #1b4fbf;
+	--blue-soft: #e9f0fe;
+	--blue-ink: #12377f;
+
+	--red: #e14434;
+	--red-deep: #b32e20;
+	--red-soft: #fdeceb;
+	--red-ink: #7e2016;
+
+	--green: #1fa45c;
+	--green-deep: #157a43;
+	--green-soft: #e6f6ed;
+	--green-ink: #0c4a29;
+
+	--yellow: #f7b32b;
+	--yellow-deep: #cf8f0d;
+	--yellow-soft: #fef5e3;
+	--yellow-ink: #6d4a05;
+
+	// ---- Warm neutrals ----------------------------------------
+	// Slightly warm so the app reads like paper and timber rather
+	// than a cold dashboard.
+	--n-0: #ffffff;
+	--n-25: #fbfaf7;
+	--n-50: #f7f5f1;
+	--n-100: #efece6;
+	--n-200: #e6e1d8;
+	--n-300: #d3ccc0;
+	--n-400: #aca595;
+	--n-500: #8a8377;
+	--n-600: #665f57;
+	--n-700: #47423b;
+	--n-800: #2c2823;
+	--n-900: #1e1c19;
+
+	// ---- Semantic surfaces ------------------------------------
+	--c-bg: var(--n-50);
+	--c-surface: var(--n-0);
+	--c-surface-2: var(--n-25);
+	--c-surface-sunken: var(--n-100);
+	--c-border: var(--n-200);
+	--c-border-strong: var(--n-300);
+
+	--c-text: var(--n-900);
+	--c-text-2: var(--n-600);
+	--c-text-3: var(--n-500);
+	--c-text-inverse: var(--n-0);
+
+	--c-danger: var(--red);
+	--c-success: var(--green);
+
+	// ---- Default wijk (blue) ----------------------------------
+	--wijk: var(--blue);
+	--wijk-deep: var(--blue-deep);
+	--wijk-soft: var(--blue-soft);
+	--wijk-ink: var(--blue-ink);
+	--on-wijk: #ffffff;
+
+	// ---- Type -------------------------------------------------
+	--font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+		"Helvetica Neue", Arial, sans-serif;
+	--font-display: "Mikado-Bold", var(--font-ui);
+	--font-num: ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+
+	--t-display: clamp(2rem, 9vw, 2.75rem);
+	--t-h1: 1.625rem;
+	--t-h2: 1.25rem;
+	--t-h3: 1.0625rem;
+	--t-body: 1rem;
+	--t-small: 0.875rem;
+	--t-micro: 0.78125rem;
+
+	// ---- Space ------------------------------------------------
+	--s-1: 4px;
+	--s-2: 8px;
+	--s-3: 12px;
+	--s-4: 16px;
+	--s-5: 20px;
+	--s-6: 24px;
+	--s-8: 32px;
+	--s-10: 40px;
+	--s-12: 48px;
+
+	// Horizontal page gutter — one value, used everywhere.
+	--gutter: 20px;
+
+	// ---- Radius -----------------------------------------------
+	--r-sm: 8px;
+	--r-md: 12px;
+	--r-lg: 16px;
+	--r-xl: 20px;
+	--r-full: 999px;
+
+	// ---- Elevation --------------------------------------------
+	// Warm-tinted shadows; grey shadows on warm surfaces look dirty.
+	--e-1: 0 1px 2px rgba(40, 32, 20, 0.05), 0 1px 3px rgba(40, 32, 20, 0.04);
+	--e-2: 0 2px 4px rgba(40, 32, 20, 0.04), 0 6px 16px -6px rgba(40, 32, 20, 0.12);
+	--e-3: 0 8px 28px -8px rgba(40, 32, 20, 0.18), 0 2px 6px rgba(40, 32, 20, 0.05);
+	--e-pop: 0 16px 48px -12px rgba(40, 32, 20, 0.28);
+
+	// ---- Motion -----------------------------------------------
+	--ease: cubic-bezier(0.2, 0, 0, 1);
+	--ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+	--d-1: 120ms;
+	--d-2: 200ms;
+	--d-3: 320ms;
+
+	// ---- Chrome sizing ----------------------------------------
+	--appbar-h: 56px;
+	--tabbar-h: 60px;
+	--safe-top: env(safe-area-inset-top, 0px);
+	--safe-bottom: env(safe-area-inset-bottom, 0px);
+	--tabbar-total: calc(var(--tabbar-h) + var(--safe-bottom));
+
+	// Minimum comfortable tap target.
+	--tap: 44px;
+}
+
+// ---- Wijk themes ---------------------------------------------
+// Applied high in the tree; every component below inherits.
+.theme-blue {
+	--wijk: var(--blue);
+	--wijk-deep: var(--blue-deep);
+	--wijk-soft: var(--blue-soft);
+	--wijk-ink: var(--blue-ink);
+	--on-wijk: #ffffff;
+}
+
+.theme-red {
+	--wijk: var(--red);
+	--wijk-deep: var(--red-deep);
+	--wijk-soft: var(--red-soft);
+	--wijk-ink: var(--red-ink);
+	--on-wijk: #ffffff;
+}
+
+.theme-green {
+	--wijk: var(--green);
+	--wijk-deep: var(--green-deep);
+	--wijk-soft: var(--green-soft);
+	--wijk-ink: var(--green-ink);
+	--on-wijk: #ffffff;
+}
+
+// Yellow is inherently light — it always takes dark ink on top,
+// otherwise contrast collapses in sunlight.
+.theme-yellow {
+	--wijk: var(--yellow);
+	--wijk-deep: var(--yellow-deep);
+	--wijk-soft: var(--yellow-soft);
+	--wijk-ink: var(--yellow-ink);
+	--on-wijk: #3a2a03;
+}
+
+// White / EHBO.
+.theme-white {
+	--wijk: #ffffff;
+	--wijk-deep: var(--n-200);
+	--wijk-soft: var(--n-50);
+	--wijk-ink: var(--n-800);
+	--on-wijk: var(--n-900);
+}

@@ -50,40 +50,44 @@ function NewPassword() {
 	}
 
 	return (
-		<Layout title="Nieuw Wachtwoord" disableBackButton={true} disableLogo={true} backgroundColor='blue'>
-			{!hasSaved &&
-				<>
-					<div className="form">
-						<p>Op deze pagina kan je een nieuw wachtwoord instellen voor het account met e-mailadres { email }.</p>
+		<Layout noHeader={true} backgroundColor='blue'>
+			<div className="auth-page">
+				<div className="auth-head">
+					<div className="auth-brand">Timmerdorp</div>
+					<h1 className="auth-title">Nieuw Wachtwoord</h1>
+				</div>
 
-						<div
-							style={{ display: 'none' }}
-						>
+				{!hasSaved &&
+					<>
+						<p className="auth-copy">Op deze pagina kan je een nieuw wachtwoord instellen voor het account met e-mailadres { email }.</p>
+
+						<div className="form">
 							{/* Verborgen e-mail input voor toegankelijkheid, per deze standaard:
 							https://www.chromium.org/developers/design-documents/create-amazing-password-forms */}
+							<div className="hidden">
+								<input
+									value={email}
+									autoComplete='username'
+									type="email"
+								/>
+							</div>
 							<input
-								value={email}
-								autoComplete='username'
-								type="email"
+								name="password"
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
+								onKeyUp={(e) => e.key == 'Enter' ? saveNewPassword() : null}
+								type="password"
+								placeholder="Nieuw wachtwoord"
 							/>
+							<button className='big' onClick={() => saveNewPassword()}>Nieuw wachtwoord opslaan</button>
+
+							<LoadingIcon color="white" shown={loading}/>
 						</div>
-						<input
-							name="password"
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
-							onKeyUp={(e) => e.key == 'Enter' ? saveNewPassword() : null}
-							type="password"
-							placeholder="Nieuw wachtwoord"
-						/>
-						<button className='big' onClick={() => saveNewPassword()}>Nieuw wachtwoord opslaan</button>
+					</>
+				}
 
-						<LoadingIcon shown={loading}/>
-					</div>
-				</>
-			}
-
-			{hasSaved && <p>Nieuw wachtwoord opgeslagen! Ga naar de <a href="/login">Inlogpagina</a> om in te loggen met je nieuwe wachtwoord.</p>}
-
+				{hasSaved && <p className="auth-copy">Nieuw wachtwoord opgeslagen! Ga naar de <a href="/login">Inlogpagina</a> om in te loggen met je nieuwe wachtwoord.</p>}
+			</div>
 		</Layout>
 	);
 }

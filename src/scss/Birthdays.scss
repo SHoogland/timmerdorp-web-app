@@ -1,317 +1,179 @@
 @use "vars";
-@use "sass:color";
 
-// Enhanced birthdays page styling
-.peopleList {
-	margin: 20px 0;
-	
-	.list-header {
-		background: vars.$blue;
-		color: white;
-		padding: 16px 20px !important;
-		border-radius: 12px 12px 0 0;
-		font-weight: 600;
-		font-size: 1.1em;
-		position: relative;
-		margin: 0;
-		
-		// Share icon styling
-		svg {
-			transition: all 0.2s ease;
-			
-			&:hover {
-				transform: scale(1.1);
-				opacity: 0.8;
-			}
-		}
+// =============================================================
+//  Verjaardagen
+//  One section per dag: a plain heading row with a count pill and
+//  a share button, then a card per jarig kind.
+// =============================================================
+
+.birthdays-page {
+	// Per-hut colour. This view shows all four wijken at once, so the
+	// raw palette is allowed here.
+	.wijk-yellow {
+		--hut: var(--yellow);
+		--hut-soft: var(--yellow-soft);
+		--hut-ink: var(--yellow-ink);
 	}
-	
-	// Wijk-based header colors
-	&.wijk-yellow .list-header {
-		background: vars.$yellow;
-		color: vars.$darkTextColor;
+	.wijk-red {
+		--hut: var(--red);
+		--hut-soft: var(--red-soft);
+		--hut-ink: var(--red-ink);
 	}
-	
-	&.wijk-red .list-header {
-		background: vars.$red;
-		color: white;
+	.wijk-blue {
+		--hut: var(--blue);
+		--hut-soft: var(--blue-soft);
+		--hut-ink: var(--blue-ink);
 	}
-	
-	&.wijk-blue .list-header {
-		background: vars.$blue;
-		color: white;
+	.wijk-green {
+		--hut: var(--green);
+		--hut-soft: var(--green-soft);
+		--hut-ink: var(--green-ink);
 	}
-	
-	&.wijk-green .list-header {
-		background: vars.$green;
-		color: white;
+	.wijk-onbekend {
+		--hut: var(--c-border-strong);
+		--hut-soft: var(--c-surface-sunken);
+		--hut-ink: var(--c-text-2);
 	}
-	
-	.childItem {
-		background: white;
-		border-radius: 0;
-		margin: 0;
-		cursor: pointer;
-		transition: all 0.2s ease;
-		border-bottom: 1px solid #f0f0f0;
-		
-		&:last-child {
-			border-radius: 0 0 12px 12px;
-			border-bottom: none;
-		}
-		
-		&:hover {
-			background: #f8f9fa;
-			transform: translateY(-1px);
-			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-		}
-		
-		&:active {
-			transform: translateY(0);
-		}
-		
-		table {
+
+	.birthday-day:last-child {
+		margin-bottom: 0;
+	}
+
+	// ---- Day heading row ----------------------------------------
+	.day-header {
+		display: flex;
+		align-items: center;
+		gap: var(--s-2);
+		margin-bottom: var(--s-3);
+
+		.section-title {
+			flex: 1;
+			min-width: 0;
 			margin: 0;
-			
-			tbody {
-				tr {
-					td {
-						padding: 16px 20px !important;
-						border: none;
-						vertical-align: middle;
-						
-						&:first-child {
-							width: 48px;
-							text-align: center;
-							
-							svg {
-								color: vars.$yellow;
-								transition: transform 0.2s ease;
-							}
-						}
-						
-						&:nth-child(2) {
-							h2 {
-								margin: 0 0 8px 0;
-								color: vars.$mediumBlack;
-								font-size: 1.1em;
-								font-weight: 600;
-								line-height: 1.3;
-							}
-							
-							p {
-								margin: 4px 0;
-								color: #666;
-								font-size: 14px;
-								line-height: 1.4;
-							}
-						}
-						
-						&:last-child {
-							width: 48px;
-							text-align: center;
-							
-							button.fab {
-								background: vars.$blue;
-								color: white;
-								border-radius: 50%;
-								width: 36px;
-								height: 36px;
-								padding: 0;
-								display: flex;
-								align-items: center;
-								justify-content: center;
-								transition: all 0.2s ease;
-								
-								&:hover {
-									transform: scale(1.05);
-									background: color.adjust(vars.$blue, $lightness: -10%);
-								}
-							}
-						}
-					}
-				}
-			}
+			font-size: var(--t-h2);
 		}
-		
-		// Birthday cake colors based on wijk
-		.birthday-cake-yellow {
-			color: vars.$yellow!important;
-		}
-		
-		.birthday-cake-red {
-			color: vars.$red!important;
-		}
-		
-		.birthday-cake-blue {
-			color: vars.$blue!important;
-		}
-		
-		.birthday-cake-green {
-			color: vars.$green!important;
-		}
-		
-		.birthday-cake-onbekend {
-			color: vars.$mediumBlack!important;
-		}
-		
-		// Wijk-based search button colors
-		&.wijk-yellow button.fab {
-					background: vars.$yellow;
-		color: vars.$darkTextColor;
-			
-			&:hover {
-				background: color.adjust(vars.$yellow, $lightness: -10%);
-			}
-		}
-		
-		&.wijk-red button.fab {
-			background: vars.$red;
-			color: white;
-			
-			&:hover {
-				background: color.adjust(vars.$red, $lightness: -10%);
-			}
-		}
-		
-		&.wijk-blue button.fab {
-			background: vars.$blue;
-			color: white;
-			
-			&:hover {
-				background: color.adjust(vars.$blue, $lightness: -10%);
-			}
-		}
-		
-		&.wijk-green button.fab {
-			background: vars.$green;
-			color: white;
-			
-			&:hover {
-				background: color.adjust(vars.$green, $lightness: -10%);
-			}
-		}
-		
-		// Wijk color indicators
-		&.yellow {
-			border-left: 4px solid vars.$yellow;
-		}
-		
-		&.red {
-			border-left: 4px solid vars.$red;
-		}
-		
-		&.blue {
-			border-left: 4px solid vars.$blue;
-		}
-		
-		&.green {
-			border-left: 4px solid vars.$green;
-		}
-	}
-	
-	hr {
-		display: none;
-	}
-}
 
-// Mobile responsiveness
-@media (max-width: 768px) {
-	.peopleList {
-		margin: 15px 0;
-		
-		.list-header {
-			padding: 14px 16px !important;
-			font-size: 1em;
+		.day-count {
+			flex: 0 0 auto;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			min-width: 28px;
+			height: 26px;
+			padding: 0 var(--s-2);
+			border-radius: var(--r-full);
+			background: var(--c-surface-sunken);
+			color: var(--c-text-2);
+			font-size: var(--t-small);
+			font-weight: 700;
 		}
-		
-		.childItem {
-			table {
-				tbody {
-					tr {
-						td {
-							padding: 14px 16px !important;
-							
-							&:first-child {
-								width: 40px;
-								
-								svg {
-									font-size: 28px;
-								}
-							}
-							
-							&:nth-child(2) {
-								h2 {
-									font-size: 1em;
-								}
-								
-								p {
-									font-size: 13px;
-								}
-							}
-							
-							&:last-child {
-								width: 40px;
-								
-								button.fab {
-									width: 32px;
-									height: 32px;
-								}
-							}
-						}
-					}
-				}
+
+		.day-share {
+			// Quiet by default; it keeps its full 44px touch target.
+			background: transparent;
+			color: var(--c-text-3);
+
+			&:hover {
+				background: var(--c-surface-sunken);
+				color: var(--c-text);
+			}
+
+			svg {
+				width: 17px;
+				height: 17px;
 			}
 		}
 	}
-}
 
-@media (max-width: 480px) {
-	.peopleList {
-		margin: 10px 0;
-		
-		.list-header {
-			padding: 12px 14px !important;
-			font-size: 0.95em;
+	// ---- Child cards --------------------------------------------
+	.birthday-list {
+		display: flex;
+		flex-direction: column;
+		gap: var(--s-2);
+	}
+
+	.birthday-card {
+		display: flex;
+		align-items: center;
+		gap: var(--s-3);
+		width: 100%;
+		padding: var(--s-3) var(--s-4);
+		text-align: left;
+		background: var(--c-surface);
+		color: var(--c-text);
+		border-radius: var(--r-lg);
+		border-left: 4px solid var(--hut, var(--c-border-strong));
+		box-shadow: var(--e-1);
+		font-weight: 400;
+
+		&:hover {
+			background: var(--c-surface-2);
+			box-shadow: var(--e-2);
 		}
-		
-		.childItem {
-			table {
-				tbody {
-					tr {
-						td {
-							padding: 12px 14px !important;
-							
-							&:first-child {
-								width: 36px;
-								
-								svg {
-									font-size: 24px;
-								}
-							}
-							
-							&:nth-child(2) {
-								h2 {
-									font-size: 0.95em;
-								}
-								
-								p {
-									font-size: 12px;
-								}
-							}
-							
-							&:last-child {
-								width: 36px;
-								
-								button.fab {
-									width: 28px;
-									height: 28px;
-								}
-							}
-						}
-					}
-				}
+
+		.cake-chip {
+			flex: 0 0 auto;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 44px;
+			height: 44px;
+			border-radius: var(--r-md);
+			background: var(--hut-soft, var(--c-surface-sunken));
+			color: var(--hut-ink, var(--c-text-2));
+
+			svg {
+				width: 22px;
+				height: 22px;
 			}
 		}
+
+		.birthday-main {
+			flex: 1;
+			min-width: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+		}
+
+		.birthday-name {
+			font-size: var(--t-h3);
+			font-weight: 700;
+			line-height: 1.2;
+			letter-spacing: -0.01em;
+			overflow-wrap: anywhere;
+		}
+
+		.birthday-sub {
+			font-size: var(--t-small);
+			line-height: 1.35;
+			color: var(--c-text-2);
+			font-variant-numeric: tabular-nums;
+		}
+
+		.birthday-search {
+			flex: 0 0 auto;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 36px;
+			height: 36px;
+			border-radius: var(--r-full);
+			background: var(--wijk-soft);
+			color: var(--wijk-ink);
+
+			svg {
+				width: 15px;
+				height: 15px;
+			}
+		}
+	}
+
+	.empty-state {
+		padding: var(--s-6) var(--s-5);
+		background: var(--c-surface);
+		border-radius: var(--r-lg);
+		box-shadow: var(--e-1);
+		font-size: var(--t-small);
 	}
 }

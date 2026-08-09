@@ -1,743 +1,310 @@
 @use "vars";
-@use "sass:color";
 
-// Zorg dat alleen de home pagina niet scrollt
-html,
-body {
-	margin: 0;
-	padding: 0;
-	min-height: 100vh;
-	width: 100vw;
-	/* overflow en height niet forceren, zodat andere pagina's kunnen scrollen */
-}
+// =============================================================
+//  Home
+//  Keeps the original architecture — full-bleed photo hero over a
+//  zero-radius edge-to-edge grid of wijk-coloured rows. No cards,
+//  no gutters, nothing floating. The polish is in the type, the
+//  hairlines, the scrim and the press states.
+// =============================================================
 
-.homeContent {
+.home {
 	position: relative;
-	margin: 0;
-	padding: 0;
-	width: 100vw;
-	height: 100vh;
-	overflow: hidden;
-	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
-
-	&.blue {
-		background: vars.$blue;
-	}
-	&.green {
-		background: vars.$green;
-	}
-	&.yellow {
-		background: vars.$yellow;
-	}
-	&.red:not(.homeInfoCard) {
-		background: vars.$red;
-	}
-	&.white {
-		background: white;
-	}
-
-	button {
-		border-radius: 0px !important;
-		margin-top: 0 !important;
-		margin-bottom: 0 !important;
-		border: none;
-		cursor: pointer;
-		color: white;
-		font-weight: bold;
-		font-size: 1.05em;
-		letter-spacing: 1px;
-		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-		position: relative;
-		overflow: hidden;
-		box-shadow: none;
-
-		
-		// Set wijk-based background colors for buttons
-		&.blue:not(.homeInfoCard) {
-			background-color: vars.$blue !important;
-			&:nth-child(2n) {
-				background: color.adjust(vars.$blue, $lightness: -4.5%)!important;
-			}
-		}
-		&.green:not(.homeInfoCard) {
-			background-color: vars.$green !important;
-			&:nth-child(2n) {
-				background: color.adjust(vars.$green, $lightness: -2.5%)!important;
-			}
-		}
-		&.yellow:not(.homeInfoCard) {
-			background-color: vars.$yellow !important;
-			color: vars.$darkTextColor !important;
-			&:nth-child(2n) {
-				background: color.adjust(vars.$yellow, $lightness: -5.5%)!important;
-			}
-		}
-		&.red:not(.homeInfoCard) {
-			background-color: vars.$red !important;
-			&:nth-child(2n) {
-				background: color.adjust(vars.$red, $lightness: -2.5%)!important;
-			}
-		}
-		&.white:not(.homeInfoCard) {
-			background-color: white !important;
-			color: vars.$darkTextColor !important;
-		}
-
-		// Add hover effect with scale
-		&:hover {
-			transform: translateY(-2px);
-			box-shadow: none;
-		}
-
-		// Add active state
-		&:active {
-			transform: translateY(0);
-			box-shadow: none;
-		}
-
-		&.small {
-			grid-column: span 1;
-			height: 80px;
-		}
-		&.realWeather > .homeBtnD {
-			position: relative;
-			left: -10px;
-			flex-direction: row !important;
-			align-items: center !important;
-
-			h2 {
-				position: absolute;
-				top: 20px;
-				left: 32px;
-				margin: 0;
-				padding: 0!important;
-				padding-left: 20px!important;
-			}
-			.weatherMsg {
-				position: absolute;
-				top: 42px;
-				left: 52px;
-				margin: 0;
-				p {
-					padding: 0!important;
-				}
-			}
-		}
-
-		&.small > .homeBtnD > i.material-icons {
-			font-size: 2em;
-			width: 100%;
-			text-align: center;
-			top: 24px;
-			left: 0px;
-		}
-
-		&.small:last-of-type {
-			margin-right: 0px !important;
-		}
-
-		&.halfWidth {
-			margin-left: 0 !important;
-		}
-
-		&.bg-white {
-			color: #333;
-			background: #eaeaea;
-			&:hover,
-			&:active {
-				background: #ccc !important;
-			}
-		}
-
-		i.material-icons {
-			font-size: 1.6em;
-			margin-right: 12px;
-			width: 24px;
-			height: 24px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-	}
-
-	#homeButtons {
-		position: relative;
-		width: 100%;
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: 0;
-		height: fit-content;
-
-		button {
-			height: 80px;
-			margin: 0;
-			padding: 0;
-			position: relative;
-			overflow: hidden;
-			font-family: "Montserrat", sans-serif;
-			font-weight: 600;
-			letter-spacing: 0.5px;
-
-			// Add subtle inner glow effect
-			&::before {
-				content: "";
-				position: absolute;
-				top: 0;
-				left: -100%;
-				width: 100%;
-				height: 100%;
-				// background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-				transition: left 0.6s ease;
-			}
-
-			&:hover::before {
-				left: 100%;
-			}
-			
-			// Flip gradient direction for second weather card
-			&.second-weather::before {
-				// background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-				left: 100%;
-			}
-			
-			&.second-weather:hover::before {
-				left: -100%;
-			}
-
-			// Add ripple effect on click
-			&::after {
-				content: "";
-				position: absolute;
-				top: 50%;
-				left: 50%;
-				width: 0;
-				height: 0;
-				border-radius: 50%;
-				background: rgba(255, 255, 255, 0.3);
-				transform: translate(-50%, -50%);
-				transition:
-					width 0.6s ease,
-					height 0.6s ease;
-			}
-
-			&:active::after {
-				width: 300px;
-				height: 300px;
-			}
-
-			&.small {
-				grid-column: span 1;
-				height: 80px;
-			}
-
-			&.halfWidth {
-				grid-column: span 1;
-				height: 80px;
-			}
-
-			&:not(.small):not(.halfWidth) {
-				grid-column: span 2;
-				height: 80px;
-			}
-
-			// Responsive adjustments
-			@media screen and (max-width: 480px) {
-				font-size: 0.9em;
-
-				i.material-icons {
-					font-size: 1.4em;
-				}
-			}
-		}
-	}
-
-	#homeBtnContainer {
-		flex: 0.7;
-		position: relative;
-		padding: 0;
-		margin-top: -80px;
-		min-height: 0;
-
-		// Add subtle background pattern
-		&::before {
-			content: "";
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			background: radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
-				radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
-			pointer-events: none;
-		}
-	}
-
-	#overlay {
-		z-index: 20;
-		width: 100%;
-		height: 100%;
-		position: absolute;
-		top: 0;
-		left: 0;
-		background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.1) 100%);
-		transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		text-align: center;
-	}
-
-	.homeBtnD {
-		text-align: left;
-		position: relative;
-		padding: 0px 16px;
-		display: flex;
-		align-items: center;
-		height: 100%;
-		width: 100%;
-
-		> span {
-			font-size: 18px;
-			font-weight: 600;
-			margin-left: 8px;
-			flex: 1;
-		}
-	}
-
-	header {
-		position: relative;
-		height: calc(100vh - 380px);
-		z-index: 10;
-		background-position: center;
-		background-size: cover;
-		background-image: url(../assets/header_bg.jpg);
-		transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background-position: center center;
-
-		// Add a subtle overlay for better text readability
-		&::before {
-			content: "";
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			// background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 100%);
-			z-index: 15;
-		}
-
-		* {
-			z-index: 25;
-		}
-	}
-
-	#ptitle {
-		text-align: center;
-		font-family: "Mikado-Bold", sans-serif !important;
-		margin: 0;
-		font-size: clamp(28px, 8vw, 48px);
-		position: relative;
-		z-index: 20;
-		color: white;
-		line-height: 1.1;
-		transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-		text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-		padding: 0 20px 32px 20px;
-
-		@media screen and (max-height: 680px) {
-			font-size: clamp(24px, 4vw, 36px);
-			br {
-				display: none;
-			}
-		}
-	}
-
-	#titleContainer {
-		width: 100%;
-		text-align: center;
-		z-index: 20;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.homeInfoCard {
-		transition-duration: 500ms;
-		z-index: 20;
-		color: white !important;
-
-		// Add glassmorphism effect
-		-webkit-backdrop-filter: blur(10px);
-		backdrop-filter: blur(10px);
-		border: none!important;
-
-		// Make background more transparent to overlay header
-		background: rgba(0, 0, 0, 0.4);
-
-		// Improve text alignment
-		.homeBtnD {
-			padding: 16px;
-			flex-direction: row;
-			align-items: center;
-			justify-content: flex-start;
-			height: 100%;
-			box-sizing: border-box;
-
-			.material-icons {
-				margin: 0!important;
-			}
-		}
-
-		// Ensure all text is white
-		h2,
-		.weatherMsg,
-		p,
-		span,
-		* {
-			color: white !important;
-		}
-
-		// Prevent line breaks in all text elements
-		h2,
-		.weatherMsg,
-		p {
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-		}
-
-		i.material-icons {
-			font-size: 2.5rem;
-			margin-left: 12px;
-			filter: none;
-			transition: all 0.3s ease;
-			flex-shrink: 0;
-
-			&:hover {
-				transform: scale(1.1);
-				filter: none;
-			}
-		}
-
-		.homeBtnD span {
-			top: -26px;
-			position: relative;
-		}
-	}
-
-	.weather {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		flex: 1;
-
-		h2,
-		.weatherMsg {
-			overflow-x: hidden;
-			margin: 0;
-			margin-bottom: 0!important;
-			font-weight: 600;
-			text-shadow: none;
-			line-height: 1.4;
-			color: white !important;
-			p {
-				padding: 0!important;
-			}
-		}
-
-		h2 {
-			font-size: 16px;
-			margin-bottom: 8px;
-			animation: fadeInUp 0.3s ease-out 0.2s both;
-			font-weight: 700;
-			color: white !important;
-		}
-
-		div.weatherMsg {
-			font-size: 12px;
-			margin-bottom: 6px;
-			animation: fadeInUp 0.3s ease-out 0.3s both;
-			font-weight: 500;
-			color: white !important;
-
-			p {
-				margin: 0;
-				text-shadow: none;
-				color: white !important;
-			}
-		}
-
-		#data {
-			.weatherMsg {
-				animation: fadeInUp 0.3s ease-out 0.4s both;
-
-				&:nth-child(2) {
-					animation-delay: 0.5s;
-				}
-
-				&:nth-child(3) {
-					animation-delay: 0.6s;
-				}
-			}
-		}
-	}
-
-	i.material-icons.data {
-		left: -8px !important;
-		position: relative;
-	}
-
-	#ptitle,
-	#ptitle * {
-		overflow: hidden;
-	}
-
-	#potentialAdminsNotification {
-		background: vars.$red;
-		width: 24px;
-		height: 24px;
-		line-height: 24px;
-		text-align: center;
-		border-radius: 24px;
-		position: absolute;
-		right: 6px;
-		top: 10px;
-		font-size: 12px;
-		font-weight: bold;
-		box-shadow: 0 2px 8px rgba(238, 2, 2, 0.4);
-		animation: pulse 2s infinite;
-
-		// Add glow effect
-		&::before {
-			content: "";
-			position: absolute;
-			top: -2px;
-			left: -2px;
-			right: -2px;
-			bottom: -2px;
-			background: vars.$red;
-			border-radius: 50%;
-			opacity: 0.3;
-			z-index: -1;
-			animation: pulse 2s infinite;
-		}
-	}
-
-	#wijkChoice {
-		z-index: 20;
-		padding: 24px;
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		left: 0;
-		color: white;
-		background: vars.$blue;
-		opacity: 1;
-		transition-duration: 600ms;
-
-		// Add backdrop blur effect
-		-webkit-backdrop-filter: blur(20px);
-		backdrop-filter: blur(20px);
-
-		// Add subtle shadow
-		box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.1);
-
-
-		&.white,
-		&.yellow {
-			ion-item {
-				color: black;
-			}
-			& {
-				color: black;
-			}
-		}
-
-		&.fadedOut {
-			opacity: 0;
-		}
-
-		h1 {
-			margin-top: 0;
-			text-align: center;
-		}
-
-		p {
-			text-align: center;
-			margin-bottom: 24px;
-		}
-
-		.wijk-select-container {
-			text-align: center;
-			margin-bottom: 24px;
-		}
-
-		.wijk-select {
-			width: 100%;
-			max-width: 300px;
-			padding: 16px;
-			border: none;
-			border-radius: 12px;
-			background: rgba(0, 0, 0, 0.2);
-			color: white;
-			font-size: 16px;
-			font-weight: 500;
-			transition: all 0.3s ease;
-			border: 2px solid rgba(255, 255, 255, 0.1);
-
-			&:focus {
-				outline: none;
-				border-color: rgba(255, 255, 255, 0.5);
-				background: rgba(0, 0, 0, 0.3);
-				transform: scale(1.02);
-			}
-
-			option {
-				background: #333;
-				color: white;
-				padding: 8px;
-			}
-		}
-
-		.wijk-save-btn {
-			width: 100%;
-			max-width: 300px;
-			margin: 0 auto;
-			display: block;
-			background: rgba(0, 0, 0, 0.2);
-			border: none;
-			color: white;
-			padding: 16px;
-			border-radius: 12px;
-			font-size: 16px;
-			font-weight: 600;
-			cursor: pointer;
-			transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-			border: 2px solid rgba(255, 255, 255, 0.1);
-			text-transform: uppercase;
-			letter-spacing: 1px;
-
-			&:hover {
-				background: rgba(0, 0, 0, 0.4);
-				border-color: rgba(255, 255, 255, 0.3);
-				transform: translateY(-2px);
-				box-shadow: none;
-			}
-
-			&:active {
-				transform: translateY(0);
-				box-shadow: none;
-			}
-		}
-	}
-
-	* {
-		font-family: "Montserrat", "Roboto", "Arial", "Helvetica", sans-serif;
-	}
-
-	#ptitle,
-	#ptitle * {
-		font-family: "Mikado-Bold", "Roboto", "Arial", "Helvetica", sans-serif;
-	}
+	height: 100dvh;
+	overflow: hidden;
+	background: var(--wijk);
 }
 
-.material-icons {
-	font-size: 24px;
-	line-height: 1;
-	display: inline-flex;
+// ---- Hero -----------------------------------------------------
+
+.home-hero {
+	position: relative;
+	flex: 1 1 auto;
+	// Lets the hero shrink to nothing on very short screens rather than
+	// pushing the action rows off the bottom.
+	min-height: 0;
+	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-style: normal;
-}
+	background-image: url("../assets/header_bg.jpg");
+	background-size: cover;
+	background-position: center;
 
-// Keyframe animations
-@keyframes fadeInUp {
-	from {
-		opacity: 0;
-		transform: translateY(10px);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-@keyframes slideInFromTop {
-	from {
-		opacity: 0;
-		transform: translateY(-15px);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
+	// Two-stop scrim: heavy at the very bottom so the glass strip and the
+	// wijk rows have something to sit against, light in the middle so the
+	// photo is still a photo.
+	&::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background:
+			linear-gradient(
+				to top,
+				rgba(18, 14, 9, 0.88) 0%,
+				rgba(18, 14, 9, 0.55) 22%,
+				rgba(18, 14, 9, 0.22) 48%,
+				rgba(18, 14, 9, 0.34) 100%
+			);
 	}
 }
 
-@keyframes pulse {
-	0% {
-		transform: scale(1);
-		opacity: 1;
+.home-title {
+	position: relative;
+	z-index: 2;
+	margin: 0;
+	padding: 0 var(--s-6);
+	// Flex centres the text *box*, but the box reserves descender space under
+	// "2026" that no glyph uses, so the ink reads ~0.06em high. Nudge it back
+	// down in em so the correction scales with the fluid font size.
+	transform: translateY(0.06em);
+	text-align: center;
+	font-family: var(--font-display);
+	font-size: clamp(2.25rem, 12vw, 3.5rem);
+	line-height: 0.94;
+	letter-spacing: 0.005em;
+	color: #fff;
+	text-shadow: 0 2px 24px rgba(0, 0, 0, 0.5);
+
+	.home-year {
+		display: block;
+		font-size: 0.98em;
+		// The year is the same weight but held back slightly, so the
+		// wordmark still leads.
+		opacity: 0.86;
 	}
-	50% {
-		transform: scale(1.05);
-		opacity: 0.7;
-	}
-	100% {
-		transform: scale(1);
-		opacity: 1;
+
+	@media (max-height: 680px) {
+		font-size: clamp(1.875rem, 9vw, 2.5rem);
 	}
 }
 
-// Add subtle entrance animation to the main content
-.homeContent {
-	animation: slideInFromTop 0.4s ease-out;
+// ---- Info strip -----------------------------------------------
+// A solid band in the wijk's deep tone, sitting between the photo and
+// the action rows. Deliberately NOT frosted glass: translucency over a
+// busy photo reads muddy, loses contrast in sunlight, and looks generic.
+// A solid block continues the stacked-colour architecture instead.
+
+.home-info {
+	position: relative;
+	z-index: 2;
+	flex: 0 0 auto;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	background: color-mix(in srgb, var(--wijk) 62%, #000);
 }
 
-// Add subtle staggered animation to buttons
-#homeButtons button {
-	opacity: 0;
-	animation: fadeInUp 0.4s ease-out forwards;
+.home-info-card {
+	display: flex;
+	align-items: center;
+	gap: var(--s-3);
+	height: 72px;
+	padding: 0 var(--s-4);
+	border-radius: 0;
+	text-align: left;
+	color: var(--on-wijk);
+	background: transparent;
+	transition: background-color var(--d-1) var(--ease);
 
-	&:nth-child(1) {
-		animation-delay: 0.05s;
+	// One hairline between the two halves, drawn on the first cell only so
+	// it can never double up at the seam.
+	&:first-child {
+		box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.14);
 	}
-	&:nth-child(2) {
-		animation-delay: 0.1s;
+
+	&:active {
+		transform: none;
+		background: rgba(0, 0, 0, 0.16);
 	}
-	&:nth-child(3) {
-		animation-delay: 0.15s;
+
+	.material-icons {
+		flex: 0 0 auto;
+		font-size: 24px;
+		opacity: 0.9;
 	}
-	&:nth-child(4) {
-		animation-delay: 0.2s;
+}
+
+.theme-yellow .home-info {
+	background: color-mix(in srgb, var(--wijk) 68%, #000);
+
+	// Yellow's --on-wijk is dark ink, which is right on the bright rows but
+	// unreadable on this darkened band. The band needs light type.
+	.home-info-card {
+		color: #fff;
 	}
-	&:nth-child(5) {
-		animation-delay: 0.25s;
+
+	.home-info-sub {
+		color: rgba(255, 255, 255, 0.75);
 	}
-	&:nth-child(6) {
-		animation-delay: 0.3s;
+}
+
+.theme-white .home-info {
+	background: var(--n-100);
+
+	.home-info-card:first-child {
+		box-shadow: inset -1px 0 0 var(--c-border);
 	}
-	&:nth-child(7) {
-		animation-delay: 0.35s;
+}
+
+.home-info-text {
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 1px;
+
+	.home-info-lead {
+		font-size: 1.0625rem;
+		font-weight: 700;
+		line-height: 1.15;
+		letter-spacing: -0.01em;
+		font-variant-numeric: tabular-nums;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
-	&:nth-child(8) {
-		animation-delay: 0.4s;
+
+	.home-info-sub {
+		font-size: 0.75rem;
+		font-weight: 550;
+		line-height: 1.25;
+		color: rgba(255, 255, 255, 0.72);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
-	&:nth-child(9) {
-		animation-delay: 0.45s;
+}
+
+// ---- Action rows ----------------------------------------------
+// Full-bleed, square, stacked. The chunky edge-to-edge feel is the
+// point; the refinement is in the hairlines and the pressed state.
+
+.home-rows {
+	flex: 0 0 auto;
+	display: flex;
+	flex-direction: column;
+}
+
+.home-row {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: var(--s-4);
+	height: 76px;
+	min-height: 76px;
+	padding: 0 var(--s-5);
+	border-radius: 0;
+	background: var(--wijk);
+	color: var(--on-wijk);
+	text-align: left;
+	// Hairline between rows, drawn in the tint's own ink so it never
+	// looks like a grey line laid on top of colour.
+	box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.11);
+	transition: background-color var(--d-1) var(--ease);
+
+	// Alternating shade, as before, but computed from the live token so
+	// it holds up across all five wijk themes.
+	&:nth-child(2n) {
+		background: color-mix(in srgb, var(--wijk) 93%, #000);
 	}
-	&:nth-child(10) {
-		animation-delay: 0.5s;
+
+	&:active {
+		transform: none;
+		background: color-mix(in srgb, var(--wijk) 84%, #000);
 	}
-	&:nth-child(11) {
-		animation-delay: 0.55s;
+
+	.material-icons {
+		flex: 0 0 auto;
+		font-size: 25px;
+		// Optical alignment: the material glyphs sit a hair high.
+		position: relative;
+		top: 1px;
+		opacity: 0.95;
 	}
-	&:nth-child(12) {
-		animation-delay: 0.6s;
+
+	.home-row-label {
+		flex: 1;
+		min-width: 0;
+		font-size: 1.0625rem;
+		font-weight: 680;
+		letter-spacing: -0.005em;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	// Quiet affordance that the row leads somewhere.
+	.home-row-chevron {
+		flex: 0 0 auto;
+		display: flex;
+		align-items: center;
+		font-size: 15px;
+		opacity: 0.42;
+	}
+}
+
+// Yellow and white need their hairlines lighter or they look dirty.
+.theme-yellow .home-row,
+.theme-white .home-row {
+	box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.09);
+}
+
+.theme-white .home-row {
+	&:nth-child(2n) {
+		background: var(--n-50);
+	}
+
+	&:active {
+		background: var(--n-100);
+	}
+}
+
+// ---- Tab bar override on Home ---------------------------------
+// The shared frosted-neutral bar would read as a seam here, so on Home
+// it continues the wijk block instead.
+
+.home .bottom-bar {
+	position: relative;
+	height: calc(var(--tabbar-h) + var(--safe-bottom));
+	background: color-mix(in srgb, var(--wijk) 78%, #000);
+	backdrop-filter: none;
+	-webkit-backdrop-filter: none;
+	border-top: none;
+	box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.14);
+
+	.bottom-bar-btn {
+		color: color-mix(in srgb, var(--on-wijk) 74%, transparent);
+
+		&.active {
+			color: var(--on-wijk);
+		}
+
+		// Same problem as the info band: the bar is a darkened wijk tone, so
+		// yellow's dark ink loses against it.
+		.theme-yellow & {
+			color: rgba(255, 255, 255, 0.8);
+
+			&.active {
+				color: #fff;
+			}
+		}
+
+		&:active .material-icons {
+			transform: scale(0.86);
+		}
+	}
+}
+
+.theme-white .home .bottom-bar,
+.home.theme-white .bottom-bar {
+	background: var(--n-100);
+
+	.bottom-bar-btn {
+		color: var(--c-text-3);
+
+		&.active {
+			color: var(--c-text);
+		}
 	}
 }

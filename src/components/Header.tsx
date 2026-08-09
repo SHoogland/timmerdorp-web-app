@@ -2,26 +2,28 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import '../scss/Header.scss';
-import { FaArrowLeft } from 'react-icons/fa';
-
+import { FaChevronLeft } from 'react-icons/fa';
 
 interface HeaderProps {
 	title: string;
 	disableBackButton?: boolean;
 	disableLogo?: boolean;
 	color?: string;
+	// Defaults to going home. Detail pages pass navigate(-1) so back returns
+	// to the list you came from with its search term still in place.
+	onBack?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ title, disableBackButton, color, disableLogo }) => {
+const Header: React.FC<HeaderProps> = ({ title, disableBackButton, color, disableLogo, onBack }) => {
 	const navigate = useNavigate();
 
-	// if header title contains <<text>>, wrap text in <span> with class 'small'
+	// A title may carry a subtitle as `Main <<sub>>`, rendered underneath.
 	let headerElement = <>{title}</>;
 	if (title.includes('<<') && title.includes('>>')) {
 		const parts = title.split('<<');
 		headerElement = (
 			<>
-				{parts[0]}
+				{parts[0].trim()}
 				<span className="small">{parts[1].split('>>')[0]}</span>
 				{parts[1].split('>>')[1]}
 			</>
@@ -29,10 +31,16 @@ const Header: React.FC<HeaderProps> = ({ title, disableBackButton, color, disabl
 	}
 
 	return (
-		<header className={color || "blue"}>
-			{ disableBackButton ? null : <FaArrowLeft id="back-btn" onClick={() => navigate('/')} /> }
-			<h1 className={(disableBackButton ? 'no-back-button ' : '') + (disableLogo ? 'no-logo' : '')}>{ headerElement }</h1>
-			{ disableLogo ? null : <img src={logo} alt="tdorp logo" /> }
+		<header className={`appbar ${color || 'blue'}`}>
+			{disableBackButton ? (
+				<span className="appbar-spacer" />
+			) : (
+				<button type="button" className="appbar-btn" aria-label="Terug" onClick={onBack || (() => navigate('/'))}>
+					<FaChevronLeft />
+				</button>
+			)}
+			<h1>{headerElement}</h1>
+			{disableLogo ? <span className="appbar-spacer" /> : <img className="appbar-logo" src={logo} alt="" />}
 		</header>
 	);
 };

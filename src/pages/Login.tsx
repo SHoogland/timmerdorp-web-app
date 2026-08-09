@@ -55,29 +55,12 @@ function Login() {
 	}
 
 	return (
-		<Layout title='Inloggen' disableBackButton={true} disableLogo={true} backgroundColor='blue'>
-			<div className="form">
-				<input
-					name="email"
-					value={email}
-					onChange={(e) => setEmail(e.target.value)}
-					onKeyUp={(e) => e.key == 'Enter' ? login() : null}
-					type="email"
-					placeholder="E-mailadres"
-					autoComplete="email"
-				/>
-				<input
-					name="password"
-					value={password}
-					onChange={(e) => setPassword(e.target.value)}
-					onKeyUp={(e) => e.key == 'Enter' ? login() : null}
-					type="password"
-					placeholder="Wachtwoord"
-					autoComplete="current-password"
-				/>
-				<button className='big' onClick={() => login()}>Inloggen</button>
-
-				<LoadingIcon color="white" shown={loading} />
+		<Layout noHeader={true} backgroundColor='blue'>
+			<div className="auth-page">
+				<div className="auth-head">
+					<div className="auth-brand">Timmerdorp App</div>
+					<h1 className="auth-title">Inloggen</h1>
+				</div>
 
 				{errorText && <Card
 					icon={FaExclamationTriangle}
@@ -87,23 +70,48 @@ function Login() {
 					<p>{errorText}</p>
 				</Card>}
 
-				<p className='helper-link'><a href="/wachtwoord-vergeten">Wachtwoord vergeten?</a></p>
+				<div className="form">
+					<input
+						name="email"
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
+						onKeyUp={(e) => e.key == 'Enter' ? login() : null}
+						type="email"
+						placeholder="E-mailadres"
+						autoComplete="email"
+					/>
+					<input
+						name="password"
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+						onKeyUp={(e) => e.key == 'Enter' ? login() : null}
+						type="password"
+						placeholder="Wachtwoord"
+						autoComplete="current-password"
+					/>
+					<button className='big' onClick={() => login()}>Inloggen</button>
 
-				<Card
-					icon={FaExclamationTriangle}
-					header="Let op!"
-				>
+					<LoadingIcon color="white" shown={loading} />
+
+					<p className='helper-link'><a href="/wachtwoord-vergeten">Wachtwoord vergeten?</a></p>
+				</div>
+
+				{/* One line, not a slab. Registering is the rare path; making it a
+				    second big button gave it equal weight to signing in. */}
+				<p className="auth-alt">
+					Nog geen account? <a onClick={() => navigate('/registreren')}>Registreren</a>
+				</p>
+
+				{/* Only people who cannot get in need this, so it stays folded away
+				    instead of taking up a third of the first screen. */}
+				<details className="auth-note">
+					<summary>Lukt inloggen niet?</summary>
 					<ul>
-						<li>Accounts van vorig jaar werken ook nog steeds!</li>
-						<li>Heb je al een account gemaakt in de Timmerdorp-webshop, bijvoorbeeld om kaartjes te kopen voor je kinderen? Log dan in met dat webshop-account.</li>
+						<li>Accounts van vorig jaar werken ook nog steeds.</li>
+						<li>Heb je al een account in de Timmerdorp-webshop, bijvoorbeeld om kaartjes te kopen voor je kinderen? Log dan in met dat webshop-account.</li>
 					</ul>
-				</Card>
+				</details>
 			</div>
-			<footer className="one-button-footer">
-				<button onClick={() => navigate('/registreren')}>
-					Registreren
-				</button>
-			</footer>
 		</Layout>
 	)
 }

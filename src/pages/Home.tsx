@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import apiCall from '../utils/apiCall';
 import logOut from '../utils/logOut';
 import getCurrentWijk from '../utils/getCurrentWijk';
+import { FaChevronRight } from 'react-icons/fa';
+import WijkPicker from '../components/WijkPicker';
 import '../scss/Home.scss';
 
 interface WeatherData {
@@ -16,12 +18,18 @@ interface WeatherData {
 interface PageItem {
 	title: string;
 	component: string;
-	class: string;
 	icon: string;
-	weather?: boolean;
-	data?: boolean;
 	small?: boolean;
 }
+
+const WIJK_LABELS: Record<string, string> = {
+	blue: 'Blauw',
+	red: 'Rood',
+	green: 'Groen',
+	yellow: 'Geel',
+	white: 'Wit / EHBO',
+};
+
 
 function Home() {
 	const [weather, setWeather] = useState<WeatherData | null>(null);
@@ -45,81 +53,22 @@ function Home() {
 		return () => window.removeEventListener('storage', onStorage);
 	}, []);
 
-	const wijken = {
-		blue: "blauw",
-		red: "rood",
-		green: "groen",
-		yellow: "geel"
-	};
+	// Home renders without <Layout>, so it owns its own theme class.
+	useEffect(() => {
+		const themeClass = `theme-${wijk}`;
+		document.body.classList.add(themeClass);
+		return () => document.body.classList.remove(themeClass);
+	}, [wijk]);
 
 	const pages: PageItem[] = [
-		{
-			title: '-',
-			component: "weather",
-			class: 'halfWidth homeInfoCard weather realWeather',
-			icon: "partly-sunny",
-			weather: true
-		},
-		{
-			title: '-',
-			component: "stats",
-			class: 'halfWidth homeInfoCard weather',
-			icon: "insert_chart",
-			data: true
-		},
-		{
-			title: 'Zoek kinderen',
-			component: "search",
-			class: '',
-			icon: "search"
-		},
-		{
-			title: 'Aanwezigheid',
-			component: "presence",
-			class: '',
-			icon: "how_to_reg"
-		},
-		{
-			title: 'Scan ticket',
-			component: "scan-ticket",
-			class: '',
-			icon: 'qr_code_scanner'
-		},
-		{
-			title: 'Beheer hutjes',
-			component: "connect-child-to-cabin",
-			class: '',
-			icon: 'person_add_alt'
-		},
-		{
-			title: 'Statistieken',
-			component: "stats",
-			class: 'small',
-			icon: "insert_chart",
-			small: true
-		},
-		{
-			title: 'Verjaardagen',
-			component: "birthdays",
-			class: 'small',
-			icon: "cake",
-			small: true
-		},
-		// Hutjeskaart en Foto's en Bijlagen knop verwijderd
-		{
-			title: 'Instellingen',
-			component: "settings",
-			class: 'small',
-			icon: "settings",
-			small: true
-		},
-		{
-			title: 'Log uit',
-			component: "login",
-			class: 'small',
-			icon: "logout",
-			small: true
-		}
+		{ title: 'Zoek kinderen', component: 'search', icon: 'search' },
+		{ title: 'Aanwezigheid', component: 'presence', icon: 'how_to_reg' },
+		{ title: 'Scan ticket', component: 'scan-ticket', icon: 'qr_code_scanner' },
+		{ title: 'Beheer hutjes', component: 'connect-child-to-cabin', icon: 'person_add_alt' },
+		{ title: 'Statistieken', component: 'stats', icon: 'insert_chart', small: true },
+		{ title: 'Verjaardagen', component: 'birthdays', icon: 'cake', small: true },
+		{ title: 'Instellingen', component: 'settings', icon: 'settings', small: true },
+		{ title: 'Log uit', component: 'login', icon: 'logout', small: true },
 	];
 
 	useEffect(() => {
@@ -150,10 +99,7 @@ function Home() {
 			}
 		});
 
-		// Load weather data
 		loadWeatherData();
-
-		// Load wijk stats
 		loadWijkStats();
 	}, []);
 
@@ -167,7 +113,6 @@ function Home() {
 			processWeatherData(data);
 		} catch (error) {
 			console.error('Error loading weather:', error);
-			// Set default weather data if API fails
 			setWeather({
 				temp: 20,
 				msg: "Weer niet beschikbaar",
@@ -177,14 +122,11 @@ function Home() {
 	};
 
 	const processWeatherData = (data: any) => {
-		console.log('Processing weather data:', data);
-
-		let weatherMessage = "Geen regen (?)";
+		let weatherMessage = "Geen regen";
 		let totalRain = 0;
 		let skipped = 0;
 		let weatherIcon = "wb_sunny";
 
-		// Check if we have valid data
 		if (!data.list || !Array.isArray(data.list) || data.list.length === 0) {
 			console.error('Invalid weather data structure');
 			setWeather({
@@ -219,7 +161,6 @@ function Home() {
 		}
 
 		const temperature = Math.round(data.list[0].main.temp - 273.15);
-		console.log('Setting weather:', { temp: temperature, msg: weatherMessage, icon: weatherIcon });
 
 		setWeather({
 			temp: temperature,
@@ -230,28 +171,18 @@ function Home() {
 
 	const loadWijkStats = async () => {
 		try {
-			console.log('Loading wijk stats...');
 			const result = await apiCall('wijkStats');
-			console.log('Wijk stats result:', result);
 
 			if (result && result.response === 'success') {
 				let dag = ['di', 'wo', 'do', 'vr'][new Date().getDay() - 2];
-				console.log('Current day:', dag, 'Current wijk:', wijk);
 
 				const currentWijk = wijk === 'white' ? 'blue' : wijk;
-				const wijkCountValue = result.quarters?.[currentWijk]?.['aanwezig_' + dag] || 0;
-				const childrenCountValue = result['aanwezig_' + dag] || 0;
-				const birthdaysValue = (result.birthdays?.[dag] || {}).count || 0;
-
-				console.log('Setting stats:', { wijkCount: wijkCountValue, childrenCount: childrenCountValue, birthdays: birthdaysValue });
-
-				setWijkCount(wijkCountValue);
-				setChildrenCount(childrenCountValue);
-				setBirthdays(birthdaysValue);
+				setWijkCount(result.quarters?.[currentWijk]?.['aanwezig_' + dag] || 0);
+				setChildrenCount(result['aanwezig_' + dag] || 0);
+				setBirthdays((result.birthdays?.[dag] || {}).count || 0);
 			}
 		} catch (error) {
 			console.error('Error loading wijk stats:', error);
-			// Set default values if API fails
 			setWijkCount(0);
 			setChildrenCount(0);
 			setBirthdays(0);
@@ -259,178 +190,120 @@ function Home() {
 	};
 
 	const openPage = (page: PageItem) => {
-		if (page.component === 'weather') {
-			window.open("https://buienradar.nl/weer/heiloo/nl/2754516", "_blank");
-		} else if (page.component === 'login') {
+		if (page.component === 'login') {
 			logOut().then(() => {
 				navigate('/login');
 			});
-		} else {
-			// Map component names to routes
-			const routeMap: { [key: string]: string } = {
-				'search': 'zoek',
-				'presence': 'aanwezigheid',
-				'scan-ticket': 'scan',
-				'connect-child-to-cabin': 'hutjes',
-				'stats': 'statistieken',
-				'birthdays': 'verjaardagen',
-				'map': 'kaart',
-				'files': 'fotos',
-				'settings': 'instellingen'
-			};
+			return;
+		}
 
-			const route = routeMap[page.component];
-			if (route) {
-				navigate(route);
-			}
+		const routeMap: { [key: string]: string } = {
+			'search': 'zoek',
+			'presence': 'aanwezigheid',
+			'scan-ticket': 'scan',
+			'connect-child-to-cabin': 'hutjes',
+			'stats': 'statistieken',
+			'birthdays': 'verjaardagen',
+			'map': 'kaart',
+			'files': 'fotos',
+			'settings': 'instellingen'
+		};
+
+		const route = routeMap[page.component];
+		if (route) {
+			navigate(route);
 		}
 	};
 
-	const wijkChoiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		setCurrentWijkChoice(e.target.value);
-	};
-
-	const saveWijkChoice = async () => {
+	const saveWijkChoice = async (choice: string) => {
+		setCurrentWijkChoice(choice);
 		try {
-			await apiCall('setAdminWijk', { wijk: currentWijkChoice });
-			localStorage.setItem('wijk', currentWijkChoice);
-			localStorage.setItem('wijkName', currentWijkChoice);
+			await apiCall('setAdminWijk', { wijk: choice });
+			localStorage.setItem('wijk', choice);
+			localStorage.setItem('wijkName', choice);
 
-			// Dispatch custom event to notify statusbar color update
-			window.dispatchEvent(new CustomEvent('wijkChanged', { detail: { wijk: currentWijkChoice } }));
+			window.dispatchEvent(new CustomEvent('wijkChanged', { detail: { wijk: choice } }));
 
-			// if (onlyChangeWijk) {
-			// 	// Navigate back if this was just a wijk change
-			// 	navigate(-1);
-			// } else {
-			setWijk(currentWijkChoice); // update wijkkleur direct
+			setWijk(choice);
 			setFinishedWijkChoice(true);
 			setTimeout(() => {
 				setShowWijkChoice(false);
-			}, 500);
-			// }
+			}, 400);
 		} catch (error) {
 			console.error('Error saving wijk choice:', error);
 		}
 	};
 
-	// Import BottomBar
-	// ...existing code...
-	// Herstel originele rendering van weer-widget en statistiekenblok
-	const mainButtons = pages.filter(p => !p.small && !p.weather && !p.data);
+	const mainButtons = pages.filter(p => !p.small);
 	const menuButtons = pages.filter(p => p.small);
 	const bottomBarButtons = menuButtons.map(page => ({
 		icon: page.icon,
+		label: page.title,
 		onClick: () => openPage(page)
 	}));
 
-	// Vind weather en data knoppen
-	const weatherPage = pages.find(p => p.weather);
-	const dataPage = pages.find(p => p.data);
-
 	return (
-		<div className={`${wijk} homeContent`}>
-			<header className="home-header">
-				<div id="overlay">
-					<div id="titleContainer">
-						<h1 id="ptitle" className="home-header">
-							Timmerdorp <br />{currentYear}
-						</h1>
-					</div>
-				</div>
+		<div className={`home theme-${wijk}`}>
+			<header className="home-hero">
+				<h1 className="home-title">
+					Timmerdorp
+					<span className="home-year">{currentYear}</span>
+				</h1>
+
 			</header>
 
-			<div id="homeBtnContainer">
-				<div id="homeButtons">
-					{/* Weer-widget */}
-					{weatherPage && (
-						<button
-							className={`halfWidth homeInfoCard weather realWeather alternate ${wijk}`}
-							onClick={() => openPage(weatherPage)}
-						>
-							<div className="homeBtnD">
-								<Icon name={weather && weather.icon ? weather.icon : weatherPage.icon} />
-								{weather && (
-									<>
-										<h2>Het is {weather.temp}°C</h2>
-										<div className="weatherMsg">
-											<p>{weather.msg}</p>
-										</div>
-									</>
-								)}
-							</div>
-						</button>
-					)}
-					{/* Statistiekenblok */}
-					{dataPage && (
-						<button
-							className={`halfWidth homeInfoCard weather alternate second-weather ${wijk}`}
-							onClick={() => openPage(dataPage)}
-						>
-							<div className="homeBtnD">
-								<Icon name={dataPage.icon} className="data" />
-								<div id="data">
-									<div className="weatherMsg" style={{ top: '3px', fontSize: '80%' }}>
-										<p>{childrenCount} kind{childrenCount !== 1 ? "eren" : ""} hier</p>
-									</div>
-									<div className="weatherMsg" style={{ top: '22px', fontSize: '80%' }}>
-										<p>{wijkCount} in wijk {wijken[wijk as keyof typeof wijken]}</p>
-									</div>
-									<div className="weatherMsg" style={{ top: '41px', fontSize: '80%' }}>
-										<p>{birthdays} {birthdays === 1 ? "jarige" : "jarigen"} vandaag</p>
-									</div>
-								</div>
-							</div>
-						</button>
-					)}
-					{/* Vier grote knoppen */}
-					{mainButtons.map((page, index) => (
-						<button
-							key={index}
-							onClick={() => openPage(page)}
-							className={`homeBtn alternate ${wijk}`}
-						>
-							<div className="homeBtnD">
-								<Icon name={page.icon} />
-								<span>{page.title}</span>
-							</div>
-						</button>
-					))}
+			<div className="home-info">
+					<button
+						className="home-info-card"
+						onClick={() => window.open('https://buienradar.nl/weer/heiloo/nl/2754516', '_blank')}
+					>
+						<Icon name={weather?.icon || 'partly-sunny'} />
+						<span className="home-info-text">
+							<span className="home-info-lead">{weather ? `${weather.temp}°C` : '—'}</span>
+							<span className="home-info-sub">{weather?.msg || 'Weer laden…'}</span>
+						</span>
+					</button>
+
+					<button
+						className="home-info-card"
+						onClick={() => navigate('statistieken')}
+					>
+						<Icon name="insert_chart" />
+						<span className="home-info-text">
+							<span className="home-info-lead">{childrenCount} kinderen</span>
+							<span className="home-info-sub">
+								{wijkCount} in wijk {WIJK_LABELS[wijk]?.toLowerCase() || 'blauw'}, {birthdays} {birthdays === 1 ? 'jarige' : 'jarigen'}
+							</span>
+						</span>
+					</button>
 				</div>
+
+			<div className="home-rows">
+				{mainButtons.map((page) => (
+					<button
+						key={page.component}
+						onClick={() => openPage(page)}
+						className="home-row"
+					>
+						<Icon name={page.icon} />
+						<span className="home-row-label">{page.title}</span>
+						<span className="home-row-chevron">
+							<FaChevronRight />
+						</span>
+					</button>
+				))}
 			</div>
 
-			{/* BottomBar onderaan */}
-			<div id="bottomBarContainer">
-				<BottomBar buttons={bottomBarButtons} wijk={wijk} />
-			</div>
+			<BottomBar buttons={bottomBarButtons} wijk={wijk} />
 
 			{showWijkChoice && (
-				<div id="wijkChoice" className={`${currentWijkChoice} ${finishedWijkChoice ? ' fadedOut' : ''}`}>
-					<h1>Wijk-keuze</h1>
-					<div className="wijk-select-container">
-						<select
-							value={currentWijkChoice}
-							onChange={wijkChoiceChange}
-							className="wijk-select"
-							aria-label="Kies je wijk"
-						>
-							<option value="">Kies je wijk</option>
-							<option value="blue">Blauw</option>
-							<option value="yellow">Geel</option>
-							<option value="red">Rood</option>
-							<option value="green">Groen</option>
-							<option value="white">Wit/EHBO</option>
-						</select>
-					</div>
-					<br />
-					{currentWijkChoice && (
-						<button
-							onClick={saveWijkChoice}
-							className="modern wijk-save-btn"
-						>
-							Opslaan
-						</button>
-					)}
+				<div className={`wijk-choice${finishedWijkChoice ? ' fadedOut' : ''}`}>
+					<h1>Bij welke wijk zit je?</h1>
+					<p className="wijk-choice-sub">Je kunt dit later wijzigen bij Instellingen.</p>
+
+					{/* Picking a wijk IS the action, so there is no separate save
+					    step: the tap commits and the overlay closes. */}
+					<WijkPicker value={currentWijkChoice} onSelect={saveWijkChoice} />
 				</div>
 			)}
 		</div>

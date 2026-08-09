@@ -1,0 +1,145 @@
+@use "vars";
+
+// =============================================================
+//  Wijk picker
+//  Shared by the first-run overlay on Home and the "Wijk wijzigen"
+//  page, so the same choice always looks and behaves the same way.
+// =============================================================
+
+.wijk-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: var(--s-3);
+	width: 100%;
+	max-width: 420px;
+	margin: 0 auto;
+}
+
+.wijk-option {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	min-height: 96px;
+	padding: var(--s-4);
+	border-radius: var(--r-lg);
+	background: var(--swatch);
+	color: var(--swatch-ink, #fff);
+	font-family: var(--font-display);
+	font-size: 1.25rem;
+	font-weight: 700;
+	letter-spacing: 0.01em;
+	box-shadow: inset 0 0 0 3px transparent;
+	transition:
+		box-shadow var(--d-2) var(--ease),
+		transform var(--d-2) var(--ease);
+
+	&:active {
+		transform: scale(0.97);
+	}
+
+	// The currently active wijk, so the page shows where you already are.
+	&.is-current {
+		box-shadow:
+			inset 0 0 0 3px var(--c-surface),
+			0 8px 24px -10px rgba(40, 32, 20, 0.55);
+	}
+
+	.wijk-check {
+		position: absolute;
+		top: var(--s-2);
+		right: var(--s-2);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 24px;
+		height: 24px;
+		border-radius: var(--r-full);
+		background: var(--c-surface);
+		color: var(--n-900);
+		font-size: 11px;
+	}
+
+	&.blue {
+		--swatch: var(--blue);
+	}
+	&.green {
+		--swatch: var(--green);
+	}
+	&.red {
+		--swatch: var(--red);
+	}
+	&.yellow {
+		--swatch: var(--yellow);
+		--swatch-ink: var(--yellow-ink);
+	}
+
+	// Wit/EHBO gets the full width: it is the odd one out, and a white tile
+	// beside a coloured one otherwise reads as an empty slot.
+	&.white {
+		--swatch: var(--c-surface);
+		--swatch-ink: var(--n-900);
+		grid-column: span 2;
+		min-height: 68px;
+		box-shadow: inset 0 0 0 1px var(--c-border);
+
+		&.is-current {
+			box-shadow:
+				inset 0 0 0 3px var(--n-900),
+				0 8px 24px -10px rgba(40, 32, 20, 0.55);
+		}
+
+		.wijk-check {
+			background: var(--n-900);
+			color: var(--c-surface);
+		}
+	}
+}
+
+// ---- "Wijk wijzigen" page --------------------------------------
+
+.wijk-page {
+	padding: var(--s-5) var(--gutter);
+}
+
+// ---- First-run overlay on Home ---------------------------------
+
+.wijk-choice {
+	position: fixed;
+	inset: 0;
+	z-index: 200;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: var(--s-8) var(--gutter);
+	padding-bottom: calc(var(--s-8) + var(--safe-bottom));
+	background: var(--n-900);
+	color: #fff;
+	transition: opacity var(--d-3) var(--ease);
+
+	&.fadedOut {
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	h1 {
+		font-family: var(--font-display);
+		font-size: clamp(1.75rem, 8vw, 2.25rem);
+		color: #fff;
+		text-align: center;
+		margin-bottom: var(--s-2);
+	}
+
+	.wijk-choice-sub {
+		text-align: center;
+		color: rgba(255, 255, 255, 0.6);
+		margin-bottom: var(--s-8);
+	}
+
+	// On the dark overlay the "current" ring would be invisible against
+	// white tiles, and nothing is selected yet anyway.
+	.wijk-option.white {
+		box-shadow: none;
+	}
+}

@@ -1,26 +1,35 @@
 import { useNavigate } from 'react-router-dom';
 import Layout from '../layouts/layout';
-import '../scss/ChangeWijk.scss';
+import apiCall from '../utils/apiCall';
+import WijkPicker from '../components/WijkPicker';
 
 function ChangeWijk() {
 	const navigate = useNavigate();
+	const currentWijk = localStorage.getItem('wijkName') || '';
 
-	const changeWijk = (wijk: string) => {
+	const changeWijk = async (wijk: string) => {
+		// Also persist to the API. Previously this page only wrote localStorage,
+		// so a wijk changed here was forgotten on another device or after a
+		// logout, while the first-run picker on Home did save it properly.
+		try {
+			await apiCall('setAdminWijk', { wijk });
+		} catch (error) {
+			console.error('Error saving wijk:', error);
+		}
+
+		localStorage.setItem('wijk', wijk);
 		localStorage.setItem('wijkName', wijk);
-		
+
 		// Dispatch custom event to notify statusbar color update
 		window.dispatchEvent(new CustomEvent('wijkChanged', { detail: { wijk } }));
-		
+
 		navigate('/instellingen');
 	}
 
 	return (
-		<Layout title="Wijk wijzigen" noPadding={true}>
-			<div id="wijk-keuze">
-				<div className="wijk blue" onClick={() => changeWijk('blue')}>Blauw</div>
-				<div className="wijk green" onClick={() => changeWijk('green')}>Groen</div>
-				<div className="wijk red" onClick={() => changeWijk('red')}>Rood</div>
-				<div className="wijk yellow" onClick={() => changeWijk('yellow')}>Geel</div>
+		<Layout title="Wijk wijzigen" theme={currentWijk || undefined}>
+			<div className="wijk-page">
+				<WijkPicker value={currentWijk} onSelect={changeWijk} />
 			</div>
 		</Layout>
 	);

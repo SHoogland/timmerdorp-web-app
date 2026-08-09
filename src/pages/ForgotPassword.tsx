@@ -26,28 +26,34 @@ function ForgotPassword() {
 
 
 	return (
-		<Layout title="Wachtwoord Vergeten" disableBackButton={true} disableLogo={true} backgroundColor='blue'>
-			{!hasRequested &&
-				<>
-					<div className="form">
-						<p>Voer je e-mailadres in en we sturen je een e-mail met instructies om je wachtwoord te resetten.</p>
-						<input
-							name="email"
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-							onKeyUp={(e) => e.key == 'Enter' ? forgotPassword() : null}
-							type="email"
-							placeholder="E-mailadres"
-						/>
-						<button className='big' onClick={() => forgotPassword()}>Nieuw wachtwoord opvragen</button>
+		<Layout noHeader={true} backgroundColor='blue'>
+			<div className="auth-page">
+				<div className="auth-head">
+					<div className="auth-brand">Timmerdorp</div>
+					<h1 className="auth-title">Wachtwoord Vergeten</h1>
+				</div>
 
-						<LoadingIcon color="white" shown={loading}/>
-					</div>
-				</>
-			}
+				{!hasRequested &&
+					<>
+						<p className="auth-copy">Voer je e-mailadres in en we sturen je een e-mail met instructies om je wachtwoord te resetten.</p>
+						<div className="form">
+							<input
+								name="email"
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
+								onKeyUp={(e) => e.key == 'Enter' ? forgotPassword() : null}
+								type="email"
+								placeholder="E-mailadres"
+							/>
+							<button className='big' onClick={() => forgotPassword()}>Nieuw wachtwoord opvragen</button>
 
-			{hasRequested && <p>Nieuw wachtwoord opgevraagd! Controleer je inbox en spam-map voor instructies om je nieuwe wachtwoord in te stellen.</p>}
+							<LoadingIcon color="white" shown={loading}/>
+						</div>
+					</>
+				}
 
+				{hasRequested && <p className="auth-copy">Nieuw wachtwoord opgevraagd! Controleer je inbox en spam-map voor instructies om je nieuwe wachtwoord in te stellen.</p>}
+			</div>
 		</Layout>
 	);
 }

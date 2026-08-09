@@ -1,0 +1,388 @@
+@use "vars";
+
+// =============================================================
+//  Ticket detail + edit
+//  Replaces the inline style objects in ViewTicket / EditTicket.
+// =============================================================
+
+.ticketCard {
+	position: relative;
+	width: 100%;
+	max-width: 680px;
+	margin: 0 auto;
+	min-height: 100dvh;
+	background: var(--c-bg);
+	padding: 0 var(--gutter) calc(var(--s-10) + var(--safe-bottom));
+}
+
+.ticket-topbar {
+	position: sticky;
+	top: 0;
+	z-index: 20;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	height: calc(var(--appbar-h) + var(--safe-top));
+	padding-top: var(--safe-top);
+	margin: 0 calc(var(--gutter) * -1);
+	padding-right: var(--s-3);
+	background: color-mix(in srgb, var(--c-bg) 88%, transparent);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+
+	.ticket-close {
+		width: var(--tap);
+		height: var(--tap);
+		min-height: var(--tap);
+		padding: 0;
+		border-radius: var(--r-full);
+		background: var(--c-surface);
+		color: var(--c-text-2);
+		box-shadow: var(--e-1);
+		font-size: 1.125rem;
+		line-height: 1;
+	}
+}
+
+.ticket-name {
+	margin: var(--s-2) 0 var(--s-1);
+	font-family: var(--font-display);
+	font-size: 1.875rem;
+	line-height: 1.1;
+	letter-spacing: 0.005em;
+}
+
+.ticket-subline {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--s-2);
+	margin-bottom: var(--s-6);
+}
+
+.ticket-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--s-1);
+	height: 30px;
+	padding: 0 var(--s-3);
+	border-radius: var(--r-full);
+	background: var(--wijk-soft);
+	color: var(--wijk-ink);
+	font-size: var(--t-micro);
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+
+	&.neutral {
+		background: var(--c-surface-sunken);
+		color: var(--c-text-2);
+	}
+}
+
+// ---- Property groups ------------------------------------------
+
+.ticket-group {
+	margin-bottom: var(--s-6);
+
+	h3 {
+		margin: 0 0 var(--s-2);
+		font-size: var(--t-h3);
+	}
+
+	// A group-sized empty state, not a full page one.
+	.empty-state {
+		padding: var(--s-6) var(--s-5);
+		font-size: var(--t-small);
+	}
+}
+
+.ticket-table {
+	width: 100%;
+	background: var(--c-surface);
+	border-radius: var(--r-lg);
+	box-shadow: var(--e-1);
+	overflow: hidden;
+	font-size: var(--t-small);
+
+	td {
+		padding: var(--s-3) var(--s-4);
+		border-bottom: 1px solid var(--c-border);
+		vertical-align: top;
+	}
+
+	tr:last-child td {
+		border-bottom: none;
+	}
+
+	// Label column stays narrow and quiet; the value is what matters.
+	td:first-child {
+		width: 42%;
+		color: var(--c-text-3);
+		font-weight: 600;
+	}
+
+	td:last-child {
+		color: var(--c-text);
+		font-weight: 550;
+	}
+
+	.is-empty {
+		color: var(--c-text-3);
+		font-style: italic;
+		font-weight: 400;
+	}
+
+	a {
+		color: var(--wijk);
+		font-weight: 650;
+	}
+
+	// Edit mode: inputs sit flush inside the value cell.
+	input[type="text"] {
+		min-height: 40px;
+		padding: 0 var(--s-3);
+		font-size: var(--t-small);
+	}
+}
+
+// ---- Edit form ------------------------------------------------
+// Label above input, stacked: on a 390px phone a two-column table
+// leaves the input too narrow to read what you typed.
+
+.ticket-fields {
+	background: var(--c-surface);
+	border-radius: var(--r-lg);
+	box-shadow: var(--e-1);
+	overflow: hidden;
+}
+
+.ticket-field {
+	padding: var(--s-3) var(--s-4);
+	border-bottom: 1px solid var(--c-border);
+
+	&:last-child {
+		border-bottom: none;
+	}
+
+	label {
+		margin-bottom: var(--s-1);
+		font-size: var(--t-micro);
+		font-weight: 600;
+		color: var(--c-text-3);
+	}
+
+	input[type="text"] {
+		min-height: var(--tap);
+		padding: 0 var(--s-3);
+		background: var(--c-surface-sunken);
+		border-color: transparent;
+
+		&:focus {
+			background: var(--c-surface);
+			border-color: var(--wijk);
+		}
+	}
+}
+
+// The save rail stays under the thumb while the form scrolls.
+.ticketCard.ticket-edit {
+	padding-bottom: 0;
+	// Cancels the shell's own bottom padding so the rail can reach
+	// the true bottom of the viewport.
+	margin-bottom: calc((var(--s-8) + var(--safe-bottom)) * -1);
+}
+
+.ticket-form-bar {
+	position: sticky;
+	bottom: 0;
+	z-index: 20;
+	display: flex;
+	gap: var(--s-2);
+	margin: var(--s-8) calc(var(--gutter) * -1) 0;
+	padding: var(--s-3) var(--gutter);
+	padding-bottom: calc(var(--s-3) + var(--safe-bottom));
+	border-top: 1px solid var(--c-border);
+	background: color-mix(in srgb, var(--c-bg) 88%, transparent);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+
+	button {
+		flex: 1 1 auto;
+		min-height: 50px;
+	}
+
+	// Cancel is the smaller escape hatch; save owns the width.
+	button.btn-neutral {
+		flex: 0 1 38%;
+	}
+}
+
+.ticket-events {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	background: var(--c-surface);
+	border-radius: var(--r-lg);
+	box-shadow: var(--e-1);
+	overflow: hidden;
+
+	li {
+		position: relative;
+		padding: var(--s-3) var(--s-4) var(--s-3) var(--s-8);
+		border-bottom: 1px solid var(--c-border);
+		font-size: var(--t-small);
+		color: var(--c-text-2);
+		line-height: 1.45;
+
+		&:last-child {
+			border-bottom: none;
+		}
+
+		// Timeline dot.
+		&::before {
+			content: "";
+			position: absolute;
+			left: var(--s-4);
+			top: 1.15em;
+			width: 7px;
+			height: 7px;
+			border-radius: var(--r-full);
+			background: var(--c-border-strong);
+		}
+	}
+}
+
+// ---- Action rail ----------------------------------------------
+
+.ticket-actions {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: var(--s-2);
+	margin-top: var(--s-8);
+
+	button {
+		min-height: 50px;
+		font-size: var(--t-small);
+	}
+
+	.span-2 {
+		grid-column: span 2;
+	}
+}
+
+// ---- Wristband page -------------------------------------------
+
+.wristband-page {
+	.wristband-error {
+		max-width: 480px;
+		margin: 0 auto var(--s-5);
+		padding: var(--s-4);
+		border-radius: var(--r-md);
+		background: var(--red-soft);
+		color: var(--red-ink);
+		text-align: center;
+	}
+
+	.wristband-suggestions {
+		max-width: 480px;
+		margin: 0 auto var(--s-4);
+		text-align: center;
+		font-size: var(--t-small);
+		color: var(--c-text-2);
+	}
+
+	.wristband-saving {
+		margin-top: var(--s-4);
+		text-align: center;
+		font-size: var(--t-small);
+		color: var(--c-text-3);
+	}
+}
+
+// Zooltjes row: the whole value cell is one tap target.
+.ticketTable td.sole-cell {
+	padding: 0;
+}
+
+.sole-toggle {
+	display: flex;
+	align-items: center;
+	gap: var(--s-3);
+	min-height: var(--tap);
+	margin: 0;
+	padding: 0 var(--s-4);
+	font-size: var(--t-small);
+	font-weight: 600;
+	color: var(--c-text);
+	cursor: pointer;
+
+	input[type="checkbox"] {
+		width: 22px;
+		height: 22px;
+		margin: 0;
+		flex-shrink: 0;
+		accent-color: var(--wijk);
+	}
+
+	// The hammer loader is page sized by default; shrink it inline.
+	.loading-icon {
+		width: auto;
+		padding: 0;
+
+		img {
+			width: 34px;
+			height: 28px;
+		}
+	}
+}
+
+.ticketTable {
+	width: 100%;
+	max-width: 480px;
+	margin: 0 auto var(--s-6);
+	background: var(--c-surface);
+	border-radius: var(--r-lg);
+	box-shadow: var(--e-1);
+	overflow: hidden;
+	font-size: var(--t-small);
+	text-align: left;
+
+	td {
+		padding: var(--s-3) var(--s-4);
+		border-bottom: 1px solid var(--c-border);
+	}
+
+	tr:last-child td {
+		border-bottom: none;
+	}
+
+	td:first-child {
+		width: 44%;
+		color: var(--c-text-3);
+		font-weight: 600;
+	}
+}
+
+.wristband-entry {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--s-3);
+	max-width: 480px;
+	margin: 0 auto;
+
+	.wristband-number {
+		width: 108px;
+		min-width: 108px;
+		height: 60px;
+		min-height: 60px;
+		font-size: 1.75rem;
+		border-radius: var(--r-lg);
+	}
+
+	button.big {
+		width: auto;
+		flex: 1;
+		min-height: 60px;
+	}
+}

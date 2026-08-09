@@ -17,6 +17,22 @@ interface TicketPropertiesMap {
 	[key: string]: TicketProperty;
 }
 
+// Same wijk theming as the view page, so editing feels like the same flow.
+const getWijkThemeClass = (hutNr: string) => {
+	switch (('' + (hutNr || '')).charAt(0)) {
+		case '0':
+			return 'theme-yellow';
+		case '1':
+			return 'theme-red';
+		case '2':
+			return 'theme-blue';
+		case '3':
+			return 'theme-green';
+		default:
+			return '';
+	}
+};
+
 function ViewTicket() {
 	const [loading, setLoading] = useState(false);
 	const [ticket, setTicket] = useState<Ticket>({});
@@ -67,74 +83,81 @@ function ViewTicket() {
 		const result = await apiCall('saveTicketEdit', { ticket, reason })
 		if (!result || result.message != 'success') alert('hmmmm (geen response)')
 		setLoading(false);
-		navigate('/bekijk-ticket?ticket-id=' + ticket.id);
+		navigate('/bekijk-ticket?ticket-id=' + ticket.id, { replace: true });
 	};
 
+	const cancel = () => navigate('/bekijk-ticket?ticket-id=' + ticket.id, { replace: true });
+
+	const displayName = [ticket.firstName, ticket.lastName].filter(Boolean).join(' ');
 
 	return (
 		<Layout noHeader={true} noPadding={true}>
 			<LoadingIcon shown={loading} />
 			{!loading &&
-				<div className="ticketCard">
-					<h3>Naam</h3>
-					<table>
-						<tbody>
-							<tr>
-								<td>Voornaam</td>
-								<td>
-									<input
-										type="text"
-										title="Voornaam"
-										onChange={(e) => setTicket({ ...ticket, firstName: e.target.value })}
-										value={ticket.firstName || ''}
-										placeholder="Voornaam"
-									/>
-								</td>
-							</tr>
-							<tr>
-								<td>Achternaam</td>
-								<td>
-									<input
-										type="text"
-										title="Achternaam"
-										onChange={(e) => setTicket({ ...ticket, lastName: e.target.value })}
-										value={ticket.lastName || ''}
-										placeholder="Achternaam"
-									/>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					<br />
+				<div className={'ticketCard ticket-edit ' + getWijkThemeClass(ticket.hutNr)}>
+					<div className="ticket-topbar">
+						<button className="ticket-close" onClick={cancel} title="Annuleren" aria-label="Annuleren">
+							✕
+						</button>
+					</div>
+
+					<h1 className="ticket-name">{displayName || 'Ticket bewerken'}</h1>
+
+					<div className="ticket-group">
+						<h3>Naam</h3>
+						<div className="ticket-fields">
+							<div className="ticket-field">
+								<label htmlFor="firstName">Voornaam</label>
+								<input
+									id="firstName"
+									type="text"
+									title="Voornaam"
+									onChange={(e) => setTicket({ ...ticket, firstName: e.target.value })}
+									value={ticket.firstName || ''}
+									placeholder="Voornaam"
+								/>
+							</div>
+							<div className="ticket-field">
+								<label htmlFor="lastName">Achternaam</label>
+								<input
+									id="lastName"
+									type="text"
+									title="Achternaam"
+									onChange={(e) => setTicket({ ...ticket, lastName: e.target.value })}
+									value={ticket.lastName || ''}
+									placeholder="Achternaam"
+								/>
+							</div>
+						</div>
+					</div>
+
 					{tableCategories.map((cat) => (
-						<div key={cat.name}>
+						<div className="ticket-group" key={cat.name}>
 							<h3>{cat.name}</h3>
-							<table>
-								<tbody>
-									{cat.props.map((prop) =>
-										<tr key={prop}>
-											<td>
-												{(ticketPropertiesMap[prop] || {}).label}
-											</td>
-											<td>
-												<input
-													type="text"
-													title={(ticketPropertiesMap[prop] || {}).label}
-													onChange={(e) => setTicket({ ...ticket, [prop]: e.target.value })}
-													value={ticket[prop]}
-													placeholder={(ticketPropertiesMap[prop] || {}).label}
-												/>
-											</td>
-										</tr>
-									)}
-								</tbody>
-							</table>
+							<div className="ticket-fields">
+								{cat.props.map((prop) =>
+									<div className="ticket-field" key={prop}>
+										<label htmlFor={'field-' + prop}>
+											{(ticketPropertiesMap[prop] || {}).label}
+										</label>
+										<input
+											id={'field-' + prop}
+											type="text"
+											title={(ticketPropertiesMap[prop] || {}).label}
+											onChange={(e) => setTicket({ ...ticket, [prop]: e.target.value })}
+											value={ticket[prop]}
+											placeholder={(ticketPropertiesMap[prop] || {}).label}
+										/>
+									</div>
+								)}
+							</div>
 						</div>
 					))}
-					<br />
-					<br />
-					<button onClick={save}>Opslaan</button>
-					<button onClick={() => navigate('/bekijk-ticket?ticket-id=' + ticket.id)}>Annuleren</button>
+
+					<div className="ticket-form-bar">
+						<button className="btn-neutral" onClick={cancel}>Annuleren</button>
+						<button onClick={save}>Opslaan</button>
+					</div>
 				</div>}
 		</Layout >
 	);

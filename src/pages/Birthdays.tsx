@@ -11,7 +11,7 @@ const Birthdays: React.FC = () => {
 	const [error, setError] = useState<boolean>(false);
 	const [data, setData] = useState<any>(null);
 	const [days] = useState<string[]>(['di', 'wo', 'do', 'vr']);
-	const [dates] = useState<string[]>(['Dinsdag 19 augustus', 'Woensdag 20 augustus', 'Donderdag 21 augustus', 'Vrijdag 22 augustus']);
+	const [dates] = useState<string[]>(['Dinsdag 11 augustus', 'Woensdag 12 augustus', 'Donderdag 13 augustus', 'Vrijdag 14 augustus']);
 	const [currentWijk, setCurrentWijk] = useState<string>('blue');
 	const navigate = useNavigate();
 
@@ -21,7 +21,7 @@ const Birthdays: React.FC = () => {
 				// Get current wijk for theming
 				const wijkName = localStorage.getItem('wijkName') || 'blue';
 				setCurrentWijk(wijkName);
-				
+
 				const result = await apiCall('wijkStats');
 				if (result && result.response === 'success') {
 					setData(result.birthdays);
@@ -94,57 +94,56 @@ const Birthdays: React.FC = () => {
 	return (
 		<>
 			<Layout title="Verjaardagen">
-				{days.map((d, i) => (
-					<div key={d} id={d} className={`peopleList wijk-${currentWijk}`}>
-						<div className='list-header' style={{ paddingLeft: '0px', position: 'relative' }}>
-							{dates[i]} ({data[d].count})
-							{data[d].kids.length > 0 && (
-								<FaShareAlt
-									onClick={() => shareDate(d)}
-									style={{ position: 'absolute', right: '8px', top: '12px', cursor: 'pointer' }}
-								/>
-							)}
-						</div>
-						{data[d].kids.length === 0 ? (
-							<div><b>Geen kinderen jarig</b></div>
-						) : (
-							data[d].kids.map((bday: any, idx: number) => (
-								<div key={idx} className={`childItem ${getWijkClass(bday.hutNr)}`} onClick={() => zoekKind(bday)}>
-									<table style={{ width: "100%" }}>
-										<tbody>
-											<tr>
-												<td style={{ width: '48px' }}>
-													<FaBirthdayCake 
-														className={`birthday-cake-${getWijkColor(bday.hutNr)}`}
-														style={{ fontSize: '32px', position: 'relative', left: '2px' }} 
-													/>
-												</td>
-												<td style={{ paddingLeft: '0px' }}>
-													<h2 style={{marginBottom: '0px'}}>
-														<b>{bday.name}</b>
-														<br />
-													</h2>
-													<p style={{ fontSize: '14px', marginBottom: '4px', marginTop: '0px' }}>
-														Wordt {bday.newAge}!
-													</p>
-													<p style={{ fontSize: '14px', marginBottom: '0px', marginTop: '0px' }}>
-														Hutje: {bday.hutNr}
-													</p>
-												</td>
-												<td style={{ width: "48px" }}>
-													<button className='fab' title='Zoek kind'>
-														<FaSearch />
-													</button>
-												</td>
-											</tr>
-										</tbody>
-									</table>
+				<div className={`birthdays-page wijk-${currentWijk}`}>
+					{days.map((d, i) => (
+						<section key={d} id={d} className="section birthday-day">
+							<div className="day-header">
+								<h2 className="section-title">{dates[i]}</h2>
+								<span className="day-count nums">{data[d].count}</span>
+								{data[d].kids.length > 0 && (
+									<button
+										type="button"
+										className="fab day-share"
+										title="Deel verjaardagen"
+										aria-label={`Deel de verjaardagen van ${dates[i]}`}
+										onClick={() => shareDate(d)}
+									>
+										<FaShareAlt />
+									</button>
+								)}
+							</div>
+
+							{data[d].kids.length === 0 ? (
+								<div className="empty-state">
+									<p>Geen kinderen jarig</p>
 								</div>
-							))
-						)}
-						<hr />
-					</div>
-				))}
+							) : (
+								<div className="birthday-list">
+									{data[d].kids.map((bday: any, idx: number) => (
+										<button
+											type="button"
+											key={idx}
+											className={`birthday-card wijk-${getWijkClass(bday.hutNr)}`}
+											onClick={() => zoekKind(bday)}
+										>
+											<span className="cake-chip" aria-hidden="true">
+												<FaBirthdayCake />
+											</span>
+											<span className="birthday-main">
+												<span className="birthday-name">{bday.name}</span>
+												<span className="birthday-sub">Wordt {bday.newAge}!</span>
+												<span className="birthday-sub">Hutje: {bday.hutNr}</span>
+											</span>
+											<span className="birthday-search" aria-hidden="true">
+												<FaSearch />
+											</span>
+										</button>
+									))}
+								</div>
+							)}
+						</section>
+					))}
+				</div>
 			</Layout>
 		</>
 	);

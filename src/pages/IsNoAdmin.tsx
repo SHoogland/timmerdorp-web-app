@@ -39,11 +39,24 @@ function IsNoAdmin() {
 	}, []);
 
 	return (
-		<Layout title="Registreren <<(stap 3/3)>>" disableBackButton={true} disableLogo={true} backgroundColor='blue'>
-			<h2>Nog geen beheerder!</h2>
-			<p>Je bent door Stan en Stephan nog niet aangewezen als app-beheerder! Daarom heb je nog geen toegang tot de app. Vraag een van hen om je toe te voegen als beheerder. Je bent ingelogd als {email}.</p>
-			<br/>
-			<button className='big' onClick={() => {logOut(); navigate('/login')}}>Uitloggen</button>
+		<Layout noHeader={true} backgroundColor='blue'>
+			<div className="auth-page">
+				<div className="auth-head">
+					<div className="auth-brand">Timmerdorp</div>
+					<div className="funnel-step">
+						<div className="funnel-progress" role="img" aria-label="Stap 3 van 3">
+							<span className="dot is-done" />
+							<span className="dot is-done" />
+							<span className="dot is-active" />
+						</div>
+						<span>Registreren, stap 3 van 3</span>
+					</div>
+				</div>
+
+				<h2>Nog geen beheerder!</h2>
+				<p className="auth-copy">Je bent door Stan en Stephan nog niet aangewezen als app-beheerder! Daarom heb je nog geen toegang tot de app. Vraag een van hen om je toe te voegen als beheerder. Je bent ingelogd als {email}.</p>
+				<button className='big auth-secondary' onClick={() => {logOut(); navigate('/login')}}>Uitloggen</button>
+			</div>
 		</Layout>
 	);
 }

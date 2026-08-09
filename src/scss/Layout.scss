@@ -1,80 +1,61 @@
-@use "sass:color";
 @use "vars";
 
-html,
-body,
-#root,
-.main-content {
-	height: 100%;
-	margin: 0;
-}
+// =============================================================
+//  Page shell
+// =============================================================
 
 .main-content {
-	&:not(.no-padding):not(.has-footer) {
-		padding: 20px 28px;
+	// Content is capped so the app stays readable if someone opens it
+	// on a tablet or desktop, but the gutter keeps phones edge-comfortable.
+	width: 100%;
+	max-width: 680px;
+	margin: 0 auto;
+	padding: var(--s-5) var(--gutter);
+	// Clear the fixed tab bar plus the home indicator.
+	padding-bottom: calc(var(--s-8) + var(--safe-bottom));
+	// Opacity only, deliberately. A filled animation that touches `transform`
+	// turns this element into the containing block for its position:fixed
+	// descendants, which stranded the stats refresh FAB mid-page instead of
+	// pinning it to the viewport corner.
+	animation: contentIn var(--d-3) var(--ease) both;
+
+	&.no-padding {
+		padding-left: 0;
+		padding-right: 0;
 	}
 
 	&.has-footer {
 		display: flex;
 		flex-direction: column;
+		min-height: calc(100dvh - var(--appbar-h) - var(--safe-top));
+		padding: 0;
 
 		.content-excluding-footer {
 			flex: 1;
-			padding: 20px 28px;
-		}
-	}
-
-	&.no-padding {
-		padding: 0;
-	}
-}
-
-body {
-	background-color: #fafafa;
-	font-family: Roboto, Arial, Helvetica, sans-serif;
-	margin: 0;
-	padding: 0;
-}
-
-body.page-with-blue-background {
-	&,
-	header {
-		background: color.adjust(vars.$blue, $lightness: -12%) !important;
-	}
-
-	button,
-	.card {
-		&:not(.bg-red) {
-			background: color.adjust(vars.$blue, $lightness: -24%);
+			padding: var(--s-5) var(--gutter);
 		}
 	}
 }
 
+// Pages that sit on a saturated full-bleed background (login, register,
+// the registration funnel). The wijk colour becomes the page itself.
+body.page-with-blue-background,
 body.page-with-red-background {
-	&,
-	header {
-		background: color.adjust(vars.$red, $lightness: -12%) !important;
-	}
+	background: var(--page-bg);
+	color: #fff;
 
-	button,
-	.card {
-		&:not(.bg-red) {
-			background: color.adjust(vars.$red, $lightness: -24%);
-		}
-	}
-}
-
-body.page-with-blue-background, body.page-with-red-background {
-	header h1 {
-		font-size: 2.4em;
-		margin-top: 18px;
-	}
-	.card {
-		border: none;
+	// The app bar has to belong to the page it sits on. Without this it
+	// keeps wearing --wijk, so a red error page gets a blue bar.
+	header.appbar {
+		background: var(--page-bg);
+		color: #fff;
 		box-shadow: none;
 	}
 
-	a,
+	.main-content {
+		color: #fff;
+	}
+
 	h1,
 	h2,
 	h3,
@@ -82,28 +63,119 @@ body.page-with-blue-background, body.page-with-red-background {
 	h5,
 	h6,
 	p,
-	.icon,
-	li {
-		color: white;
+	li,
+	.icon {
+		color: #fff;
+	}
+
+	a {
+		color: #fff;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	// Inputs invert to a translucent well so they read on colour.
+	input[type="text"],
+	input[type="password"],
+	input[type="email"],
+	input[type="number"] {
+		background: rgba(255, 255, 255, 0.14);
+		border-color: rgba(255, 255, 255, 0.28);
+		color: #fff;
+		backdrop-filter: blur(6px);
+		-webkit-backdrop-filter: blur(6px);
+
+		&::placeholder {
+			color: rgba(255, 255, 255, 0.7);
+		}
+
+		&:focus {
+			background: rgba(255, 255, 255, 0.2);
+			border-color: rgba(255, 255, 255, 0.85);
+			box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.16);
+		}
+	}
+
+	// The main action becomes white-on-colour — highest possible contrast.
+	.form > button,
+	button.big {
+		background: #fff;
+		color: var(--page-bg-ink);
+		box-shadow: var(--e-2);
+	}
+
+	// The red error card keeps its own light background and dark red ink;
+	// dropping the dark translucent fill on top of it made the text
+	// unreadable (dark red on dark blue).
+	.card:not(.bg-red) {
+		background: rgba(0, 0, 0, 0.18);
+		border-color: rgba(255, 255, 255, 0.18);
+		box-shadow: none;
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
 	}
 }
 
+body.page-with-blue-background {
+	--page-bg: #1b4fbf;
+	--page-bg-ink: #123a91;
+}
 
+body.page-with-red-background {
+	--page-bg: #b32e20;
+	--page-bg-ink: #8a2115;
+}
 
+// A single sticky action rail at the bottom of a form page.
 footer.one-button-footer {
-	height: 100px;
-    min-height: 100px;
-	width: 100%;
-	background: color.adjust(vars.$blue, $lightness: -25%);
-	
+	position: sticky;
+	bottom: 0;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	padding: var(--s-4) var(--gutter);
+	padding-bottom: calc(var(--s-4) + var(--safe-bottom));
+	background: rgba(0, 0, 0, 0.18);
+	border-top: 1px solid rgba(255, 255, 255, 0.14);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+
 	button {
-		background: white!important;
-		color: black;
-		padding: 16px 24px;
-		text-transform: uppercase;
-		letter-spacing: 3px;
+		background: rgba(255, 255, 255, 0.16);
+		color: #fff;
+		box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.35);
+		min-width: 200px;
+		letter-spacing: 0.02em;
+	}
+}
+
+// ---- Generic section + list primitives used across pages ------
+
+.section {
+	margin-bottom: var(--s-8);
+}
+
+.section-title {
+	font-size: var(--t-h3);
+	font-weight: 700;
+	letter-spacing: -0.01em;
+	color: var(--c-text);
+	margin: 0 0 var(--s-3);
+}
+
+.panel {
+	background: var(--c-surface);
+	border-radius: var(--r-lg);
+	box-shadow: var(--e-1);
+	overflow: hidden;
+}
+
+.empty-state {
+	text-align: center;
+	padding: var(--s-10) var(--s-5);
+	color: var(--c-text-3);
+
+	p {
+		margin: 0;
 	}
 }

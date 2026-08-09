@@ -1,10 +1,15 @@
+// Legacy SCSS variables, retuned to match the new token palette in
+// _tokens.scss. Kept so existing `vars.$x` call sites keep working and
+// so colour.adjust() still has real values to compute from.
+// New code should prefer the CSS custom properties (var(--blue) etc.).
+
 $white: #ffffff;
-$lightGrey: #ddd;
-$darkGrey: #cccccc;
-$mediumBlack: #101010;
-$blue: #2196f3;
-$liliac: #c393ff;
-$yellow: #f5e31d;
-$green: #43a047;
-$red: #ee0202;
-$darkTextColor: #3a3a3a;
+$lightGrey: #e6e1d8;
+$darkGrey: #d3ccc0;
+$mediumBlack: #1e1c19;
+$blue: #2f6fed;
+$liliac: #b79bff;
+$yellow: #f7b32b;
+$green: #1fa45c;
+$red: #e14434;
+$darkTextColor: #3a2a03;

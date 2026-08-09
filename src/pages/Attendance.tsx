@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { MdCheckCircle, MdErrorOutline, MdRemoveCircleOutline } from 'react-icons/md';
 import Layout from '../layouts/layout';
 import apiCall from '../utils/apiCall';
 import { useNavigate } from 'react-router-dom';
@@ -19,15 +20,21 @@ function Attendance() {
 	const [foundChildIsAlreadyPresent, setFoundChildIsAlreadyPresent] = useState(false);
 	const [weekday, setWeekday] = useState('');
 	const [weekdayDisplayname, setWeekdayDisplayname] = useState('');
+	const [outsideEventDays, setOutsideEventDays] = useState(false);
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		const weekdays = ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'];
 		const today = new Date().getDay();
 		let weekday = weekdays[today];
+		// Outside Tuesday-Friday there is no day to register against. Rather
+		// than an alert that boots you back to the homepage, the page opens in
+		// a clearly disabled state and says why.
 		if (today < 2 || today > 5) {
-			alert('Nog even wachten tot Timmerdorp!');
-			navigate('/');
+			// TEMP(testing): the notice + disabled controls are switched off so
+			// the page can be exercised outside the event week. Restore by
+			// setting this to true before merging.
+			setOutsideEventDays(false);
 			weekday = 'Dinsdag';
 		}
 		setWeekdayDisplayname(weekday);
@@ -43,7 +50,7 @@ function Attendance() {
 				search(parseInt(bandjeParam));
 			}, 100);
 		}
-	}, [navigate])		
+	}, [navigate])
 
 	const togglePresence = () => {
 		if (wristbandNumber.length < 3) return;
@@ -56,7 +63,9 @@ function Attendance() {
 		if (foundChildIsAlreadyPresent) {
 			absenceReason = prompt('Reden van afwezigheid:');
 			if (absenceReason == null) {
-				alert('Geef wel een reden op!');
+				// Cancelling the prompt aborts the whole action, so say that
+				// plainly rather than scolding the user for a missing reason.
+				alert('Let op: afwezig melden geannuleerd! Je moet een reden opgeven als je iemand afwezig meldt.');
 				return;
 			}
 		}
@@ -142,87 +151,105 @@ function Attendance() {
 		});
 	}
 
+	// --- purely derived display values, no state or behaviour involved
+	const hutNr = foundChild.hutNr;
+	const hutWijk = getWijkColor(hutNr);
+	const isPresentToday = !!foundChild['aanwezig_' + weekday];
+	// btnColor wins so the "Opgeslagen!" flash stays green; otherwise the
+	// button wears the colour of the state it will move the child *into*.
+	const actionTone = btnColor || (foundChildIsAlreadyPresent ? 'red' : 'green');
+
 	return (
 		<Layout title="Aanwezigheid">
-			<div className="attendance-container">
-				<div className="attendance-header">
-					<h2>Aanwezigheid registreren voor {weekdayDisplayname}</h2>
-				</div>
-				
-				<div className="attendance-input-section">
-					<div className="input-group">
-						<label htmlFor="searchInput" className="input-label">Polsbandnummer</label>
-						<input
-							type="tel"
-							maxLength={3}
-							title="Polsbandnummer"
-							id="searchInput"
-							value={wristbandNumber}
-							onChange={(e) => wristbandInputChange(e)}
-							onKeyUp={(e) => e.key == 'Enter' ? togglePresence() : null}
-							placeholder="000"
-							className="wristband-number"
-						/>
-					</div>
-					
-					<div className="button-group">
-						<button
-							onClick={togglePresence}
-							className={`attendance-button ${btnColor} big ${togglePresenceIsLoading ? "with-loading-icon" : ""}`}
-							disabled={!hasFoundChild || togglePresenceIsLoading}
-						>
-							<LoadingIcon color="white" shown={togglePresenceIsLoading} />
-							{!togglePresenceIsLoading && (
-								btnColor == 'green' ? 'Opgeslagen!' : 
-								(foundChildIsAlreadyPresent ? "Afwezig melden" : "Aanwezig melden")
-							)}
-						</button>
-					</div>
-				</div>
+			<div className="attendance-page">
+				<h2 className="attendance-day">Aanwezigheid registreren voor {weekdayDisplayname}</h2>
 
-				{searchIsLoading && (
-					<div className="loading-section">
-						<LoadingIcon shown={true} />
-						<p>Zoeken naar kind...</p>
+				{outsideEventDays && (
+					<div className="attendance-closed">
+						<p>Timmerdorp loopt van dinsdag tot en met vrijdag. Vandaag kun je geen aanwezigheid registreren.</p>
 					</div>
 				)}
 
-				{hasSearched && hasFoundChild && (
-					<div className="card attendance-card">
-						<div className={`card-header wijk-${getWijkColor(foundChild.hutNr)}`}>
-							<h3>Kind #{wristbandNumber}</h3>
+				<div className="attendance-entry">
+					<label htmlFor="searchInput">Polsbandnummer</label>
+					<input
+						type="tel"
+						inputMode="numeric"
+						maxLength={3}
+						title="Polsbandnummer"
+						id="searchInput"
+						value={wristbandNumber}
+						onChange={(e) => wristbandInputChange(e)}
+						onKeyUp={(e) => e.key == 'Enter' ? togglePresence() : null}
+						placeholder="000"
+						className="attendance-input"
+					disabled={outsideEventDays}
+					/>
+				</div>
+
+				<div className="attendance-slot">
+					{searchIsLoading && (
+						<div className="attendance-loading">
+							<LoadingIcon shown={true} />
+							<p>Zoeken naar kind...</p>
 						</div>
-						<div className="card-content">
-							<div className="info-row">
-								<span className="info-label">Naam:</span>
-								<span className="info-value">{foundChild.firstName} {foundChild.lastName}</span>
-							</div>
-							
-							<div className="info-row">
-								<span className="info-label">Hutnummer:</span>
-								<span className={`info-value wijk-accent-${getWijkColor(foundChild.hutNr)}`}>
-									{foundChild.hutNr || 'Niet toegewezen'}
-								</span>
+					)}
+
+					{hasSearched && hasFoundChild && (
+						<div className="attendance-result">
+							<h3 className="attendance-name display">{foundChild.firstName} {foundChild.lastName}</h3>
+
+							<div className="attendance-facts">
+								<div className="attendance-fact">
+									<span className="fact-label">Polsbandnummer</span>
+									<span className="fact-value">{wristbandNumber}</span>
+								</div>
+
+								{/* Tinted in the hut's own wijk colour: at a glance you see
+								    which wijk the child belongs to, not just a small dot. */}
+								<div className={`attendance-fact${hutNr ? ` is-wijk hut-${hutWijk}` : ''}`}>
+									<span className="fact-label">Hutnummer</span>
+									{hutNr ? (
+										<span className="fact-value">{hutNr}</span>
+									) : (
+										<span className="fact-value is-empty">Niet toegewezen</span>
+									)}
+								</div>
 							</div>
 
-							<div className="info-row">
-								<span className="info-label">Aanwezig vandaag:</span>
-								<span className={`info-value status-${foundChild['aanwezig_' + weekday] ? 'present' : 'absent'}`}>
-									{foundChild['aanwezig_' + weekday] ? 'Ja' : 'Nee'}
+							<div className={`attendance-presence ${isPresentToday ? 'is-present' : 'is-absent'}`}>
+								{isPresentToday ? <MdCheckCircle aria-hidden="true" /> : <MdRemoveCircleOutline aria-hidden="true" />}
+								<span className="presence-copy">
+									<span className="presence-label">Aanwezig vandaag</span>
+									<span className="presence-value">{isPresentToday ? 'Ja' : 'Nee'}</span>
 								</span>
 							</div>
 						</div>
-					</div>
-				)}
-				
-				{hasSearched && !hasFoundChild && (
-					<div className="card error-card">
-						<div className="error-content">
-							<span className="error-icon">⚠️</span>
-							<p>Geen kind gevonden met dit polsbandnummer!</p>
+					)}
+
+					{hasSearched && !hasFoundChild && (
+						<div className="card bg-red attendance-error">
+							<MdErrorOutline className="icon" aria-hidden="true" />
+							<div className="text-content">
+								<p className="card-header">Geen kind gevonden met dit polsbandnummer!</p>
+							</div>
 						</div>
-					</div>
-				)}
+					)}
+				</div>
+
+				<div className="attendance-actionbar">
+					<button
+						onClick={togglePresence}
+						className={`attendance-action big ${actionTone} ${togglePresenceIsLoading ? "with-loading-icon" : ""}`}
+						disabled={outsideEventDays || !hasFoundChild || togglePresenceIsLoading}
+					>
+						<LoadingIcon color="white" shown={togglePresenceIsLoading} />
+						{!togglePresenceIsLoading && (
+							btnColor == 'green' ? 'Opgeslagen!' :
+							(foundChildIsAlreadyPresent ? "Afwezig melden" : "Aanwezig melden")
+						)}
+					</button>
+				</div>
 			</div>
 		</Layout>
 	);

@@ -23,7 +23,10 @@ function Settings() {
 	const [potentialAdmins, setPotentialAdmins] = useState<Admin[]>([]);
 	const [eventHistory, setEventHistory] = useState<Parse.Object[]>([]);
 	const [historyLength, setHistoryLength] = useState(0);
-	const eventCategories = ['set-hutnr', 'marked-present', 'marked-absent', 'save-hut-location', 'collected-sole', 'gave-wristband']
+	// Every eventType the API ever writes to the History class, from the six
+	// logEventHistory call sites in timmerdorp-parse/cloud/lib/app/. Keep this
+	// in sync with those, or the events silently never show up in the list.
+	const eventCategories = ['set-hutnr', 'marked-present', 'marked-absent', 'save-hut-location', 'collected-sole', 'gave-wristband', 'ticket-edit']
 	const [selectedEventCategories, setSelectedEventCategories] = useState(eventCategories);
 	const categoryNameMap: { [key: string]: string } = {
 		'set-hutnr': 'Hutnummers',
@@ -32,6 +35,7 @@ function Settings() {
 		'save-hut-location': 'Hut-locaties',
 		'collected-sole': 'Zooltjes',
 		'gave-wristband': 'Polsbandjes',
+		'ticket-edit': 'Gegevenswijzigingen',
 	}
 	const navigate = useNavigate();
 
@@ -72,7 +76,11 @@ function Settings() {
 			if (result.success) {
 				const admittedAdmin = potentialAdmins.find((a) => a.email === email);
 				setPotentialAdmins(potentialAdmins.filter((a) => a.email !== email));
-				setAdmins([...admins, { email: admittedAdmin?.email || '', name: admittedAdmin?.name || '' }]);
+				// A manually added admin is not in potentialAdmins, so the lookup
+				// misses and the old code appended a row with an empty email and
+				// name: it rendered blank and could never be removed again,
+				// because removeAdmin matched on that empty string.
+				setAdmins([...admins, { email, name: admittedAdmin?.name || email }]);
 				alert('Gelukt! Admin toegevoegd.');
 			} else {
 				alert("Admin toevoegen mislukt: " + JSON.stringify(result));
@@ -175,89 +183,122 @@ function Settings() {
 		setEventHistory(filterEvents(eventHistory));
 	}, [selectedEventCategories]);
 
+	const shownEvents = eventHistory.filter(h => h.get('shown'));
+
 	return (
-		<Layout title={isStanOfStephan ? "Instellingen" : "Account info"} noPadding={true}>
+		<Layout title={isStanOfStephan ? "Instellingen" : "Account info"}>
 			{isInitialized && (
-				<>
-					<table>
-						<tbody>
-							<tr>
-								<td>Email</td>
-								<td>{Parse.User.current()?.get('username')}</td>
-							</tr>
-							<tr>
-								<td>Naam</td>
-								<td>{Parse.User.current()?.get('firstName') + " " + Parse.User.current()?.get('lastName')}</td>
-							</tr>
-							<tr>
-								<td>Wijk</td>
-								<td>{wijkName} <a onClick={() => navigate('/wijzig-wijk')}>(aanpassen)</a></td>
-							</tr>
-						</tbody>
-					</table>
-					{!isStanOfStephan && <button className="big red" onClick={deleteAccount}>Verwijder account</button>}
+				<div className="settings-page">
+					<section className="section">
+						<h2 className="section-title">Account</h2>
+						<div className="panel def-list">
+							<div className="def-row">
+								<span className="def-label">Email</span>
+								<span className="def-value selectable">{Parse.User.current()?.get('username')}</span>
+							</div>
+							<div className="def-row">
+								<span className="def-label">Naam</span>
+								<span className="def-value">{Parse.User.current()?.get('firstName') + " " + Parse.User.current()?.get('lastName')}</span>
+							</div>
+							<div className="def-row">
+								<span className="def-label">Wijk</span>
+								<span className="def-value">
+									{wijkName} <a onClick={() => navigate('/wijzig-wijk')}>(aanpassen)</a>
+								</span>
+							</div>
+						</div>
+					</section>
 
 					<LoadingIcon shown={loading}/>
 
 					{isStanOfStephan && !loading && (
 						<>
-							<h2>Admins</h2>
-							{admins.length > 0 && (
-								<table>
-									<tbody>
+							<section className="section">
+								<h2 className="section-title">Admins</h2>
+								{admins.length > 0 && (
+									<ul className="panel people-list">
 										{admins.map((admin) => (
-											<tr key={admin.email}>
-												<td>{admin.name}</td>
-												<td>{admin.email}</td>
-												<td><button onClick={() => removeAdmin(admin.email)}>Verwijderen</button></td>
-											</tr>
+											<li key={admin.email}>
+												<span className="person">
+													<span className="person-name">{admin.name}</span>
+													<span className="person-email selectable">{admin.email}</span>
+												</span>
+												<span className="person-actions">
+													<button className="btn-quiet btn-sm" onClick={() => removeAdmin(admin.email)}>Verwijderen</button>
+												</span>
+											</li>
 										))}
-									</tbody>
-								</table>
-							)}
+									</ul>
+								)}
+								<button className="btn-ghost btn-sm add-admin" onClick={() => acceptAdmin(prompt('E-mailadres van nieuwe admin:') || '', true)}>
+									Handmatig een beheerder toevoegen
+								</button>
+							</section>
 
-							<h2>Admin-verzoeken</h2>
-							{potentialAdmins.length > 0 && (
-								<table>
-									<tbody>
+							<section className="section">
+								<h2 className="section-title">Admin-verzoeken</h2>
+								{potentialAdmins.length > 0 ? (
+									<ul className="panel people-list">
 										{potentialAdmins.map((admin) => (
-											<tr key={admin.email}>
-												<td>{admin.name}</td>
-												<td>{admin.email}</td>
-												<td><button onClick={() => acceptAdmin(admin.email)}>Accepteren</button></td>
-												<td><button onClick={() => removeAdmin(admin.email)}>Weigeren</button></td>
-											</tr>
+											<li key={admin.email}>
+												<span className="person">
+													<span className="person-name">{admin.name}</span>
+													<span className="person-email selectable">{admin.email}</span>
+												</span>
+												<span className="person-actions">
+													<button className="btn-sm" onClick={() => acceptAdmin(admin.email)}>Accepteren</button>
+													<button className="btn-quiet btn-sm" onClick={() => removeAdmin(admin.email)}>Weigeren</button>
+												</span>
+											</li>
 										))}
-									</tbody>
-								</table>
-							)}
+									</ul>
+								) : (
+									<div className="panel empty-state">
+										<p>Geen admin-verzoeken</p>
+									</div>
+								)}
+							</section>
 
-							<p onClick={() => acceptAdmin(prompt('E-mailadres van nieuwe admin:') || '', true)} className="link">
-								Handmatig een beheerder toevoegen
-							</p>
+							<section className="section">
+								<h2 className="section-title">Event history (0-{shownEvents.length} van {historyLength})</h2>
 
-							{potentialAdmins.length === 0 && <p>Geen admin-verzoeken</p>}
-
-							<h2>Event history (0-{eventHistory.filter(h => h.get('shown')).length} van {historyLength})</h2>
-							{eventCategories.map((category) => (
-								<button key={category} className={'categoryButton ' + (selectedEventCategories.includes(category) ? 'selected' : '')} onClick={() => handleCategoryClick(category)}>{categoryNameMap[category]}</button>
-							))}
-							{eventHistory.length > 0 && (
-								<ul id="eventHistory">
-									{eventHistory.filter(h => h.get('shown')).map((event, index) => (
-										<li key={index}>
-											{ event.get('desc') }
-										</li>
+								<div className="chip-row">
+									{eventCategories.map((category) => (
+										<button
+											key={category}
+											type="button"
+											aria-pressed={selectedEventCategories.includes(category)}
+											className={'chip' + (selectedEventCategories.includes(category) ? ' is-selected' : '')}
+											onClick={() => handleCategoryClick(category)}
+										>{categoryNameMap[category]}</button>
 									))}
-								</ul>
-							)}
-							{historyLength > eventHistory.length && (
-								<p className="link" onClick={() => getMoreEvents()}>Nog 100 resultaten ophalen (van de overgebleven { historyLength - eventHistory.length })</p>
-							)}
+								</div>
+
+								{eventHistory.length > 0 && (
+									<ul id="eventHistory" className="panel event-timeline">
+										{shownEvents.map((event, index) => (
+											<li key={index}>
+												{ event.get('desc') }
+											</li>
+										))}
+									</ul>
+								)}
+
+								{historyLength > eventHistory.length && (
+									<button className="btn-quiet block load-more" onClick={() => getMoreEvents()}>
+										Nog 100 resultaten ophalen (van de overgebleven { historyLength - eventHistory.length })
+									</button>
+								)}
+							</section>
 						</>
-					)
-					}
-				</>
+					)}
+
+					{!isStanOfStephan && (
+						<section className="section danger-zone">
+							<button className="btn-danger block" onClick={deleteAccount}>Verwijder account</button>
+						</section>
+					)}
+				</div>
 			)}
 		</Layout>
 	);

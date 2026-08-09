@@ -1,98 +1,104 @@
 @use "vars";
 
-@font-face {
-	font-family: Mikado-Bold;
-	src: url("../assets/fonts/Mikado-Bold.woff");
-}
+// =============================================================
+//  App bar
+//  Wijk-coloured so a volunteer can tell at a glance which wijk
+//  the app is set to, even from arm's length in bright sun.
+// =============================================================
 
-header {
-	background: vars.$blue;
-	height: 80px;
-	-webkit-box-shadow: none;
-	box-shadow: none;
-	* {
-		display: inline-block;
-	}
+header.appbar {
+	position: sticky;
+	top: 0;
+	z-index: 50;
+	display: flex;
+	align-items: center;
+	gap: var(--s-2);
+	height: calc(var(--appbar-h) + var(--safe-top));
+	padding: var(--safe-top) var(--s-2) 0;
+	background: var(--wijk);
+	color: var(--on-wijk);
+	// Keeps the bar readable while content scrolls under it.
+	box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 2px 12px -6px rgba(40, 32, 20, 0.25);
 
-	img {
-		position: relative;
-		top: 12.5px;
-		float: right;
-		width: 75px;
-		height: 56px;
-		margin-right: 12px;
-	}
+	.appbar-btn {
+		flex: 0 0 auto;
+		width: var(--tap);
+		height: var(--tap);
+		min-height: var(--tap);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		background: transparent;
+		color: inherit;
+		border-radius: var(--r-full);
+		padding: 0;
 
-	#back-btn {
-		width: 42px;
-		height: 42px;
-		position: relative;
-		float: left;
-		margin-left: 18px;
-		margin-top: calc(80px / 2 - 40px / 2);
-		color: white;
-		cursor: pointer;
-	}
-
-	&.yellow,
-	&.white {
-		h1, #back-btn {
-			color: vars.$darkTextColor;
+		svg {
+			width: 21px;
+			height: 21px;
 		}
+
+		&:hover {
+			background: rgba(255, 255, 255, 0.16);
+		}
+
+		&:active {
+			transform: scale(0.9);
+		}
+	}
+
+	// Yellow and white wijken need dark chrome on the tint.
+	&.yellow .appbar-btn:hover,
+	&.white .appbar-btn:hover {
+		background: rgba(0, 0, 0, 0.08);
 	}
 
 	h1 {
-		font-family: "Mikado-Bold" !important;
-		font-weight: normal;
-		letter-spacing: 2px;
-		position: absolute;
-		white-space: nowrap;
-		font-size: 30px;
-		overflow-x: hidden;
-		line-height: 30px;
-		padding-top: 28px;
-		top: 0;
-		margin-top: 0;
-		margin-bottom: 0;
-		height: 80px;
-		width: calc(100% - 132px);
-		z-index: 2;
+		flex: 1;
+		min-width: 0;
+		margin: 0;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 1.3125rem;
+		line-height: 1.15;
+		letter-spacing: 0.01em;
 		text-align: center;
-		left: 66px;
-		color: white;
-		&.home-header {
-			left: 0;
-		}
-		&.no-back-button {
-			left: 12px;
-			width: calc(100% - 66px);
-		}
-		&.no-logo {
-			width: calc(100% - 66px);
-		}
-		&.no-logo.no-back-button {
-			width: calc(100% - 12px);
-		}
-		@media only screen and (max-width: 360px) {
-			font-size: 24px !important;
-			line-height: 24px;
-			padding-top: 28px;
-		}
+		color: inherit;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+
 		.small {
-			font-size: 20px;
+			display: block;
+			font-family: var(--font-ui);
+			font-size: 0.6875rem;
+			font-weight: 600;
+			letter-spacing: 0.04em;
+			opacity: 0.75;
+			margin-top: 1px;
+		}
+
+		@media (max-width: 360px) {
+			font-size: 1.1875rem;
 		}
 	}
 
-	&.red {
-		background: vars.$red;
+	.appbar-logo {
+		flex: 0 0 auto;
+		width: 46px;
+		height: 34px;
+		object-fit: contain;
+		margin-right: var(--s-2);
 	}
-	&.yellow {
-		background: vars.$yellow;
+
+	// Keeps the title optically centred when only one side has a control.
+	.appbar-spacer {
+		flex: 0 0 auto;
+		width: var(--tap);
 	}
-	&.green {
-		background: vars.$green;
-	}
-	&.blue {
-		background: vars.$blue;
-	}
+}
+
+.theme-yellow header.appbar,
+.theme-white header.appbar {
+	box-shadow: 0 1px 0 var(--c-border), 0 2px 12px -8px rgba(40, 32, 20, 0.3);
 }
