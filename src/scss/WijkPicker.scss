@@ -74,6 +74,9 @@
 		--swatch: var(--yellow);
 		--swatch-ink: var(--yellow-ink);
 	}
+	&.fuchsia {
+		--swatch: var(--fuchsia);
+	}
 
 	// Wit/EHBO gets the full width: it is the odd one out, and a white tile
 	// beside a coloured one otherwise reads as an empty slot.

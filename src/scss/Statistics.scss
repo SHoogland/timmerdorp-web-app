@@ -107,12 +107,16 @@
 		td.white {
 			color: var(--c-text);
 		}
+		td.fuchsia {
+			color: var(--fuchsia-deep);
+		}
 
 		td.blue,
 		td.red,
 		td.green,
 		td.yellow,
-		td.white {
+		td.white,
+		td.fuchsia {
 			font-weight: 700;
 		}
 

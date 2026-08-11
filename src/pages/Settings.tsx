@@ -155,6 +155,7 @@ function Settings() {
 			red: 'Rood',
 			yellow: 'Geel',
 			white: 'Wit/EHBO',
+			fuchsia: 'Fuchsia',
 		}[englishWijkName];
 		setWijkName(wijkNaam || 'Onbekend');
 
@@ -164,6 +165,7 @@ function Settings() {
 			red: 'rood',
 			yellow: 'geel',
 			white: 'wit',
+			fuchsia: 'fuchsia',
 		}[englishWijkName];
 
 		document.cookie = `wijk=${wijkCookie}; path=/; max-age=31536000`;

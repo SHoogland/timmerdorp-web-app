@@ -176,7 +176,9 @@ function Home() {
 			if (result && result.response === 'success') {
 				let dag = ['di', 'wo', 'do', 'vr'][new Date().getDay() - 2];
 
-				const currentWijk = wijk === 'white' ? 'blue' : wijk;
+				// wijkStats only buckets the four hut-backed wijken; white/EHBO and
+				// fuchsia are badge-only wijken with no hut range, so fall back.
+				const currentWijk = (wijk === 'white' || wijk === 'fuchsia') ? 'blue' : wijk;
 				setWijkCount(result.quarters?.[currentWijk]?.['aanwezig_' + dag] || 0);
 				setChildrenCount(result['aanwezig_' + dag] || 0);
 				setBirthdays((result.birthdays?.[dag] || {}).count || 0);
