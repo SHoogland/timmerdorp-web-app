@@ -11,6 +11,7 @@ export const WIJKEN = [
 	{ key: 'red', label: 'Rood' },
 	{ key: 'yellow', label: 'Geel' },
 	{ key: 'white', label: 'Wit / EHBO' },
+	{ key: 'fuchsia', label: 'Fuchsia' },
 ];
 
 interface WijkPickerProps {

@@ -8,6 +8,8 @@ const getWijkHexColor = (wijkName: string): string => {
 			return '#2196f3';
 		case 'green':
 			return '#43a047';
+		case 'fuchsia':
+			return '#cc2d8c'; // keep in sync with --fuchsia in _tokens.scss
 		default:
 			return '#2196f3'; // default fallback to blue
 	}

@@ -33,6 +33,13 @@
 	--yellow-soft: #fffade;
 	--yellow-ink: #6a4d00;
 
+	// Fuchsia: a non-hut wijk, same treatment as white/EHBO — a badge
+	// colour for admins, not a hut-number-backed district.
+	--fuchsia: #cc2d8c;
+	--fuchsia-deep: #9c1e69;
+	--fuchsia-soft: #fce9f3;
+	--fuchsia-ink: #6e1350;
+
 	// ---- Warm neutrals ----------------------------------------
 	// Slightly warm so the app reads like paper and timber rather
 	// than a cold dashboard.
@@ -175,4 +182,13 @@
 	--wijk-soft: var(--n-50);
 	--wijk-ink: var(--n-800);
 	--on-wijk: var(--n-900);
+}
+
+// Fuchsia: another non-hut badge wijk, alongside white/EHBO.
+.theme-fuchsia {
+	--wijk: var(--fuchsia);
+	--wijk-deep: var(--fuchsia-deep);
+	--wijk-soft: var(--fuchsia-soft);
+	--wijk-ink: var(--fuchsia-ink);
+	--on-wijk: #ffffff;
 }
