@@ -44,7 +44,10 @@ function Attendance() {
 			setWristbandNumber(bandjeParam);
 			// Use setTimeout to ensure the component is fully mounted
 			setTimeout(() => {
-				search(parseInt(bandjeParam));
+				// Pass the raw string, not parseInt(bandjeParam) — that stripped
+				// leading zeros (e.g. "007" -> 7 -> "7"), which then failed to
+				// match the zero-padded wristband stored on the ticket.
+				search(bandjeParam);
 			}, 100);
 		}
 	}, [navigate])
@@ -118,7 +121,11 @@ function Attendance() {
 		}
 	};
 
-	const search = (wristband: number) => {
+	const search = (wristband: number | string) => {
+		// Wristbands are zero-padded 3-digit strings ("007", "042", ...) and
+		// the backend matches on the exact string, so this must never round
+		// through a number — parseInt/String would drop the leading zeros
+		// and silently fail to find the ticket.
 		const wristbandStr = String(wristband);
 		setSearchIsLoading(true);
 		setHasSearched(false);
