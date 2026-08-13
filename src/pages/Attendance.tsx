@@ -35,7 +35,8 @@ function Attendance() {
 			weekday = 'Dinsdag';
 		}
 		setWeekdayDisplayname(weekday);
-		setWeekday(weekday.substring(0, 2).toLowerCase());
+		const dayCode = weekday.substring(0, 2).toLowerCase();
+		setWeekday(dayCode);
 
 		// Check for wristband parameter in URL and auto-search
 		const urlParams = new URLSearchParams(window.location.search);
@@ -47,7 +48,12 @@ function Attendance() {
 				// Pass the raw string, not parseInt(bandjeParam) — that stripped
 				// leading zeros (e.g. "007" -> 7 -> "7"), which then failed to
 				// match the zero-padded wristband stored on the ticket.
-				search(bandjeParam);
+				// Also pass dayCode explicitly: setWeekday() above hasn't been
+				// applied yet when this closure was created, so search() would
+				// otherwise read the stale initial weekday state ('') and never
+				// detect the child as already present — the button then always
+				// said "Aanwezig melden" instead of "Afwezig melden".
+				search(bandjeParam, dayCode);
 			}, 100);
 		}
 	}, [navigate])
@@ -121,12 +127,18 @@ function Attendance() {
 		}
 	};
 
-	const search = (wristband: number | string) => {
+	const search = (wristband: number | string, dayOverride?: string) => {
 		// Wristbands are zero-padded 3-digit strings ("007", "042", ...) and
 		// the backend matches on the exact string, so this must never round
 		// through a number — parseInt/String would drop the leading zeros
 		// and silently fail to find the ticket.
 		const wristbandStr = String(wristband);
+		// dayOverride lets callers (the mount-time auto-search) pass the day
+		// code straight through instead of reading the weekday state, which
+		// may not have applied yet in their closure. Manual searches from the
+		// input always run after that state has settled, so the fallback is
+		// safe there.
+		const day = dayOverride || weekday;
 		setSearchIsLoading(true);
 		setHasSearched(false);
 		apiCall('findChildByWristband', { wristband: wristbandStr }).then((result) => {
@@ -145,13 +157,13 @@ function Attendance() {
 
 
 			// Check if it's Wednesday, Thursday, or Friday and if the ticket has no hutNr
-			if ((weekday === 'wo' || weekday === 'do' || weekday === 'vr') && !result.ticket.hutNr) {
+			if ((day === 'wo' || day === 'do' || day === 'vr') && !result.ticket.hutNr) {
 				alert('Let op: Dit kind heeft nog geen hutnummer!!!');
 			}
 
 			setFoundChild(result.ticket);
 			setHasFoundChild(true);
-			setFoundChildIsAlreadyPresent(result.ticket['aanwezig_' + weekday]);
+			setFoundChildIsAlreadyPresent(result.ticket['aanwezig_' + day]);
 		});
 	}
 
