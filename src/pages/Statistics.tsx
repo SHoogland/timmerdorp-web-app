@@ -34,7 +34,7 @@ function Statistics() {
 		{ title: "Aanwezig di", prop: "aanwezig_di" },
 		{ title: "Aanwezig wo", prop: "aanwezig_wo" },
 		{ title: "Aanwezig do", prop: "aanwezig_do" },
-		...(statistieken?.aanwezig_vr !== undefined ? [{ title: "Aanwezig vr", prop: "aanwezig_vr" }] : []),
+		{ title: "Aanwezig vr", prop: "aanwezig_vr" },
 	];
 
 	const allprops = [
@@ -266,7 +266,6 @@ function Statistics() {
 		updateData();
 	};
 
-	const showVrijdag = admins.some((admin) => admin.vr !== undefined);
 	// The attendance battle is meaningless until someone has actually checked
 	// a child in, so it stays hidden until the first presence is recorded.
 	// Data-driven on purpose: duplicating the event dates from the API here
@@ -353,11 +352,9 @@ function Statistics() {
 									<td>
 										Donderdag
 									</td>
-									{showVrijdag && (
-										<td>
-											Vrijdag
-										</td>
-									)}
+									<td>
+										Vrijdag
+									</td>
 									<td>
 										Totaal
 									</td>
@@ -368,9 +365,7 @@ function Statistics() {
 										<td>{admin.di || 0}</td>
 										<td>{admin.wo || 0}</td>
 										<td>{admin.do || 0}</td>
-										{showVrijdag && (
-											<td>{admin.vr || 0}</td>
-										)}
+										<td>{admin.vr || 0}</td>
 										<td>{admin.total || 0}</td>
 									</tr>
 								))}
