@@ -51,6 +51,20 @@
 				height: 42px;
 			}
 		}
+
+		// Steps the numeric hut code by 1, so a volunteer can walk down a
+		// row of huts without retyping the number each time.
+		.hut-nav {
+			display: flex;
+			gap: var(--s-2);
+			margin-top: var(--s-2);
+		}
+
+		.hut-nav-btn {
+			flex: 1;
+			min-height: var(--tap);
+			font-size: var(--t-small);
+		}
 	}
 
 	// ---- Error callout ------------------------------------------
